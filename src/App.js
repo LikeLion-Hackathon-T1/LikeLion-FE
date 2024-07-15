@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import styled from "styled-components";
 import LoginPage from "./pages/LoginPage";
 import OauthCallback from "./utils/OauthCallback";
+import HomePage from "./pages/HomePage";
 
 const App = () => {
     return (
@@ -11,7 +12,7 @@ const App = () => {
             <MobileContainer>
                 <BrowserRouter>
                     <Routes>
-                        <Route path="/" element={<LoginPage />} />
+                        <Route path="/" element={<HomePage />} />
                         <Route path="/login" element={<LoginPage />} />
                         <Route
                             path="/oauth/kakao/callback"

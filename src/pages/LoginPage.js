@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import KaKaoLogin from "../assets/images/kakao_login.png";
+import { useNavigate } from "react-router-dom";
+import useIsLogin from "../hooks/useIsLogin";
 
 const LoginPage = () => {
     const REST_API_KEY = process.env.REACT_APP_KAKAO_REST_API_KEY;
@@ -9,6 +11,14 @@ const LoginPage = () => {
     const handleLogin = () => {
         window.location.href = kakaoAuthUrl;
     };
+    const navigate = useNavigate();
+    const isLogin = useIsLogin();
+
+    useEffect(() => {
+        if (isLogin) {
+            navigate("/", { replace: true });
+        }
+    }, [isLogin, navigate]);
     return (
         <Container>
             <Header>
