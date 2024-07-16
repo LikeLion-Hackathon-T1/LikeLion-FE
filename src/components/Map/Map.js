@@ -102,39 +102,49 @@ const KakaoMap = () => {
                     )}
                 </Map>
             }
-            <ButtonContainer>
-                <button onClick={() => getUserLocation()}>내 위치 찾기</button>
-                <Button>
-                    <button onClick={() => handleUserLocation(0.0001, 0)}>
-                        위도 +
+            {userLocation && (
+                <ButtonContainer>
+                    <button onClick={() => getUserLocation()}>
+                        내 위치 찾기
                     </button>
-                    <div>
-                        <button onClick={() => handleUserLocation(0, -0.0001)}>
-                            경도 -
+                    <Button>
+                        <button onClick={() => handleUserLocation(0.0001, 0)}>
+                            위도 +
                         </button>
-                        <button onClick={() => handleUserLocation(0, 0.0001)}>
-                            경도 +
+                        <div>
+                            <button
+                                onClick={() => handleUserLocation(0, -0.0001)}
+                            >
+                                경도 -
+                            </button>
+                            <button
+                                onClick={() => handleUserLocation(0, 0.0001)}
+                            >
+                                경도 +
+                            </button>
+                        </div>
+                        <button onClick={() => handleUserLocation(-0.0001, 0)}>
+                            위도 -
                         </button>
-                    </div>
-                    <button onClick={() => handleUserLocation(-0.0001, 0)}>
-                        위도 -
+                    </Button>
+                    <button onClick={() => handleAddWaypoint()}>
+                        마커 위치 경유지로 등록
                     </button>
-                </Button>
-                <button onClick={() => handleAddWaypoint()}>
-                    마커 위치 경유지로 등록
-                </button>
-                <button
-                    onClick={() =>
-                        handleMapCenter(
-                            userLocation.latitude,
-                            userLocation.longitude
-                        )
-                    }
-                >
-                    마커 위치로 이동
-                </button>
-                <button onClick={() => setWaypoints([])}>경유지 초기화</button>
-            </ButtonContainer>
+                    <button
+                        onClick={() =>
+                            handleMapCenter(
+                                userLocation.latitude,
+                                userLocation.longitude
+                            )
+                        }
+                    >
+                        마커 위치로 이동
+                    </button>
+                    <button onClick={() => setWaypoints([])}>
+                        경유지 초기화
+                    </button>
+                </ButtonContainer>
+            )}
         </Container>
     );
 };
