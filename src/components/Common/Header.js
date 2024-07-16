@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { ReactComponent as BackIcon } from "../../assets/images/back.svg";
 import { ReactComponent as CartIcon } from "../../assets/images/cart.svg";
 import { useNavigate } from "react-router-dom";
+import useCartStore from "../../hooks/useCartStore";
 
 const Header = ({
     title,
@@ -11,6 +12,7 @@ const Header = ({
     back = true,
 }) => {
     const navigate = useNavigate();
+    const totalItemCount = useCartStore((state) => state.totalItemCount);
 
     return (
         <Container>
@@ -24,11 +26,33 @@ const Header = ({
             </LeftSection>
             <Title>{title}</Title>
             <RightSection>
-                {cart && <Cart onClick={() => navigate("/cart")} />}
+                {cart && (
+                    <>
+                        <Cart
+                            width="40px"
+                            height="40px"
+                            onClick={() => navigate("/cart")}
+                        />
+                        <CartCount>{totalItemCount()}</CartCount>
+                    </>
+                )}
             </RightSection>
         </Container>
     );
 };
+
+const CartCount = styled.span`
+    position: absolute;
+    top: 30px;
+    right: 20px;
+    background-color: red;
+    border-radius: 10px;
+    color: white;
+    padding: 2px 2px 0px 2px;
+    font-size: 11px;
+    font-weight: 900;
+    text-align: center;
+`;
 
 const Container = styled.div`
     display: flex;

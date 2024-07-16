@@ -3,7 +3,7 @@ import { persist } from "zustand/middleware";
 
 const useCartStore = create(
     persist(
-        (set) => ({
+        (set, get) => ({
             carts: {},
             addItem: (storeName, item) =>
                 set((state) => {
@@ -67,6 +67,13 @@ const useCartStore = create(
                         carts: updatedCarts,
                     };
                 }),
+            totalItemCount: () =>
+                Object.values(get().carts).reduce(
+                    (total, storeCart) =>
+                        total +
+                        storeCart.reduce((sum, item) => sum + item.count, 0),
+                    0
+                ),
         }),
         {
             name: "cart-storage",

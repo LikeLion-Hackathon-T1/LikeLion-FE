@@ -9,9 +9,7 @@ const HomePage = () => {
         <div>
             <Header title="홈" back={false} />
             <KakaoMap />
-            <button onClick={() => navigate("/menuTest")}>
-                장바구니 테스트
-            </button>
+            <button onClick={() => navigate("/menuTest")}>구매 테스트</button>
         </div>
     );
 };
