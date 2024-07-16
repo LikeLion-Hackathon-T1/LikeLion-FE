@@ -1,13 +1,15 @@
-import { Map, MapMarker } from "react-kakao-maps-sdk";
+import { Map, MapMarker, Polyline } from "react-kakao-maps-sdk";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Common/Header";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import SyluvIcon from "../assets/images/syluv.png";
 
 const HomePage = () => {
     const navigate = useNavigate();
     const [userLocation, setUserLocation] = useState(null);
     const [mapCenter, setMapCenter] = useState(null);
+    const [waypoints, setWaypoints] = useState([]);
 
     useEffect(() => {
         getUserLocation();
@@ -47,6 +49,15 @@ const HomePage = () => {
         setMapCenter({ latitude, longitude });
     };
 
+    const handleAddWaypoint = () => {
+        if (userLocation) {
+            setWaypoints([
+                ...waypoints,
+                { lat: userLocation.latitude, lng: userLocation.longitude },
+            ]);
+        }
+    };
+
     return (
         <div>
             <Header title="홈" back={false} />
@@ -72,41 +83,62 @@ const HomePage = () => {
                             }}
                         />
                     )}
+                    {waypoints.map((waypoint, index) => (
+                        <MapMarker
+                            key={index}
+                            position={{
+                                lat: waypoint.lat,
+                                lng: waypoint.lng,
+                            }}
+                            image={{
+                                src: SyluvIcon,
+                                size: { width: 30, height: 30 },
+                            }}
+                        />
+                    ))}
+                    {waypoints.length > 1 && (
+                        <Polyline
+                            path={[waypoints]}
+                            strokeWeight={5} // 선의 두께 입니다
+                            strokeColor={"#FFAE00"} // 선의 색깔입니다
+                            strokeOpacity={0.7} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+                            strokeStyle={"solid"} // 선의 스타일입니다
+                        />
+                    )}
                 </Map>
             )}
             <ButtonContainer>
-                <ButtonContainer>
-                    <button onClick={() => getUserLocation()}>
-                        내 위치 찾기
+                <button onClick={() => getUserLocation()}>내 위치 찾기</button>
+                <div>
+                    <button onClick={() => handleUserLocation(0.0001, 0)}>
+                        위도 +
                     </button>
-                    <div>
-                        <button onClick={() => handleUserLocation(0.0001, 0)}>
-                            위도 +
-                        </button>
-                        <button onClick={() => handleUserLocation(-0.0001, 0)}>
-                            위도 -
-                        </button>
-                    </div>
-                    <div>
-                        <button onClick={() => handleUserLocation(0, 0.0001)}>
-                            경도 +
-                        </button>
-                        <button onClick={() => handleUserLocation(0, -0.0001)}>
-                            경도 -
-                        </button>
-                    </div>
-                    <button
-                        onClick={() =>
-                            handleMapCenter(
-                                userLocation.latitude,
-                                userLocation.longitude
-                            )
-                        }
-                    >
-                        마커 위치로 이동
+                    <button onClick={() => handleUserLocation(-0.0001, 0)}>
+                        위도 -
                     </button>
-                </ButtonContainer>
-
+                </div>
+                <div>
+                    <button onClick={() => handleUserLocation(0, 0.0001)}>
+                        경도 +
+                    </button>
+                    <button onClick={() => handleUserLocation(0, -0.0001)}>
+                        경도 -
+                    </button>
+                </div>
+                <button
+                    onClick={() =>
+                        handleMapCenter(
+                            userLocation.latitude,
+                            userLocation.longitude
+                        )
+                    }
+                >
+                    마커 위치로 이동
+                </button>
+                <button onClick={() => handleAddWaypoint()}>
+                    마커 위치 경유지로 등록
+                </button>
+                <button onClick={() => setWaypoints([])}>경유지 초기화</button>
                 <button onClick={() => navigate("/menuTest")}>
                     장바구니 테스트
                 </button>
@@ -123,4 +155,5 @@ const ButtonContainer = styled.div`
     gap: 10px;
     margin-bottom: 20px;
 `;
+
 export default HomePage;
