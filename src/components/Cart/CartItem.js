@@ -25,6 +25,11 @@ const CartItem = ({
         updateItemCount(storeName, name, newCount);
     };
 
+    const handleRemove = () => {
+        setQuantity(0);
+        updateItemCount(storeName, name, 0);
+    };
+
     const formatPrice = (price) => {
         return new Intl.NumberFormat("ko-KR").format(price) + "원";
     };
@@ -36,6 +41,7 @@ const CartItem = ({
                 <ItemTitle>{name}</ItemTitle>
                 <ItemPrice>{formatPrice(price)}</ItemPrice>
             </ItemInfo>
+            <EraseButton onClick={handleRemove}>삭제</EraseButton>
             <ItemCouter
                 quantity={quantity}
                 onDecrease={handleDecrease}
@@ -44,6 +50,18 @@ const CartItem = ({
         </Container>
     );
 };
+
+const EraseButton = styled.button`
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+`;
 
 const Container = styled.div`
     display: flex;
