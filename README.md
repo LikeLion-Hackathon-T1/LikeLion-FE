@@ -1,1 +1,1 @@
-# 개발 전에 Notion Prontend Page 확인
+# 개발 전에 Notion Frontend Page 확인
