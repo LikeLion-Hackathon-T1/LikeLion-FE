@@ -67,9 +67,9 @@ jobs:
               uses: docker/build-push-action@v6.4.1
               with:
                   context: .
-                  file: ./Dockerfile
+                  file: ./Dockerfile.prod
                   push: true
-                  tags: ${{ secrets.DOCKERHUB_USERNAME }}/jmdb
+                  tags: ${{ secrets.DOCKERHUB_USERNAME }}/syluv
 
             # 마지막으로 ssh로 인스턴스에 연결하여 이미지를 Pull하고 컨테이너를 재시작한다.
             - name: Pull and restart Docker Container
