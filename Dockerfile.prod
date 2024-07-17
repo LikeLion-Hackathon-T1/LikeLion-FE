@@ -19,8 +19,9 @@ COPY conf /etc/nginx
 # 빌드된 파일을 nginx에 복사
 COPY --from=build /app/build /usr/share/nginx/html
 
-# HTTP(80) 포트 오픈
+# HTTP(80) 및 HTTPS(443) 포트 오픈
 EXPOSE 80
+EXPOSE 443
 
 # nginx 실행
 CMD ["nginx", "-g", "daemon off;"]
