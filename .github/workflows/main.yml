@@ -46,7 +46,7 @@ jobs:
                   context: .
                   file: ./Dockerfile.prod # Dockerfile.prod 경로 지정
                   push: true
-                  tags: ${{ secrets.DOCKERHUB_USERNAME }}/jmdb
+                  tags: ${{ secrets.DOCKERHUB_USERNAME }}/syluv:latest
 
             - name: Pull and restart Docker Container
               uses: appleboy/ssh-action@master
@@ -58,9 +58,9 @@ jobs:
                   timeout: 60s
                   script: |
                       echo "Pulling latest Docker image"
-                      sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/jmdb
+                      sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/syulv
                       echo "Stopping existing Docker container"
                       sudo docker stop syluvFrontend || true
                       sudo docker rm syluvFrontend || true
                       echo "Starting new Docker container"
-                      sudo docker run -d --rm --name syluvFrontend -p 80:80 -p 443:443 ${{ secrets.DOCKERHUB_USERNAME }}/jmdb
+                      sudo docker run -d --rm --name syluvFrontend -p 80:80 -p 443:443 ${{ secrets.DOCKERHUB_USERNAME }}/syluv
