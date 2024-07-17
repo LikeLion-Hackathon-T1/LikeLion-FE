@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import Header from "../components/Common/Header";
-import NavBar from "../components/Common/NavBar";
-import MarketTab from "../components/Market/MarketTab";
-import VisitTab from "../components/Market/VisitTab";
+import Header from "components/Common/Header";
+import NavBar from "components/Common/NavBar";
+import MarketTab from "components/Market/MarketTab";
+import VisitTab from "components/Market/VisitTab";
 
 const MarketPage = () => {
     const items = ["홈", "방문"];

@@ -1,13 +1,13 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import styled from "styled-components";
-import LoginPage from "./pages/LoginPage";
-import OauthCallback from "./utils/OauthCallback";
-import HomePage from "./pages/HomePage";
-import CartPage from "./pages/CartPage";
-import MenuTestPage from "./pages/MenuTestPage";
-import MarketPage from "./pages/MarketPage";
-import { ScrollContainer } from "./styles/SyluvStyle";
+import LoginPage from "pages/LoginPage";
+import OauthCallback from "utils/OauthCallback";
+import HomePage from "pages/HomePage";
+import CartPage from "pages/CartPage";
+import MenuTestPage from "pages/MenuTestPage";
+import MarketPage from "pages/MarketPage";
+import { ScrollContainer } from "styles/SyluvStyle";
 
 const App = () => {
     return (

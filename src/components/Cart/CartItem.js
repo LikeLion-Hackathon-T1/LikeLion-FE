@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import ItemCouter from "./ItemCounter";
 import { useState } from "react";
-import useCartStore from "../../hooks/useCartStore";
+import useCartStore from "hooks/useCartStore";
 import Item from "../Common/Item/Item";
 
 const CartItem = ({

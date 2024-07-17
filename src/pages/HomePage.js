@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import Header from "../components/Common/Header";
-import KakaoMap from "../components/Map/Map";
+import Header from "components/Common/Header";
+import KakaoMap from "components/Map/Map";
 
 const HomePage = () => {
     const navigate = useNavigate();

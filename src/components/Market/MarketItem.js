@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { ReactComponent as VisitIcon } from "../../assets/images/visit.svg";
+import { ReactComponent as VisitIcon } from "assets/images/visit.svg";
 import { useState } from "react";
 import MarketInfoSmall from "./MarketinfoSmall";
 

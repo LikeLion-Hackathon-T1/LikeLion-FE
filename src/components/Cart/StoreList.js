@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import useCartStore from "../../hooks/useCartStore";
+import useCartStore from "hooks/useCartStore";
 import Store from "./Store";
 
 const StoreList = () => {

@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import { ReactComponent as BackIcon } from "../../assets/images/back.svg";
-import { ReactComponent as CartIcon } from "../../assets/images/cart.svg";
+import { ReactComponent as BackIcon } from "assets/images/back.svg";
+import { ReactComponent as CartIcon } from "assets/images/cart.svg";
 import { useNavigate } from "react-router-dom";
-import useCartStore from "../../hooks/useCartStore";
+import useCartStore from "hooks/useCartStore";
 import { useEffect, useState } from "react";
 
 const Header = ({
