@@ -79,6 +79,6 @@ jobs:
                   host: ${{ secrets.HOST }}
                   username: ${{ secrets.USER }}
                   script: |
-                      docker pull ${{ secrets.DOCKERHUB_USERNAME }}/syluv
-                      docker stop syluv
-                      docker run -d --rm --name syluvFrontend -p 80:80 ${{ secrets.DOCKERHUB_USERNAME }}/syluv
+                      sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/syluv
+                      sudo docker stop syluv
+                      sudo docker run -d --rm --name syluvFrontend -p 80:80 ${{ secrets.DOCKERHUB_USERNAME }}/syluv
