@@ -81,4 +81,4 @@ jobs:
                   script: |
                       sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/syluv
                       sudo docker stop syluv
-                      sudo docker run -d --rm --name syluvFrontend -p 80:80 ${{ secrets.DOCKERHUB_USERNAME }}/syluv
+                      sudo docker run -d --rm --name syluvFrontend -p 80:80 -p 443:443 ${{ secrets.DOCKERHUB_USERNAME }}/syluv
