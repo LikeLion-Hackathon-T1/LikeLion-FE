@@ -6,6 +6,7 @@ import OauthCallback from "./utils/OauthCallback";
 import HomePage from "./pages/HomePage";
 import CartPage from "./pages/CartPage";
 import MenuTestPage from "./pages/MenuTestPage";
+import MarketPage from "./pages/MarketPage";
 
 const App = () => {
     return (
@@ -15,6 +16,7 @@ const App = () => {
                     <Routes>
                         <Route path="/" element={<HomePage />} />
                         <Route path="/login" element={<LoginPage />} />
+                        <Route path="/market" element={<MarketPage />} />
                         <Route path="/cart" element={<CartPage />} />
                         <Route path="/menuTest" element={<MenuTestPage />} />
                         <Route

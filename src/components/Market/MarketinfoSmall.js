@@ -1,23 +1,18 @@
 import styled from "styled-components";
 
-const Item = ({ price, name, desc, ImgSrc }) => {
-    const formatPrice = (price) => {
-        return new Intl.NumberFormat("ko-KR").format(price) + "원";
-    };
-
+const MarketInfoSmall = ({ name, desc, imgSrc }) => {
     return (
         <ItemContainer>
-            <MenuImage src={ImgSrc} alt="메뉴 이미지" />
+            <MenuImage src={imgSrc} alt="메뉴 이미지" />
             <ItemInfo>
                 <ItemTitle>{name}</ItemTitle>
-                <ItemPrice>{formatPrice(price)}</ItemPrice>
                 {desc && <ItemDescription>{desc}</ItemDescription>}
             </ItemInfo>
         </ItemContainer>
     );
 };
 
-export default Item;
+export default MarketInfoSmall;
 
 const ItemContainer = styled.div`
     display: flex;
@@ -25,7 +20,7 @@ const ItemContainer = styled.div`
 `;
 
 const ItemDescription = styled.span`
-    margin-top: 15px;
+    margin-top: 6%;
     font-size: 11px;
     color: #666;
 `;
@@ -44,8 +39,4 @@ const ItemTitle = styled.div`
     margin-top: 5px;
     font-size: 16px;
     font-weight: bold;
-`;
-
-const ItemPrice = styled.div`
-    font-size: 14px;
 `;
