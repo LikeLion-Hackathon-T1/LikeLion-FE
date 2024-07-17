@@ -1,3 +1,4 @@
+# Stage 1: Build
 FROM node:lts AS build
 
 WORKDIR /app
@@ -10,18 +11,23 @@ COPY . .
 
 RUN npm run build
 
+# Stage 2: Serve with Nginx
 FROM nginx:stable-alpine
 
-# 기본 nginx 설정 제거 및 설정 복사
+# Remove default Nginx configuration and copy custom config
 RUN rm -rf /etc/nginx/conf.d
 COPY conf /etc/nginx
 
-# 빌드된 파일을 nginx에 복사
+# Copy SSL certificates
+COPY path/to/your/ssl/certificates/nginx.crt /etc/nginx/ssl/nginx.crt
+COPY path/to/your/ssl/certificates/nginx.key /etc/nginx/ssl/nginx.key
+
+# Copy built files to Nginx
 COPY --from=build /app/build /usr/share/nginx/html
 
-# HTTP(80) 및 HTTPS(443) 포트 오픈
+# Expose HTTP and HTTPS ports
 EXPOSE 80
 EXPOSE 443
 
-# nginx 실행
+# Run Nginx
 CMD ["nginx", "-g", "daemon off;"]
