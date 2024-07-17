@@ -1,0 +1,26 @@
+FROM node:lts AS build
+
+WORKDIR /app
+
+COPY package.json .
+
+RUN npm install
+
+COPY . .
+
+RUN npm run build
+
+FROM nginx:stable-alpine
+
+# 기본 nginx 설정 제거 및 설정 복사
+RUN rm -rf /etc/nginx/conf.d
+COPY conf /etc/nginx
+
+# 빌드된 파일을 nginx에 복사
+COPY --from=build /app/build /usr/share/nginx/html
+
+# HTTP(80) 포트 오픈
+EXPOSE 80
+
+# nginx 실행
+CMD ["nginx", "-g", "daemon off;"]
