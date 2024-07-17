@@ -36,8 +36,8 @@ const Container = styled.div`
     display: flex;
     gap: 16px;
     flex-direction: column;
-    overflow-y: scroll;
-    max-height: 450px;
+    overflow-y: auto;
+    max-height: 430px;
 
     // 스크롤바를 숨기는 스타일
     &::-webkit-scrollbar {

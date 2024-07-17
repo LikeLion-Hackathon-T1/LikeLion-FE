@@ -44,7 +44,7 @@ const MobileContainer = styled.div`
     // 좌우 패딩
     padding: 0 20px;
     width: 440px;
-    height: 100%;
+    height: 100vh;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     background-color: #fff;
     overflow: hidden;
