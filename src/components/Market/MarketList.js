@@ -36,15 +36,6 @@ const Container = styled.div`
     display: flex;
     gap: 16px;
     flex-direction: column;
-    overflow-y: auto;
-    max-height: 430px;
-
-    // 스크롤바를 숨기는 스타일
-    &::-webkit-scrollbar {
-        display: none;
-    }
-    -ms-overflow-style: none; // IE 및 Edge
-    scrollbar-width: none; // Firefox
 `;
 
 export default MarketList;

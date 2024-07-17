@@ -12,10 +12,12 @@ const VisitItem = ({ item }) => {
 
     return (
         <ListItem>
-            <div>
-                <Number>{item.order}</Number>
+            <LeftContainer>
+                <NumberCircle>
+                    <Number>{item.order}</Number>
+                </NumberCircle>
                 <MarketName>{item.name}</MarketName>
-            </div>
+            </LeftContainer>
             <ItemState isReady={isReady}>{item.state}</ItemState>
         </ListItem>
     );
@@ -26,10 +28,22 @@ export default VisitItem;
 const Number = styled.span`
     font-size: 18px;
     font-weight: bold;
-    background-color: pink;
     color: white;
-    padding: 2% 8px;
-    border-radius: 20px;
+`;
+
+const NumberCircle = styled.div`
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: pink;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+const LeftContainer = styled.div`
+    display: flex;
+    align-items: center;
 `;
 
 const ListItem = styled.div`

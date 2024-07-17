@@ -31,7 +31,7 @@ export default MarketTab;
 const Container = styled.div`
     display: flex;
     flex-direction: column;
-    margin: 32px 0;
+    margin: 8px 0 30px 0;
     gap: 16px;
 `;
 

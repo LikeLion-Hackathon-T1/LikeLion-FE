@@ -22,6 +22,7 @@ const NavBarContainer = styled.div`
     justify-content: start;
     margin-top: 20px;
     margin-left: 10px;
+    margin-bottom: 20px;
 `;
 
 const NavItem = styled.div`

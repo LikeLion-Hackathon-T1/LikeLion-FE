@@ -38,13 +38,6 @@ const CartList = styled.div`
     gap: 20px;
     overflow-y: auto;
     max-height: 85%;
-
-    // 스크롤바를 숨기는 스타일
-    &::-webkit-scrollbar {
-        display: none;
-    }
-    -ms-overflow-style: none; // IE 및 Edge
-    scrollbar-width: none; // Firefox
 `;
 
 const NoItem = styled.div`

@@ -34,21 +34,25 @@ const Container = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100vw;
-    height: 100vh;
+    width: 100dvw;
+    height: 100dvh;
     background-color: #f0f0f0;
     flex-direction: column;
 `;
 
 const MobileContainer = styled.div`
-    // 좌우 패딩
     padding: 0 20px;
     width: 440px;
-    height: 100vh;
+    height: 100dvh;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     background-color: #fff;
     overflow: hidden;
     overflow-wrap: break-word;
+
+    @media (max-width: 440px) {
+        width: 90dvw;
+        box-shadow: none;
+    }
 `;
 
 export default App;

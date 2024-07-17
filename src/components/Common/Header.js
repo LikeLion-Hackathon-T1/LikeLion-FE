@@ -59,8 +59,8 @@ const Container = styled.div`
     justify-content: space-between;
     align-items: center;
     position: relative;
-    height: 50px;
-    margin-bottom: 20px;
+    height: 5dvh;
+    margin-bottom: 2dvh;
 `;
 
 const LeftSection = styled.div`
