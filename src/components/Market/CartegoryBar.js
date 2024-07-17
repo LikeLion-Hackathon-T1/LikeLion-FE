@@ -12,7 +12,7 @@ const CategoryBar = ({ categories }) => {
                     onClick={() => {
                         setSelectedCategory(categories);
                     }}
-                    isSelected={selectedCategory === categories}
+                    selected={selectedCategory === categories}
                 >
                     {categories}
                 </Category>
@@ -37,6 +37,6 @@ const Category = styled.div`
     text-align: center;
     padding: 8px 16px;
     cursor: pointer;
-    background-color: ${(props) => (props.isSelected ? "#ccc" : "white")};
-    color: ${(props) => (props.isSelected ? "white" : "black")};
+    background-color: ${(props) => (props.selected ? "#ccc" : "white")};
+    color: ${(props) => (props.selected ? "white" : "black")};
 `;

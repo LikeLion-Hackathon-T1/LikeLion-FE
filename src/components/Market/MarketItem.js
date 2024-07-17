@@ -4,18 +4,15 @@ import { useState } from "react";
 import MarketInfoSmall from "./MarketinfoSmall";
 
 const MarketItem = ({ name, desc, imgSrc }) => {
-    const [isSelected, setIsSelected] = useState(false);
+    const [selected, setIsSelected] = useState(false);
     const handleVisit = () => {
-        setIsSelected(!isSelected);
+        setIsSelected(!selected);
     };
 
     return (
         <MarketContainer>
             <MarketInfoSmall imgSrc={imgSrc} name={name} desc={desc} />
-            <VisitButton
-                onClick={() => handleVisit()}
-                isSelected={isSelected}
-            />
+            <VisitButton onClick={() => handleVisit()} selected={selected} />
         </MarketContainer>
     );
 };
@@ -32,5 +29,5 @@ const MarketContainer = styled.div`
 const VisitButton = styled(VisitIcon)`
     cursor: pointer;
     color: gray;
-    opacity: ${(props) => (props.isSelected ? 1 : 0.5)};
+    opacity: ${(props) => (props.selected ? 1 : 0.5)};
 `;

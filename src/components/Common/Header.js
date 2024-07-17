@@ -3,6 +3,7 @@ import { ReactComponent as BackIcon } from "../../assets/images/back.svg";
 import { ReactComponent as CartIcon } from "../../assets/images/cart.svg";
 import { useNavigate } from "react-router-dom";
 import useCartStore from "../../hooks/useCartStore";
+import { useEffect, useState } from "react";
 
 const Header = ({
     title,
@@ -13,9 +14,29 @@ const Header = ({
 }) => {
     const navigate = useNavigate();
     const totalItemCount = useCartStore((state) => state.totalItemCount);
+    const [prevScrollPos, setPrevScrollPos] = useState(0);
+    const [isVisible, setIsVisible] = useState(true);
+
+    useEffect(() => {
+        setIsVisible(true);
+    }, []);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const currentScrollPos = window.pageYOffset;
+            setIsVisible(
+                prevScrollPos > currentScrollPos || currentScrollPos < 10
+            );
+            setPrevScrollPos(currentScrollPos);
+        };
+        window.addEventListener("scroll", handleScroll);
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
+    }, [prevScrollPos, isVisible]);
 
     return (
-        <Container>
+        <Container visible={isVisible.toString()}>
             <LeftSection>
                 {back && (
                     <BackButton onClick={() => navigate(backSrc)}>
@@ -27,19 +48,36 @@ const Header = ({
             <Title>{title}</Title>
             <RightSection>
                 {cart && (
-                    <>
-                        <Cart
-                            width="40px"
-                            height="40px"
-                            onClick={() => navigate("/cart")}
-                        />
+                    <Cart onClick={() => navigate("/cart")}>
+                        <CartIcon width="40px" height="40px" />
                         <CartCount>{totalItemCount()}</CartCount>
-                    </>
+                    </Cart>
                 )}
             </RightSection>
         </Container>
     );
 };
+
+const Container = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    width: 480px;
+    margin: 0 -20px;
+    top: 0;
+    height: 60px;
+    background-color: #fff;
+    box-shadow: 0 2px 0px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+
+    //visible 변화시 transition 효과
+    transition: top 0.2s;
+    ${({ visible }) => (visible === "true" ? "top: 0;" : "top: -60px;")}
+    @media (max-width: 480px) {
+        width: 100dvw;
+    }
+`;
 
 const CartCount = styled.span`
     position: absolute;
@@ -52,15 +90,6 @@ const CartCount = styled.span`
     font-size: 11px;
     font-weight: 900;
     text-align: center;
-`;
-
-const Container = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-    height: 5dvh;
-    margin-bottom: 2dvh;
 `;
 
 const LeftSection = styled.div`
@@ -95,7 +124,7 @@ const Title = styled.h1`
     font-weight: bold;
 `;
 
-const Cart = styled(CartIcon)`
+const Cart = styled.div`
     cursor: pointer;
 `;
 

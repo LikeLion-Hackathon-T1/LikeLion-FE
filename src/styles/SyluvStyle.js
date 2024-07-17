@@ -46,11 +46,10 @@ const GlobalStyle = createGlobalStyle`
     }   
 `;
 
-// 높이는 값으로 받음
 const ScrollContainer = styled.div`
     overflow-y: auto;
-    max-height: 90dvh;
-    margin-bottom: 10px;
+    height: auto;
+    min-height: 100dvh;
 
     // 스크롤바를 숨기는 스타일
     &::-webkit-scrollbar {

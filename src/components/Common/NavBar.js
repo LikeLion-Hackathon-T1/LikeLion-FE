@@ -7,7 +7,7 @@ const NavBar = ({ items, selected, handleSelected }) => {
             {items.map((item, index) => (
                 <NavItem
                     key={index}
-                    isSelected={selected === item}
+                    selected={selected === item}
                     onClick={() => handleSelected(item)}
                 >
                     {item}
@@ -20,7 +20,6 @@ const NavBar = ({ items, selected, handleSelected }) => {
 const NavBarContainer = styled.div`
     display: flex;
     justify-content: start;
-    margin-top: 20px;
     margin-left: 10px;
     margin-bottom: 20px;
 `;
@@ -30,9 +29,9 @@ const NavItem = styled.div`
     font-size: 18px;
     font-weight: bold;
     cursor: pointer;
-    color: ${(props) => (props.isSelected ? "black" : "gray")};
+    color: ${(props) => (props.selected ? "black" : "gray")};
     border-bottom: 2px solid
-        ${(props) => (props.isSelected ? "black" : "transparent")};
+        ${(props) => (props.selected ? "black" : "transparent")};
 `;
 
 export default NavBar;
