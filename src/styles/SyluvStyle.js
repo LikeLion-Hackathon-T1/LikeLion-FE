@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
     html, body, div, span, applet, object, iframe,
@@ -46,4 +46,17 @@ const GlobalStyle = createGlobalStyle`
     }   
 `;
 
-export { GlobalStyle };
+const ScrollContainer = styled.div`
+    overflow-y: auto;
+    height: auto;
+    min-height: 100dvh;
+
+    // 스크롤바를 숨기는 스타일
+    &::-webkit-scrollbar {
+        display: none;
+    }
+    -ms-overflow-style: none; // IE 및 Edge
+    scrollbar-width: none; // Firefox
+`;
+
+export { GlobalStyle, ScrollContainer };

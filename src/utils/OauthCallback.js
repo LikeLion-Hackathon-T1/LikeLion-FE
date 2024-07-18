@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import useTokenStore from "../hooks/useTokenStore";
+import useTokenStore from "hooks/useTokenStore";
 import { useNavigate } from "react-router-dom";
 
 const OauthCallback = () => {

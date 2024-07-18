@@ -1,5 +1,5 @@
-import Header from "../components/Common/Header";
-import StoreList from "../components/Cart/StoreList";
+import Header from "components/Common/Header";
+import StoreList from "components/Cart/StoreList";
 
 const CartPage = () => {
     return (

@@ -1,6 +1,6 @@
 import React from "react";
-import useCartStore from "../hooks/useCartStore";
-import Header from "../components/Common/Header";
+import useCartStore from "hooks/useCartStore";
+import Header from "components/Common/Header";
 import styled from "styled-components";
 
 const stores = [

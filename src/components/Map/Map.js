@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Map, MapMarker, Polyline } from "react-kakao-maps-sdk";
-import SyluvIcon from "../../assets/images/syluv.png";
+import SyluvIcon from "assets/images/syluv.png";
 import styled from "styled-components";
 
 const KakaoMap = () => {

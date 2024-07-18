@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import CartItem from "./CartItem";
 import StoreHeader from "./StoreHeader";
-import useCartStore from "../../hooks/useCartStore";
+import useCartStore from "hooks/useCartStore";
 
 const Store = ({ name = "" }) => {
     const { carts } = useCartStore();
