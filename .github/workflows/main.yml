@@ -47,6 +47,9 @@ jobs:
                   file: ./Dockerfile.prod
                   push: true
                   tags: ${{ secrets.DOCKERHUB_USERNAME }}/syluv:latest
+                  build-args:
+                      REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
+                      REACT_APP_OTHER_ENV: ${{ secrets.REACT_APP_OTHER_ENV }}
 
             - name: Pull and restart Docker Container
               uses: appleboy/ssh-action@master
