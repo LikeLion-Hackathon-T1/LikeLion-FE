@@ -79,7 +79,7 @@ const stores = [
 ];
 
 const MenuTestPage = () => {
-    const { addItem, removeItem, updateItemCount, carts } = useCartStore();
+    const { addItem, removeItem, carts } = useCartStore();
 
     const handleAddItem = (storeName, item) => {
         addItem(storeName, item);

@@ -1,0 +1,74 @@
+# Build stage
+FROM node:lts AS build
+
+WORKDIR /app
+
+COPY package.json .
+
+RUN npm i
+
+COPY . .
+
+# Build arguments for React environment variables
+ARG REACT_APP_API_URL
+ARG REACT_APP_OTHER_ENV
+
+# Set environment variables for React build
+ENV REACT_APP_API_URL $REACT_APP_API_URL
+ENV REACT_APP_OTHER_ENV $REACT_APP_OTHER_ENV
+
+RUN npm run build
+
+# Production stage
+FROM nginx:stable-alpine
+
+# nginx의 기본 설정을 삭제하고 앱에서 설정한 파일을 복사
+RUN rm -rf /etc/nginx/conf.d
+COPY conf /etc/nginx
+
+# 위 스테이지에서 생성한 빌드 결과를 nginx의 샘플 앱이 사용하던 폴더로 이동
+COPY --from=build /app/build /usr/share/nginx/html
+
+EXPOSE 80
+
+# nginx 실행
+CMD [ "nginx", "-g", "daemon off;" ]
+# Build stage
+FROM node:lts AS build
+
+WORKDIR /app
+
+COPY package.json .
+
+RUN npm i
+
+COPY . .
+
+# Build arguments for React environment variables
+ARG REACT_APP_KAKAO_JS_KEY
+ARG REACT_APP_KAKAO_REST_API_KEY
+ARG REACT_APP_KAKAO_REDIRECT_URI
+ARG REACT_APP_BASE_URL
+
+# Set environment variables for React build
+ENV REACT_APP_KAKAO_JS_KEY $REACT_APP_KAKAO_JS_KEY
+ENV REACT_APP_KAKAO_REST_API_KEY $REACT_APP_KAKAO_REST_API_KEY
+ENV REACT_APP_KAKAO_REDIRECT_URI $REACT_APP_KAKAO_REDIRECT_URI
+ENV REACT_APP_BASE_URL $REACT_APP_BASE_URL
+
+RUN npm run build
+
+# Production stage
+FROM nginx:stable-alpine
+
+# nginx의 기본 설정을 삭제하고 앱에서 설정한 파일을 복사
+RUN rm -rf /etc/nginx/conf.d
+COPY conf /etc/nginx
+
+# 위 스테이지에서 생성한 빌드 결과를 nginx의 샘플 앱이 사용하던 폴더로 이동
+COPY --from=build /app/build /usr/share/nginx/html
+
+EXPOSE 80
+
+# nginx 실행
+CMD [ "nginx", "-g", "daemon off;" ]
