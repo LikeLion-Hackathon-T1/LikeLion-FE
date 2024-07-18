@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import styled from "styled-components";
 import LoginPage from "pages/LoginPage";
@@ -10,6 +10,13 @@ import MarketPage from "pages/MarketPage";
 import { ScrollContainer } from "styles/SyluvStyle";
 
 const App = () => {
+    useEffect(() => {
+        if (window.location.host === "syluv.store") {
+            window.location.replace(
+                "https://www.syluv.store" + window.location.pathname
+            );
+        }
+    }, []);
     return (
         <ScrollContainer>
             <Container>
