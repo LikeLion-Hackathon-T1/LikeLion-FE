@@ -24,7 +24,10 @@ const StoreList = () => {
                 <NoItem>장바구니에 등록된 물품이 없습니다.</NoItem>
             )}
             {storeNames.length > 0 && (
-                <OrderButton>{totalPrice}원 주문하기</OrderButton>
+                <OrderButton>
+                    {new Intl.NumberFormat("ko-KR").format(totalPrice)}원
+                    주문하기
+                </OrderButton>
             )}
         </CartList>
     );
