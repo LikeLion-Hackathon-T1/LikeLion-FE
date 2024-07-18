@@ -72,7 +72,7 @@ const OauthCallback = () => {
     ]);
 
     useEffect(() => {
-        if (retry > 2) navigate("/login", { replace: true });
+        if (retry > 0) navigate("/login", { replace: true });
         fetchTokens();
     }, [fetchTokens, retry, navigate]);
 
