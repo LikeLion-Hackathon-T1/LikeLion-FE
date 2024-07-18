@@ -48,8 +48,11 @@ jobs:
                   push: true
                   tags: ${{ secrets.DOCKERHUB_USERNAME }}/syluv:latest
                   build-args:
-                      REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
-                      REACT_APP_OTHER_ENV: ${{ secrets.REACT_APP_OTHER_ENV }}
+                      REACT_APP_KAKAO_REST_API_KEY: ${{ secrets.REACT_APP_KAKAO_REST_API_KEY }}
+                      REACT_APP_KAKAO_JS_KEY: ${{ secrets.REACT_APP_KAKAO_JS_KEY }}
+                      REACT_APP_KAKAO_REST_API_KEY: ${{ secrets.REACT_APP_KAKAO_REST_API_KEY }}
+                      REACT_APP_KAKAO_REDIRECT_URI: ${{ secrets.REACT_APP_KAKAO_REDIRECT_URI }}
+                      REACT_APP_BASE_URL: ${{ secrets.REACT_APP_BASE_URL }}
 
             - name: Pull and restart Docker Container
               uses: appleboy/ssh-action@master
