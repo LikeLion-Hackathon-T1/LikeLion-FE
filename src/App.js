@@ -1,10 +1,11 @@
-// App.js
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import styled from "styled-components";
 import LoginPage from "./pages/LoginPage";
 import OauthCallback from "./utils/OauthCallback";
 import HomePage from "./pages/HomePage";
+import CartPage from "./pages/CartPage";
+import MenuTestPage from "./pages/MenuTestPage";
 
 const App = () => {
     return (
@@ -14,6 +15,8 @@ const App = () => {
                     <Routes>
                         <Route path="/" element={<HomePage />} />
                         <Route path="/login" element={<LoginPage />} />
+                        <Route path="/cart" element={<CartPage />} />
+                        <Route path="/menuTest" element={<MenuTestPage />} />
                         <Route
                             path="/oauth/kakao/callback"
                             element={<OauthCallback />}
@@ -36,7 +39,9 @@ const Container = styled.div`
 `;
 
 const MobileContainer = styled.div`
-    width: 480px;
+    // 좌우 패딩
+    padding: 0 20px;
+    width: 440px;
     height: 100%;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     background-color: #fff;
