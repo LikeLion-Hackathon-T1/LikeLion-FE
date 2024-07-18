@@ -9,6 +9,7 @@ const OauthCallback = () => {
     const [error, setError] = useState(null);
     const { setRefreshToken, setAccessToken } = useTokenStore();
     const navigate = useNavigate();
+    const [retry, setRetry] = useState(0);
 
     const getKakaoToken = useCallback(async (code) => {
         try {
@@ -58,6 +59,7 @@ const OauthCallback = () => {
         } catch (error) {
             setIsError(true);
             setError(error);
+            setRetry((prev) => prev + 1);
         } finally {
             setIsLoading(false);
         }
@@ -70,8 +72,9 @@ const OauthCallback = () => {
     ]);
 
     useEffect(() => {
+        if (retry > 2) navigate("/login", { replace: true });
         fetchTokens();
-    }, [fetchTokens]);
+    }, [fetchTokens, retry, navigate]);
 
     if (isLoading) return <div>Loading...</div>;
     if (isError) return <div>Error: {error.message}</div>;
