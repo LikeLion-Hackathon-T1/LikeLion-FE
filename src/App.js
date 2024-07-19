@@ -8,6 +8,7 @@ import CartPage from "pages/CartPage";
 import MenuTestPage from "pages/MenuTestPage";
 import MarketPage from "pages/MarketPage";
 import { ScrollContainer } from "styles/SyluvStyle";
+import Store from "components/Store/Store";
 
 const App = () => {
     useEffect(() => {
@@ -35,6 +36,7 @@ const App = () => {
                                     path="/menuTest"
                                     element={<MenuTestPage />}
                                 />
+                                <Route path="/store" element={<Store />} />
                                 <Route
                                     path="/oauth/kakao/callback"
                                     element={<OauthCallback />}

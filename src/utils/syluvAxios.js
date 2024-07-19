@@ -1,14 +1,17 @@
 import axios from "axios";
-import {
-    getAccessToken,
-    getRefreshToken,
-    setAccessToken,
-    setRefreshToken,
-} from "../hooks/useTokenStore";
+import useTokenStore from "hooks/useTokenStore";
 
 const baseURL = process.env.REACT_APP_BASE_URL;
 
-const createSyluvAxios = (navigate) => {
+const CreateSyluvAxios = (navigate) => {
+    const {
+        getAccessToken,
+        getRefreshToken,
+        setAccessToken,
+        setRefreshToken,
+        removeAccessToken,
+        removeRefreshToken,
+    } = useTokenStore();
     const syluvAxios = axios.create({
         withCredentials: true,
         baseURL: baseURL + "/v1",
@@ -52,6 +55,8 @@ const createSyluvAxios = (navigate) => {
                         })
                         .catch((error) => {
                             console.log("토큰 재발급 중 에러가 발생했습니다.");
+                            removeAccessToken();
+                            removeRefreshToken();
                             console.log(error);
                             navigate("/login", { replace: true });
                             return Promise.reject(error);
@@ -67,4 +72,4 @@ const createSyluvAxios = (navigate) => {
     return syluvAxios;
 };
 
-export default createSyluvAxios;
+export default CreateSyluvAxios;
