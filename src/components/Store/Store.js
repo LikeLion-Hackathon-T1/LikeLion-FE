@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./Store.css";
-import { ReactComponent as CartIcon } from "assets/images/cart.svg";
 import Header from "components/Common/Header";
 
 const reviews = [
