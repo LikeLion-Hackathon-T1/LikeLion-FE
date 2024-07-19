@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import createSyluvAxios from "utils/syluvAxios";
+import CreateSyluvAxios from "utils/syluvAxios";
 
 const useSyluvAxios = () => {
     const navigate = useNavigate();
-    const axiosInstance = createSyluvAxios(navigate);
+    const axiosInstance = CreateSyluvAxios(navigate);
     return axiosInstance;
 };
 
