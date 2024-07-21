@@ -70,13 +70,6 @@ const Container = styled.div`
     background-color: #fff;
     box-shadow: 0 2px 0px rgba(0, 0, 0, 0.1);
     z-index: 1000;
-
-    //visible 변화시 transition 효과
-    transition: top 0.2s;
-    ${({ visible }) => (visible === "true" ? "top: 0;" : "top: -60px;")}
-    @media (max-width: 480px) {
-        width: 100dvw;
-    }
 `;
 
 const CartCount = styled.span`
