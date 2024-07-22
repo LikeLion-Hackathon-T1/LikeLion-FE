@@ -1,8 +1,17 @@
 import { useState } from "react";
 import styled from "styled-components";
 
-const CategoryBar = ({ categories }) => {
+const CategoryBar = ({ categories, onClick }) => {
     const [selectedCategory, setSelectedCategory] = useState("전체");
+
+    const handleClick = (category) => {
+        if (category === "전체") {
+            onClick("");
+        } else {
+            onClick(category);
+        }
+        setSelectedCategory(category);
+    };
 
     return (
         <CategoryContainer>
@@ -10,7 +19,7 @@ const CategoryBar = ({ categories }) => {
                 <Category
                     key={categories}
                     onClick={() => {
-                        setSelectedCategory(categories);
+                        handleClick(categories);
                     }}
                     selected={selectedCategory === categories}
                 >

@@ -1,33 +1,56 @@
 import styled from "styled-components";
 import MarketItem from "./MarketItem";
+import useSyluvAxios from "hooks/useSyluvAxios";
+import { useEffect, useState } from "react";
 
-const markets = [
-    {
-        id: 1,
-        type: "분식",
-        name: "원조 누드 치즈김밥",
-        desc: "매콤한 양념과 부드러운 치즈가 만나 더욱 맛있는 치즈김밥",
-        imgSrc: "https://via.placeholder.com/104",
-    },
-    {
-        id: 2,
-        type: "중식",
-        name: "태화루",
-        desc: "중국의 전통적인 맛을 그대로 선보이는 태화루",
-        imgSrc: "https://via.placeholder.com/104",
-    },
-];
+const MarketList = ({ searchInfo }) => {
+    const syluvAxios = useSyluvAxios();
+    const [storeList, setStoreList] = useState(null);
 
-const MarketList = () => {
+    let fetchData;
+
+    if (searchInfo.search === "" && searchInfo.category === "") {
+        fetchData = async () => {
+            try {
+                const response = await syluvAxios.get("/store/info");
+                setStoreList(response.data.payload);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+    } else {
+        fetchData = async () => {
+            try {
+                const response = await syluvAxios.get("/market/store", {
+                    params: {
+                        search: searchInfo.search,
+                        category: searchInfo.category,
+                    },
+                });
+                setStoreList(response.data.payload);
+                console.log(response.data.payload);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+    }
+
+    useEffect(() => {
+        fetchData();
+    }, [searchInfo]);
+
+    console.log(storeList);
+
     return (
         <Container>
-            {markets.map((market) => (
+            {storeList?.map((store) => (
                 <MarketItem
-                    key={market.id}
-                    type={market.type}
-                    name={market.name}
-                    desc={market.desc}
-                    imgSrc={market.imgSrc}
+                    key={store.storeId}
+                    storeId={store.storeId}
+                    type={store.type}
+                    name={store.name}
+                    desc={store.desc}
+                    imgSrc={store.storeImage}
                 />
             ))}
         </Container>

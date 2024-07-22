@@ -3,25 +3,82 @@ import CategoryBar from "./CartegoryBar";
 import MarketList from "./MarketList";
 import { ReactComponent as SearchIcon } from "assets/images/search.svg";
 import MarketInfo from "./MarketInfo";
+import useSyluvAxios from "hooks/useSyluvAxios";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 
-const categories = ["전체", "음식", "의류", "가구", "기타"];
+const categories = ["전체", "분식", "의류", "가구", "기타"];
 
-const MarketTab = ({ market }) => {
+const MarketTab = ({ marketId }) => {
+    const syluvAxios = useSyluvAxios();
+    const [marketInfo, setMarketInfo] = useState(null);
+    const [marketHours, setMarketHours] = useState(null);
+    const { isLoading, data, isError, error } = useQuery({
+        queryKey: ["get-markets"],
+        queryFn: () => syluvAxios.get("/market/info"),
+    });
+    const [searchInfo, setSearchInfo] = useState({
+        search: "",
+        category: "",
+    });
+    const [searchInput, setSearchInput] = useState("");
+
+    useEffect(() => {
+        if (data) {
+            setMarketInfo(data.data.payload);
+        }
+    }, [data]);
+
+    useEffect(() => {
+        if (data) {
+            const hour = `${data.data.payload.startHour} ~ ${data.data.payload.closeHour}`;
+            setMarketHours(hour);
+        }
+    }, [data]);
+
+    if (isLoading) return <div></div>;
+    if (isError) return <div>Error: {error.message}</div>;
+
+    const handleChange = (e) => {
+        setSearchInput(e.target.value);
+    };
+
+    const handleKeyDown = (event) => {
+        if (event.key === "Enter") {
+            setSearchInfo({
+                ...searchInfo,
+                search: searchInput,
+            });
+        }
+    };
+
+    const handleCategory = (category) => {
+        setSearchInfo({
+            ...searchInfo,
+            category: category,
+        });
+    };
+
     return (
         <div>
             <MarketInfo
-                imgSrc="https://via.placeholder.com/160"
-                call="02-1234-5678"
-                address="서울특별시 종로구 창경궁로 123"
-                time="09:00 ~ 22:30 (일요일 휴무)"
+                imgSrc={marketInfo?.image}
+                call={marketInfo?.contact}
+                address={marketInfo?.description}
+                time={marketHours?.toString()}
             />
             <Container>
                 <Search>
                     <SearchIcon />
-                    <SearchInput placeholder="가게를 찾아볼까요?" />
+                    <SearchInput
+                        placeholder="가게를 찾아볼까요?"
+                        value={searchInput}
+                        onChange={handleChange}
+                        onKeyDown={handleKeyDown}
+                    />
                 </Search>
-                <CategoryBar categories={categories} />
-                <MarketList />
+                <CategoryBar categories={categories} onClick={handleCategory} />
+                <MarketList searchInfo={searchInfo} />
             </Container>
         </div>
     );

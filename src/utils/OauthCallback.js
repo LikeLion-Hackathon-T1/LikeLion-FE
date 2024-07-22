@@ -52,7 +52,6 @@ const OauthCallback = () => {
             const code = new URL(window.location.href).searchParams.get("code");
             const idToken = await getKakaoToken(code);
             const syluvData = await getSyluvToken(idToken);
-            console.log(syluvData);
             setAccessToken(syluvData.accessToken);
             setRefreshToken(syluvData.refreshToken);
             setName(syluvData.nickname);
