@@ -2,12 +2,19 @@ import styled from "styled-components";
 import CategoryBar from "./CartegoryBar";
 import MarketList from "./MarketList";
 import { ReactComponent as SearchIcon } from "assets/images/search.svg";
+import MarketInfo from "./MarketInfo";
 
 const categories = ["전체", "음식", "의류", "가구", "기타"];
 
 const MarketTab = ({ market }) => {
     return (
         <div>
+            <MarketInfo
+                imgSrc="https://via.placeholder.com/160"
+                call="02-1234-5678"
+                address="서울특별시 종로구 창경궁로 123"
+                time="09:00 ~ 22:30 (일요일 휴무)"
+            />
             <Container>
                 <Search>
                     <SearchIcon />
