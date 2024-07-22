@@ -1,12 +1,16 @@
 import styled from "styled-components";
+import theme from "styles/SyluvTheme";
 
-const MarketInfoSmall = ({ name, desc, imgSrc }) => {
+const MarketInfoSmall = ({ type, name, desc, imgSrc }) => {
     return (
         <ItemContainer>
             <MenuImage src={imgSrc} alt="메뉴 이미지" />
             <ItemInfo>
-                <ItemTitle>{name}</ItemTitle>
-                {desc && <ItemDescription>{desc}</ItemDescription>}
+                <ItemTitleContainer>
+                    <Category>{type}</Category>
+                    <ItemTitle>{name}</ItemTitle>
+                </ItemTitleContainer>
+                <ItemDescription>{desc}</ItemDescription>
             </ItemInfo>
         </ItemContainer>
     );
@@ -14,29 +18,46 @@ const MarketInfoSmall = ({ name, desc, imgSrc }) => {
 
 export default MarketInfoSmall;
 
+const ItemTitleContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+`;
+
+const Category = styled.div`
+    color: ${({ theme }) => theme.color.gray600};
+    font-size: 14px;
+    font-weight: ${({ theme }) => theme.fontWeight.medium};
+`;
+
 const ItemContainer = styled.div`
     display: flex;
-    gap: 20px;
+    gap: 12px;
 `;
 
 const ItemDescription = styled.span`
-    margin-top: 6%;
-    font-size: 11px;
-    color: #666;
+    font-size: 14px;
+    color: ${({ theme }) => theme.color.gray600};
+    font-weight: ${({ theme }) => theme.fontWeight.regular};
+    margin-right: 80px;
+    word-break: keep-all;
 `;
 
 const MenuImage = styled.img`
-    width: 64px;
-    height: 64px;
+    width: 104px;
+    height: 104px;
+    border-radius: 12px;
 `;
 
 const ItemInfo = styled.div`
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    margin: 4px 0;
 `;
 
 const ItemTitle = styled.div`
-    margin-top: 5px;
     font-size: 16px;
-    font-weight: bold;
+    font-weight: ${({ theme }) => theme.fontWeight.semibold};
+    color: ${({ theme }) => theme.color.gray900};
 `;

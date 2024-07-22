@@ -3,7 +3,12 @@ import { ReactComponent as VisitIcon } from "assets/images/visit.svg";
 import { useState } from "react";
 import MarketInfoSmall from "./MarketinfoSmall";
 
-const MarketItem = ({ name, desc, imgSrc }) => {
+const MarketItem = ({
+    type = "전체",
+    name = "가게 이름",
+    desc = "설명이 없습니다.",
+    imgSrc = "https://via.placeholder.com/150",
+}) => {
     const [selected, setIsSelected] = useState(false);
     const handleVisit = () => {
         setIsSelected(!selected);
@@ -11,7 +16,12 @@ const MarketItem = ({ name, desc, imgSrc }) => {
 
     return (
         <MarketContainer>
-            <MarketInfoSmall imgSrc={imgSrc} name={name} desc={desc} />
+            <MarketInfoSmall
+                imgSrc={imgSrc}
+                type={type}
+                name={name}
+                desc={desc}
+            />
             <VisitButton onClick={() => handleVisit()} selected={selected} />
         </MarketContainer>
     );

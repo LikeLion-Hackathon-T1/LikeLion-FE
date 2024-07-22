@@ -18,20 +18,26 @@ const NavBar = ({ items, selected, handleSelected }) => {
 };
 
 const NavBarContainer = styled.div`
+    margin-top: 16px;
+    margin-bottom: 29px;
     display: flex;
-    justify-content: start;
-    margin-left: 10px;
-    margin-bottom: 20px;
+    justify-content: center;
+    height: 36px;
+    border-bottom: ${({ theme }) => `1px solid ${theme.color.gray100}`};
 `;
 
 const NavItem = styled.div`
-    margin-right: 20px;
+    width: 100%;
+    margin: 0 20px;
+    text-align: center;
     font-size: 18px;
     font-weight: bold;
     cursor: pointer;
-    color: ${(props) => (props.selected ? "black" : "gray")};
+    color: ${(props) =>
+        props.selected ? props.theme.color.gray900 : props.theme.color.gray300};
     border-bottom: 2px solid
-        ${(props) => (props.selected ? "black" : "transparent")};
+        ${(props) =>
+            props.selected ? props.theme.color.gray900 : "transparent"};
 `;
 
 export default NavBar;
