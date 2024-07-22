@@ -19,42 +19,35 @@ const App = () => {
             );
         }
     }, []);
+
     return (
         <ThemeProvider theme={theme}>
             <ScrollContainer>
                 <Container>
                     <MobileContainer>
-                        <ContentContainer>
-                            <BrowserRouter>
-                                <Routes>
-                                    <Route path="/" element={<HomePage />} />
-                                    <Route
-                                        path="/login"
-                                        element={<LoginPage />}
-                                    />
-                                    <Route
-                                        path="/market"
-                                        element={<MarketPage />}
-                                    />
-                                    <Route
-                                        path="/cart"
-                                        element={<CartPage />}
-                                    />
-                                    <Route
-                                        path="/menuTest"
-                                        element={<MenuTestPage />}
-                                    />
-                                    <Route
-                                        path="/store"
-                                        element={<StorePage />}
-                                    />
-                                    <Route
-                                        path="/oauth/kakao/callback"
-                                        element={<OauthCallback />}
-                                    />
-                                </Routes>
-                            </BrowserRouter>
-                        </ContentContainer>
+                        <BrowserRouter>
+                            <Routes>
+                                <Route path="/" element={<HomePage />} />
+                                <Route path="/login" element={<LoginPage />} />
+                                <Route
+                                    path="/market/:marketId"
+                                    element={<MarketPage />}
+                                />
+                                <Route path="/cart" element={<CartPage />} />
+                                <Route
+                                    path="/menuTest"
+                                    element={<MenuTestPage />}
+                                />
+                                <Route
+                                    path="/store/:marketId/:storeId"
+                                    element={<StorePage />}
+                                />
+                                <Route
+                                    path="/oauth/kakao/callback"
+                                    element={<OauthCallback />}
+                                />
+                            </Routes>
+                        </BrowserRouter>
                     </MobileContainer>
                 </Container>
             </ScrollContainer>
@@ -84,10 +77,6 @@ const MobileContainer = styled.div`
         padding: 0;
         box-shadow: none;
     }
-`;
-
-const ContentContainer = styled.div`
-    padding: 80px 20px 0 20px;
 `;
 
 export default App;

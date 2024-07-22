@@ -1,31 +1,56 @@
 import styled from "styled-components";
 import MarketItem from "./MarketItem";
+import useSyluvAxios from "hooks/useSyluvAxios";
+import { useEffect, useState } from "react";
 
-const MarketList = () => {
-    const markets = [
-        { id: 1, name: "꽃분이네", desc: "꽃분이네 입니다.", imgSrc: "" },
-        { id: 2, name: "윤석이네", desc: "윤석이네 입니다.", imgSrc: "" },
-        { id: 3, name: "꽃분이네", desc: "꽃분이네 입니다.", imgSrc: "" },
-        { id: 4, name: "윤석이네", desc: "윤석이네 입니다.", imgSrc: "" },
-        { id: 5, name: "꽃분이네", desc: "꽃분이네 입니다.", imgSrc: "" },
-        { id: 6, name: "윤석이네", desc: "윤석이네 입니다.", imgSrc: "" },
-        { id: 7, name: "꽃분이네", desc: "꽃분이네 입니다.", imgSrc: "" },
-        { id: 8, name: "윤석이네", desc: "윤석이네 입니다.", imgSrc: "" },
-        { id: 9, name: "꽃분이네", desc: "꽃분이네 입니다.", imgSrc: "" },
-        { id: 10, name: "윤석이네", desc: "윤석이네 입니다.", imgSrc: "" },
-    ];
+const MarketList = ({ searchInfo }) => {
+    const syluvAxios = useSyluvAxios();
+    const [storeList, setStoreList] = useState(null);
+
+    let fetchData;
+
+    if (searchInfo.search === "" && searchInfo.category === "") {
+        fetchData = async () => {
+            try {
+                const response = await syluvAxios.get("/store/info");
+                setStoreList(response.data.payload);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+    } else {
+        fetchData = async () => {
+            try {
+                const response = await syluvAxios.get("/market/store", {
+                    params: {
+                        search: searchInfo.search,
+                        category: searchInfo.category,
+                    },
+                });
+                setStoreList(response.data.payload);
+                console.log(response.data.payload);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+    }
+
+    useEffect(() => {
+        fetchData();
+    }, [searchInfo]);
+
+    console.log(storeList);
+
     return (
         <Container>
-            {markets.map((market) => (
+            {storeList?.map((store) => (
                 <MarketItem
-                    key={market.id}
-                    name={market.name}
-                    desc={market.desc}
-                    imgSrc={
-                        market.imgSrc.length > 0
-                            ? market.imgSrc
-                            : "https://via.placeholder.com/100"
-                    }
+                    key={store.storeId}
+                    storeId={store.storeId}
+                    type={store.type}
+                    name={store.name}
+                    desc={store.desc}
+                    imgSrc={store.storeImage}
                 />
             ))}
         </Container>

@@ -5,75 +5,75 @@ import styled from "styled-components";
 
 const stores = [
     {
-        name: "Store 1",
+        name: "김씨 과일가게",
         items: [
-            { name: "Item 1-1", price: 10 },
-            { name: "Item 1-2", price: 15 },
+            { name: "사과", price: 10 },
+            { name: "바나나", price: 15 },
         ],
     },
     {
-        name: "Store 2",
+        name: "이씨 채소가게",
         items: [
-            { name: "Item 2-1", price: 8 },
-            { name: "Item 2-2", price: 12 },
+            { name: "배추", price: 8 },
+            { name: "시금치", price: 12 },
         ],
     },
     {
-        name: "Store 3",
+        name: "박씨 정육점",
         items: [
-            { name: "Item 3-1", price: 20 },
-            { name: "Item 3-2", price: 25 },
-            { name: "Item 3-3", price: 30 },
+            { name: "삼겹살", price: 20 },
+            { name: "등심", price: 25 },
+            { name: "갈비", price: 30 },
         ],
     },
     {
-        name: "Store 4",
+        name: "최씨 생선가게",
         items: [
-            { name: "Item 4-1", price: 5 },
-            { name: "Item 4-2", price: 7 },
+            { name: "고등어", price: 5 },
+            { name: "오징어", price: 7 },
         ],
     },
     {
-        name: "Store 5",
+        name: "한씨 두부가게",
         items: [
-            { name: "Item 5-1", price: 13 },
-            { name: "Item 5-2", price: 18 },
+            { name: "두부", price: 13 },
+            { name: "콩나물", price: 18 },
         ],
     },
     {
-        name: "Store 6",
+        name: "정씨 반찬가게",
         items: [
-            { name: "Item 6-1", price: 22 },
-            { name: "Item 6-2", price: 27 },
+            { name: "김치", price: 22 },
+            { name: "깍두기", price: 27 },
         ],
     },
     {
-        name: "Store 7",
+        name: "윤씨 제과점",
         items: [
-            { name: "Item 7-1", price: 6 },
-            { name: "Item 7-2", price: 9 },
+            { name: "붕어빵", price: 6 },
+            { name: "호떡", price: 9 },
         ],
     },
     {
-        name: "Store 8",
+        name: "권씨 떡집",
         items: [
-            { name: "Item 8-1", price: 11 },
-            { name: "Item 8-2", price: 14 },
+            { name: "인절미", price: 11 },
+            { name: "송편", price: 14 },
         ],
     },
     {
-        name: "Store 9",
+        name: "오씨 잡화점",
         items: [
-            { name: "Item 9-1", price: 17 },
-            { name: "Item 9-2", price: 19 },
+            { name: "주방용품", price: 17 },
+            { name: "청소용품", price: 19 },
         ],
     },
     {
-        name: "Store 10",
+        name: "장씨 한약방",
         items: [
-            { name: "Item 10-1", price: 21 },
-            { name: "Item 10-2", price: 23 },
-            { name: "Item 10-3", price: 28 },
+            { name: "인삼", price: 21 },
+            { name: "감초", price: 23 },
+            { name: "홍삼", price: 28 },
         ],
     },
 ];

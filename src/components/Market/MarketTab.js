@@ -1,26 +1,84 @@
 import styled from "styled-components";
 import CategoryBar from "./CartegoryBar";
-import MarketInfo from "./MarketInfo";
 import MarketList from "./MarketList";
+import { ReactComponent as SearchIcon } from "assets/images/search.svg";
+import MarketInfo from "./MarketInfo";
+import useSyluvAxios from "hooks/useSyluvAxios";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 
-const categories = ["전체", "음식", "의류", "가구", "기타"];
+const categories = ["전체", "분식", "의류", "가구", "기타"];
 
-const MarketTab = ({ market }) => {
+const MarketTab = ({ marketId }) => {
+    const syluvAxios = useSyluvAxios();
+    const [marketInfo, setMarketInfo] = useState(null);
+    const [marketHours, setMarketHours] = useState(null);
+    const { isLoading, data, isError, error } = useQuery({
+        queryKey: ["get-markets"],
+        queryFn: () => syluvAxios.get("/market/info"),
+    });
+    const [searchInfo, setSearchInfo] = useState({
+        search: "",
+        category: "",
+    });
+    const [searchInput, setSearchInput] = useState("");
+
+    useEffect(() => {
+        if (data) {
+            setMarketInfo(data.data.payload);
+        }
+    }, [data]);
+
+    useEffect(() => {
+        if (data) {
+            const hour = `${data.data.payload.startHour} ~ ${data.data.payload.closeHour}`;
+            setMarketHours(hour);
+        }
+    }, [data]);
+
+    if (isLoading) return <div></div>;
+    if (isError) return <div>Error: {error.message}</div>;
+
+    const handleChange = (e) => {
+        setSearchInput(e.target.value);
+    };
+
+    const handleKeyDown = (event) => {
+        if (event.key === "Enter") {
+            setSearchInfo({
+                ...searchInfo,
+                search: searchInput,
+            });
+        }
+    };
+
+    const handleCategory = (category) => {
+        setSearchInfo({
+            ...searchInfo,
+            category: category,
+        });
+    };
+
     return (
         <div>
+            <MarketInfo
+                imgSrc={marketInfo?.image}
+                call={marketInfo?.contact}
+                address={marketInfo?.description}
+                time={marketHours?.toString()}
+            />
             <Container>
-                <Title>광장시장 정보</Title>
-                <MarketInfo
-                    detail="광장시장은 서울 중구 신당동에 위치한 전통시장입니다."
-                    holiday="매주 일요일"
-                    businessHours={["09:00 - 19:00"]}
-                />
-            </Container>
-            <Container>
-                <Title>광장시장 가게 찾기</Title>
-                <Search type="text" placeholder="가게 이름을 입력해주세요." />
-                <CategoryBar categories={categories} />
-                <MarketList />
+                <Search>
+                    <SearchIcon />
+                    <SearchInput
+                        placeholder="가게를 찾아볼까요?"
+                        value={searchInput}
+                        onChange={handleChange}
+                        onKeyDown={handleKeyDown}
+                    />
+                </Search>
+                <CategoryBar categories={categories} onClick={handleCategory} />
+                <MarketList searchInfo={searchInfo} />
             </Container>
         </div>
     );
@@ -29,21 +87,35 @@ const MarketTab = ({ market }) => {
 export default MarketTab;
 
 const Container = styled.div`
+    margin: 0 20px;
     display: flex;
     flex-direction: column;
-    margin: 8px 0 30px 0;
     gap: 16px;
 `;
 
-const Title = styled.div`
-    font-size: 24px;
-    font-weight: bold;
+const Search = styled.div`
+    padding: 0 14px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    height: 40px;
+    border: ${(props) => `1px solid ${props.theme.color.gray100}`};
+    border-radius: 8px;
+    background-color: ${(props) => props.theme.color.gray50};
 `;
 
-const Search = styled.input`
-    height: 32px;
-    border: 2px solid #ccc;
-    border-radius: 4px;
-    padding: 0 8px;
-    font-size: 12px;
+const SearchInput = styled.input`
+    border: none;
+    background-color: transparent;
+    width: 100%;
+    font-size: 16px;
+    //활성화시 보더 삭제
+    &:focus {
+        outline: none;
+    }
+    color: ${(props) => props.theme.color.gray900};
+    // 플레이스홀더 컬러
+    &::placeholder {
+        color: ${(props) => props.theme.color.gray500};
+    }
 `;

@@ -1,11 +1,23 @@
 import styled from "styled-components";
+import { ReactComponent as PlusIcon } from "assets/images/increase.svg";
+import { ReactComponent as MinusIcon } from "assets/images/decrease.svg";
+import { useCallback } from "react";
 
 const ItemCouter = ({ quantity = 0, onIncrease, onDecrease }) => {
+    const handleDecrease = useCallback(() => {
+        if (quantity === 1) return;
+        onDecrease();
+    }, [quantity, onDecrease]);
+
     return (
         <ItemCount>
-            <MinusButton onClick={onDecrease}>-</MinusButton>
+            <LeftButton onClick={handleDecrease} quantity={quantity}>
+                <MinusIcon />
+            </LeftButton>
             <Count>{quantity}</Count>
-            <PlusButton onClick={onIncrease}>+</PlusButton>
+            <RightButton onClick={onIncrease}>
+                <PlusIcon />
+            </RightButton>
         </ItemCount>
     );
 };
@@ -14,26 +26,38 @@ export default ItemCouter;
 
 const ItemCount = styled.div`
     display: flex;
-    gap: 5px;
+    justify-content: space-between;
     position: absolute;
-    right: 0;
+    left: 157px;
     bottom: 0;
     align-items: center;
-    border: 1px solid #000;
-    border-radius: 5px;
+    border: ${({ theme }) => `1px solid ${theme.color.gray200}`};
+    border-radius: 4px;
+    width: 92px;
+    height: 32px;
 `;
 
-const PlusButton = styled.button`
-    border: none;
-    background-color: transparent;
+const CountButton = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    font-size: 20px;
+    width: 16px;
+    height: 16px;
 `;
 
-const MinusButton = styled(PlusButton)`
-    margin-left: 3px;
+const LeftButton = styled(CountButton)`
+    margin-left: 8px;
+    fill-opacity: ${({ quantity }) => (quantity === 1 ? 0.5 : 1)};
+    cursor: ${({ quantity }) => (quantity === 1 ? "default" : "pointer")};
+`;
+
+const RightButton = styled(CountButton)`
+    margin-right: 8px;
 `;
 
 const Count = styled.span`
-    font-size: 18px;
+    color: ${({ theme }) => theme.color.gray800};
+    font-size: 16px;
+    font-weight: 400;
 `;

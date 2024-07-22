@@ -7,7 +7,7 @@ const OauthCallback = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [isError, setIsError] = useState(false);
     const [error, setError] = useState(null);
-    const { setRefreshToken, setAccessToken } = useTokenStore();
+    const { setRefreshToken, setAccessToken, setName } = useTokenStore();
     const navigate = useNavigate();
 
     const getKakaoToken = useCallback(async (code) => {
@@ -41,7 +41,7 @@ const OauthCallback = () => {
                     idToken: idToken,
                 }
             );
-            return response.data;
+            return response.data.payload;
         } catch (error) {
             throw new Error("Failed to get Syluv token");
         }
@@ -54,6 +54,7 @@ const OauthCallback = () => {
             const syluvData = await getSyluvToken(idToken);
             setAccessToken(syluvData.accessToken);
             setRefreshToken(syluvData.refreshToken);
+            setName(syluvData.nickname);
             navigate("/", { replace: true });
         } catch (error) {
             setIsError(true);
@@ -68,6 +69,7 @@ const OauthCallback = () => {
         setAccessToken,
         setRefreshToken,
         navigate,
+        setName,
     ]);
 
     useEffect(() => {
