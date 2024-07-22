@@ -20,7 +20,7 @@ const CreateSyluvAxios = (navigate) => {
 
     const token = getAccessToken();
     if (token) {
-        syluvAxios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        syluvAxios.defaults.headers.common["AccessToken"] = `${token}`;
     }
 
     syluvAxios.interceptors.request.use(
@@ -40,16 +40,18 @@ const CreateSyluvAxios = (navigate) => {
                 if (error.response.status === 401 && !originalRequest._retry) {
                     originalRequest._retry = true;
                     return syluvAxios
-                        .post("/auth/refresh", {
-                            refreshToken: getRefreshToken(),
+                        .get("/users/reissue", {
+                            headers: {
+                                RefreshToken: getRefreshToken(),
+                            },
                         })
                         .then((res) => {
                             if (res.status === 200) {
-                                setAccessToken(res.data.accessToken);
-                                setRefreshToken(res.data.refreshToken);
+                                setAccessToken(res.data.payload.accessToken);
+                                setRefreshToken(res.data.payload.refreshToken);
                                 axios.defaults.headers.common[
-                                    "Authorization"
-                                ] = `Bearer ${res.data.accessToken}`;
+                                    "AccessToken"
+                                ] = `${res.data.accessToken}`;
                                 return axios(originalRequest);
                             }
                         })

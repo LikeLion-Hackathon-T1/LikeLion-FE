@@ -3,11 +3,20 @@ import Header from "components/Common/Header";
 import KakaoMap from "components/Map/Map";
 import useTokenStore from "hooks/useTokenStore";
 import useIsLogin from "hooks/useIsLogin";
+import axios from "axios";
+import useSyluvAxios from "hooks/useSyluvAxios";
 
 const HomePage = () => {
     const navigate = useNavigate();
-    const { removeAccessToken, removeRefreshToken } = useTokenStore();
+    const {
+        removeAccessToken,
+        removeRefreshToken,
+        getRefreshToken,
+        getName,
+        removeName,
+    } = useTokenStore();
     const isLogin = useIsLogin();
+    const syluvAxios = useSyluvAxios();
 
     return (
         <>
@@ -18,14 +27,36 @@ const HomePage = () => {
             </button>
             <button onClick={() => navigate("/market")}>시장 정보</button>
             <button onClick={() => navigate("/store")}>가게 정보</button>
+            <button
+                onClick={() =>
+                    axios
+                        .get("https://syluv.link/v1/users/reissue", {
+                            headers: { RefreshToken: getRefreshToken() },
+                        })
+                        .then((res) => {
+                            console.log(res);
+                        })
+                }
+            >
+                재발급
+            </button>
             {!isLogin && (
                 <button onClick={() => navigate("/login")}>로그인</button>
             )}
             {isLogin && (
                 <button
                     onClick={() => {
+                        syluvAxios
+                            .delete("/users/logout", {
+                                params: { name: getName() },
+                                headers: { RefreshToken: getRefreshToken() },
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                            });
                         removeAccessToken();
                         removeRefreshToken();
+                        removeName();
                         window.location.reload();
                     }}
                 >
