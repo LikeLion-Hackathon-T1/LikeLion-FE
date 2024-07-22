@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const Item = ({ price, name, desc, ImgSrc }) => {
+const Item = ({ price, name, ImgSrc }) => {
     const formatPrice = (price) => {
         return new Intl.NumberFormat("ko-KR").format(price) + "원";
     };
@@ -10,8 +10,7 @@ const Item = ({ price, name, desc, ImgSrc }) => {
             <MenuImage src={ImgSrc} alt="메뉴 이미지" />
             <ItemInfo>
                 <ItemTitle>{name}</ItemTitle>
-                <ItemPrice>{price && formatPrice(price)}</ItemPrice>
-                {desc && <ItemDescription>{desc}</ItemDescription>}
+                <ItemPrice>가격: {price && formatPrice(price)}</ItemPrice>
             </ItemInfo>
         </ItemContainer>
     );
@@ -24,28 +23,26 @@ const ItemContainer = styled.div`
     gap: 20px;
 `;
 
-const ItemDescription = styled.span`
-    margin-top: 15px;
-    font-size: 11px;
-    color: #666;
-`;
-
 const MenuImage = styled.img`
-    width: 64px;
-    height: 64px;
+    width: 104px;
+    height: 104px;
+    border-radius: 12px;
 `;
 
 const ItemInfo = styled.div`
     display: flex;
     flex-direction: column;
+    gap: 8px;
 `;
 
 const ItemTitle = styled.div`
-    margin-top: 5px;
     font-size: 16px;
-    font-weight: bold;
+    font-weight: ${({ theme }) => theme.fontWeight.semiBold};
+    color: ${({ theme }) => theme.color.gray900};
 `;
 
 const ItemPrice = styled.div`
     font-size: 14px;
+    color: ${({ theme }) => theme.color.gray500};
+    font-weight: ${({ theme }) => theme.fontWeight.medium};
 `;

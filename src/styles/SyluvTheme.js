@@ -1,6 +1,6 @@
 const theme = {
     color: {
-        primary: "#737373",
+        primary: "#FF6B00",
         gray900: "#181818",
         gray800: "#333333",
         gray700: "#4D4D4D",
@@ -12,7 +12,16 @@ const theme = {
         gray100: "#E6E6E6",
         gray50: "#F5F5F5",
     },
-    fontSize: {},
+    fontSize: {
+        title: "20px",
+        text: "16px",
+    },
+    fontWeight: {
+        normal: "400",
+        medium: "500",
+        semiBold: "600",
+        bold: "700",
+    },
 };
 
 export default theme;

@@ -3,45 +3,25 @@ import { ReactComponent as BackIcon } from "assets/images/back.svg";
 import { ReactComponent as CartIcon } from "assets/images/cart.svg";
 import { useNavigate } from "react-router-dom";
 import useCartStore from "hooks/useCartStore";
-import { useEffect, useState } from "react";
 
 const Header = ({
     title,
-    backTitle,
     backSrc = -1,
     cart = true,
     back = true,
+    rightText = "",
+    rightDisabled = false,
+    handleRight = () => {},
 }) => {
     const navigate = useNavigate();
     const totalItemCount = useCartStore((state) => state.totalItemCount);
-    const [prevScrollPos, setPrevScrollPos] = useState(0);
-    const [isVisible, setIsVisible] = useState(true);
-
-    useEffect(() => {
-        setIsVisible(true);
-    }, []);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            const currentScrollPos = window.pageYOffset;
-            setIsVisible(
-                prevScrollPos > currentScrollPos || currentScrollPos < 10
-            );
-            setPrevScrollPos(currentScrollPos);
-        };
-        window.addEventListener("scroll", handleScroll);
-        return () => {
-            window.removeEventListener("scroll", handleScroll);
-        };
-    }, [prevScrollPos, isVisible]);
 
     return (
-        <Container visible={isVisible.toString()}>
+        <Container>
             <LeftSection>
                 {back && (
                     <BackButton onClick={() => navigate(backSrc)}>
                         <BackIcon />
-                        {backTitle && <BackTitle>{backTitle}</BackTitle>}
                     </BackButton>
                 )}
             </LeftSection>
@@ -53,29 +33,37 @@ const Header = ({
                         <CartCount>{totalItemCount()}</CartCount>
                     </Cart>
                 )}
+                {rightText && (
+                    <RightText onClick={handleRight} disabled={rightDisabled}>
+                        {rightText}
+                    </RightText>
+                )}
             </RightSection>
         </Container>
     );
 };
 
+const RightText = styled.div`
+    cursor: ${({ disabled }) => (disabled ? "default" : "pointer")};
+    color: ${({ theme, disabled }) =>
+        disabled ? theme.color.gray400 : theme.color.primary};
+    font-size: 16px;
+    font-weight: ${({ theme }) => theme.fontWeight.medium};
+`;
+
 const Container = styled.div`
+    margin: 0px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: fixed;
-    width: 480px;
-    margin: 0 -20px;
-    top: 0;
-    height: 60px;
+    height: 52px;
     background-color: #fff;
-    box-shadow: 0 2px 0px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
 `;
 
 const CartCount = styled.span`
     position: absolute;
-    top: 30px;
-    right: 20px;
+    top: 25px;
+    right: 0px;
     background-color: red;
     border-radius: 10px;
     color: white;
@@ -104,21 +92,18 @@ const BackButton = styled.div`
     cursor: pointer;
 `;
 
-const BackTitle = styled.h2`
-    font-size: 12px;
-    margin-left: 8px;
-`;
-
 const Title = styled.h1`
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 15px;
-    font-weight: bold;
+    font-size: ${({ theme }) => theme.fontSize.title};
+    color: ${({ theme }) => theme.color.gray900};
+    font-weight: ${({ theme }) => theme.fontWeight.bold};
 `;
 
 const Cart = styled.div`
     cursor: pointer;
+    position: relative;
 `;
 
 export default Header;

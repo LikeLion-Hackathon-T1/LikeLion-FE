@@ -32,33 +32,41 @@ const StoreList = () => {
         </CartList>
     );
 };
+
 const CartList = styled.div`
+    margin-top: 7px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    overflow-y: auto;
-    max-height: 85%;
+    position: relative;
+    margin-bottom: 72px;
 `;
 
 const NoItem = styled.div`
     font-size: 20px;
     text-align: center;
-    border: 2px solid #e0e0e0;
+    border: 1px solid #e0e0e0;
     border-radius: 10px;
     padding: 20px;
+    margin: 0px 20px;
 `;
 
 const OrderButton = styled.button`
-    font-size: 16px;
-    padding: 10px;
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    position: absolute;
-    bottom: 15px;
+    position: fixed;
+    bottom: 12px;
     width: 440px;
+    height: 48px;
+    margin: 0px 20px;
+    background-color: ${({ theme }) => theme.color.primary};
+    color: white;
+    font-size: 16px;
+    font-weight: ${({ theme }) => theme.fontWeight.semiBold};
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+
+    @media (max-width: 480px) {
+        width: calc(100% - 40px);
+    }
 `;
 
 export default StoreList;

@@ -20,7 +20,6 @@ const Store = ({ name = "" }) => {
                         ImgSrc={item.ImgSrc}
                     />
                 ))}
-                {/* <AddMenu>+ 메뉴 추가</AddMenu> */}
             </CartItemContainer>
         </Container>
     );
@@ -33,17 +32,4 @@ const Container = styled.div``;
 const CartItemContainer = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    border: 1px solid gray;
-    border-radius: 10px;
-    padding: 8px 10px;
-    margin-top: 10px;
-`;
-
-const AddMenu = styled.div`
-    border-top: 1px solid gray;
-    padding-top: 10px;
-    font-size: 14px;
-    cursor: pointer;
-    text-align: center;
 `;
