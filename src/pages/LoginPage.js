@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import KaKaoLogin from "assets/images/kakao_login.png";
 import { useNavigate } from "react-router-dom";
 import useIsLogin from "hooks/useIsLogin";
+import KakaoLogin from "assets/images/kakao_login.png";
 
 const LoginPage = () => {
     const REST_API_KEY = process.env.REACT_APP_KAKAO_REST_API_KEY;
@@ -22,11 +22,12 @@ const LoginPage = () => {
     return (
         <Container>
             <Header>
-                <Title>로그인</Title>
+                <Title>달콤한 시장 여행의 시작,</Title>
+                <Title>Syluv</Title>
             </Header>
             <Body>
                 <LoginButton onClick={handleLogin}>
-                    <LoginImage src={KaKaoLogin} alt="kakao_login" />
+                    <LoginImg src={KakaoLogin} alt="kakao login" />
                 </LoginButton>
             </Body>
         </Container>
@@ -36,39 +37,42 @@ const LoginPage = () => {
 const Container = styled.div`
     display: flex;
     flex-direction: column;
-    height: 100%;
+    align-items: center;
+    justify-content: center;
+    height: 100dvh;
 `;
 
 const Header = styled.header`
-    flex: 1;
-    height: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
+    gap: 45px;
+    margin-bottom: 130px;
 `;
 
 const Title = styled.h1`
-    font-size: 72px;
-    color: black;
-    margin-top: 80px;
+    font-size: 24px;
+    font-weight: ${({ theme }) => theme.fontWeight.bold};
 `;
 
 const Body = styled.div`
-    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
 `;
 
+const LoginImg = styled.img`
+    width: 400px;
+    @media (max-width: 480px) {
+        width: calc(100dvw-80px);
+    }
+`;
+
 const LoginButton = styled.button`
     border: none;
     background-color: transparent;
-`;
-
-const LoginImage = styled.img`
     cursor: pointer;
-    &:hover {
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
 `;
 
 export default LoginPage;
