@@ -62,7 +62,7 @@ function Store() {
 
     return (
         <div>
-            <Header backTitle="광장시장" />
+            <Header />
             <div className="main-image">
                 <img src="https://via.placeholder.com/500" alt="Main" />
                 <div className="carousel-indicator">•••</div>
