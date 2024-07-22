@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { ReactComponent as BackIcon } from "assets/images/back.svg";
 import { ReactComponent as CartIcon } from "assets/images/cart.svg";
 import { useNavigate } from "react-router-dom";
-import useCartStore from "hooks/useCartStore";
+// import useCartStore from "hooks/useCartStore";
 
 const Header = ({
     title,
@@ -14,7 +14,7 @@ const Header = ({
     handleRight = () => {},
 }) => {
     const navigate = useNavigate();
-    const totalItemCount = useCartStore((state) => state.totalItemCount);
+    // const totalItemCount = useCartStore((state) => state.totalItemCount);
 
     return (
         <Container>
@@ -30,7 +30,6 @@ const Header = ({
                 {cart && (
                     <Cart onClick={() => navigate("/cart")}>
                         <CartIcon width="40px" height="40px" />
-                        <CartCount>{totalItemCount()}</CartCount>
                     </Cart>
                 )}
                 {rightText && (
@@ -60,18 +59,18 @@ const Container = styled.div`
     background-color: #fff;
 `;
 
-const CartCount = styled.span`
-    position: absolute;
-    top: 25px;
-    right: 0px;
-    background-color: red;
-    border-radius: 10px;
-    color: white;
-    padding: 2px 2px 0px 2px;
-    font-size: 11px;
-    font-weight: 900;
-    text-align: center;
-`;
+// const CartCount = styled.span`
+//     position: absolute;
+//     top: 25px;
+//     right: 0px;
+//     background-color: red;
+//     border-radius: 10px;
+//     color: white;
+//     padding: 2px 2px 0px 2px;
+//     font-size: 11px;
+//     font-weight: 900;
+//     text-align: center;
+// `;
 
 const LeftSection = styled.div`
     flex: 1;
@@ -93,9 +92,6 @@ const BackButton = styled.div`
 `;
 
 const Title = styled.h1`
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
     font-size: ${({ theme }) => theme.fontSize.title};
     color: ${({ theme }) => theme.color.gray900};
     font-weight: ${({ theme }) => theme.fontWeight.bold};

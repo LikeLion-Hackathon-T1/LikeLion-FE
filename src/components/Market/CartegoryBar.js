@@ -25,18 +25,20 @@ export default CategoryBar;
 
 const CategoryContainer = styled.div`
     display: flex;
-    gap: 16px;
+    gap: 12px;
+    margin-bottom: 12px;
 `;
 
 const Category = styled.div`
-    display: flex;
-    gap: 16px;
-    border: 2px solid #ccc;
-    border-radius: 20px;
-    font-size: 12px;
+    border: ${(props) =>
+        props.selected
+            ? `1px solid ${props.theme.color.primary}`
+            : `1px solid ${props.theme.color.gray400}`};
+    border-radius: 54px;
+    font-size: 14px;
     text-align: center;
-    padding: 8px 16px;
+    padding: 8px 12px;
     cursor: pointer;
-    background-color: ${(props) => (props.selected ? "#ccc" : "white")};
-    color: ${(props) => (props.selected ? "white" : "black")};
+    color: ${(props) =>
+        props.selected ? props.theme.color.primary : props.theme.color.gray400};
 `;

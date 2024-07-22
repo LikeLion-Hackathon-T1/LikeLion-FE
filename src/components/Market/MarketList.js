@@ -1,31 +1,33 @@
 import styled from "styled-components";
 import MarketItem from "./MarketItem";
 
+const markets = [
+    {
+        id: 1,
+        type: "분식",
+        name: "원조 누드 치즈김밥",
+        desc: "매콤한 양념과 부드러운 치즈가 만나 더욱 맛있는 치즈김밥",
+        imgSrc: "https://via.placeholder.com/104",
+    },
+    {
+        id: 2,
+        type: "중식",
+        name: "태화루",
+        desc: "중국의 전통적인 맛을 그대로 선보이는 태화루",
+        imgSrc: "https://via.placeholder.com/104",
+    },
+];
+
 const MarketList = () => {
-    const markets = [
-        { id: 1, name: "꽃분이네", desc: "꽃분이네 입니다.", imgSrc: "" },
-        { id: 2, name: "윤석이네", desc: "윤석이네 입니다.", imgSrc: "" },
-        { id: 3, name: "꽃분이네", desc: "꽃분이네 입니다.", imgSrc: "" },
-        { id: 4, name: "윤석이네", desc: "윤석이네 입니다.", imgSrc: "" },
-        { id: 5, name: "꽃분이네", desc: "꽃분이네 입니다.", imgSrc: "" },
-        { id: 6, name: "윤석이네", desc: "윤석이네 입니다.", imgSrc: "" },
-        { id: 7, name: "꽃분이네", desc: "꽃분이네 입니다.", imgSrc: "" },
-        { id: 8, name: "윤석이네", desc: "윤석이네 입니다.", imgSrc: "" },
-        { id: 9, name: "꽃분이네", desc: "꽃분이네 입니다.", imgSrc: "" },
-        { id: 10, name: "윤석이네", desc: "윤석이네 입니다.", imgSrc: "" },
-    ];
     return (
         <Container>
             {markets.map((market) => (
                 <MarketItem
                     key={market.id}
+                    type={market.type}
                     name={market.name}
                     desc={market.desc}
-                    imgSrc={
-                        market.imgSrc.length > 0
-                            ? market.imgSrc
-                            : "https://via.placeholder.com/100"
-                    }
+                    imgSrc={market.imgSrc}
                 />
             ))}
         </Container>
