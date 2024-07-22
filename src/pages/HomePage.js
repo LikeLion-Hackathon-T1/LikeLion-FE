@@ -5,6 +5,7 @@ import useTokenStore from "hooks/useTokenStore";
 import useIsLogin from "hooks/useIsLogin";
 import axios from "axios";
 import useSyluvAxios from "hooks/useSyluvAxios";
+import TabBar from "components/Common/TabBar";
 
 const HomePage = () => {
     const navigate = useNavigate();
@@ -25,8 +26,8 @@ const HomePage = () => {
             <button onClick={() => navigate("/menuTest")}>
                 장바구니 테스트
             </button>
-            <button onClick={() => navigate("/market")}>시장 정보</button>
-            <button onClick={() => navigate("/store")}>가게 정보</button>
+            <button onClick={() => navigate("/market/1")}>시장 정보</button>
+            <button onClick={() => navigate("/store/1/1")}>가게 정보</button>
             <button
                 onClick={() =>
                     axios
@@ -63,6 +64,7 @@ const HomePage = () => {
                     로그아웃
                 </button>
             )}
+            <TabBar />
         </>
     );
 };

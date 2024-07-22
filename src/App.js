@@ -19,6 +19,7 @@ const App = () => {
             );
         }
     }, []);
+
     return (
         <ThemeProvider theme={theme}>
             <ScrollContainer>
@@ -29,7 +30,7 @@ const App = () => {
                                 <Route path="/" element={<HomePage />} />
                                 <Route path="/login" element={<LoginPage />} />
                                 <Route
-                                    path="/market"
+                                    path="/market/:marketId"
                                     element={<MarketPage />}
                                 />
                                 <Route path="/cart" element={<CartPage />} />
@@ -37,7 +38,10 @@ const App = () => {
                                     path="/menuTest"
                                     element={<MenuTestPage />}
                                 />
-                                <Route path="/store" element={<StorePage />} />
+                                <Route
+                                    path="/store/:marketId/:storeId"
+                                    element={<StorePage />}
+                                />
                                 <Route
                                     path="/oauth/kakao/callback"
                                     element={<OauthCallback />}
