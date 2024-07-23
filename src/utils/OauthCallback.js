@@ -2,9 +2,11 @@ import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import useTokenStore from "hooks/useTokenStore";
 import { useNavigate } from "react-router-dom";
+import Welcome from "components/Login/Welcome";
 
 const OauthCallback = () => {
     const [isLoading, setIsLoading] = useState(true);
+    const [isFIrstLogin, setIsFirstLogin] = useState(false);
     const [isError, setIsError] = useState(false);
     const [error, setError] = useState(null);
     const { setRefreshToken, setAccessToken, setName } = useTokenStore();
@@ -55,7 +57,12 @@ const OauthCallback = () => {
             setAccessToken(syluvData.accessToken);
             setRefreshToken(syluvData.refreshToken);
             setName(syluvData.nickname);
-            navigate("/", { replace: true });
+            console.log(syluvData.existYn);
+            if (syluvData.existYn === false) {
+                setIsFirstLogin(true);
+            } else {
+                navigate("/", { replace: true });
+            }
         } catch (error) {
             setIsError(true);
             setError(error);
@@ -74,8 +81,9 @@ const OauthCallback = () => {
 
     useEffect(() => {
         fetchTokens();
-    }, [fetchTokens]);
+    }, []);
 
+    if (isFIrstLogin) return <Welcome />;
     if (isLoading) return <div>Loading...</div>;
     if (isError) return <div>Error: {error.message}</div>;
 

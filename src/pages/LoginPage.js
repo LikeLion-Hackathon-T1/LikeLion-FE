@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import useIsLogin from "hooks/useIsLogin";
 import KakaoLogin from "assets/images/kakao_login.png";
+import { ReactComponent as SyluvLogo } from "assets/images/syluv.svg";
 
 const LoginPage = () => {
     const REST_API_KEY = process.env.REACT_APP_KAKAO_REST_API_KEY;
@@ -23,7 +24,7 @@ const LoginPage = () => {
         <Container>
             <Header>
                 <Title>달콤한 시장 여행의 시작,</Title>
-                <Title>Syluv</Title>
+                <SyluvLogo />
             </Header>
             <Body>
                 <LoginButton onClick={handleLogin}>
@@ -40,6 +41,7 @@ const Container = styled.div`
     align-items: center;
     justify-content: center;
     height: 100dvh;
+    gap: 72px;
 `;
 
 const Header = styled.header`
@@ -47,8 +49,7 @@ const Header = styled.header`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 45px;
-    margin-bottom: 130px;
+    gap: 26px;
 `;
 
 const Title = styled.h1`
