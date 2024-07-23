@@ -1,8 +1,10 @@
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const StoreList = () => {
+    const navigate = useNavigate();
     return (
-        <StoreContainer>
+        <StoreContainer onClick={() => navigate("/order/1")}>
             <StoreItem>
                 <StoreName>세미수산</StoreName>
                 <StoreStatus>픽업완료</StoreStatus>
@@ -22,6 +24,7 @@ const StoreContainer = styled.div`
     flex-direction: column;
     margin-top: 21px;
     gap: 10px;
+    cursor: pointer;
 `;
 
 const StoreItem = styled.div`

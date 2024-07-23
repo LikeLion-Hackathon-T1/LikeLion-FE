@@ -12,7 +12,8 @@ import theme from "styles/SyluvTheme";
 import StorePage from "pages/StorePage";
 import QrPage from "pages/QrPage";
 import QrGenPage from "pages/QrGenPage";
-import OrderListPage from "pages/OrderDetailPage";
+import OrderListPage from "pages/OrderListPage";
+import OrderDetailPage from "pages/OrderDetailPage";
 const App = () => {
     useEffect(() => {
         if (window.location.host === "syluv.store") {
@@ -47,6 +48,10 @@ const App = () => {
                                 <Route
                                     path="/order"
                                     element={<OrderListPage />}
+                                />
+                                <Route
+                                    path="/order/:orderId"
+                                    element={<OrderDetailPage />}
                                 />
                                 <Route path="/qr" element={<QrPage />} />
                                 <Route path="/qrgen" element={<QrGenPage />} />
