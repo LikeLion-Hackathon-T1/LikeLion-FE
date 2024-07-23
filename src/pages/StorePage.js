@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import MenuItem from "../components/MenuItem";
-import ReviewItem from "../components/ReviewItem";
+import MenuItem from "../components/Store/MenuItem";
+import ReviewItem from "../components/Store/ReviewItem";
 import StoreInfo from "../components/Store/StoreInfo";
 import menuImage from "../assets/images/gimbap.png";
 import reviewImage1 from "../assets/images/menu_gimbap.png";
-import reviewImage2 from "../assets/images/menu_gimbap2.png";
-import reviewImage3 from "../assets/images/menu_gimbap3.png";
+import reviewImage2 from "../assets/images/menu_gimbap.png";
+import reviewImage3 from "../assets/images/menu_gimbap.png";
 
 const PageWrapper = styled.div`
   font-family: "Pretendard", sans-serif;
