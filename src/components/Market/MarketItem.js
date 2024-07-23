@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { ReactComponent as VisitIcon } from "assets/images/visit.svg";
 import { useState } from "react";
-import MarketInfoSmall from "./MarketinfoSmall";
 import useSyluvAxios from "hooks/useSyluvAxios";
+import VisitModal from "./VisitModal";
+import MarketInfoSmall from "./MarketinfoSmall";
 
 const MarketItem = ({
     storeId = 0,
@@ -13,6 +14,7 @@ const MarketItem = ({
 }) => {
     const syluvAxios = useSyluvAxios();
     const [selected, setIsSelected] = useState(false);
+    const [isVisitClicked, setIsVisitClicked] = useState(false);
     const handleVisit = () => {
         setIsSelected(!selected);
         syluvAxios.post(`/market/${storeId}/visitlist`, {
@@ -28,7 +30,17 @@ const MarketItem = ({
                 name={name}
                 desc={desc}
             />
-            <VisitButton onClick={() => handleVisit()} selected={selected} />
+            <VisitButton
+                onClick={() => setIsVisitClicked(true)}
+                selected={selected}
+            />
+            {isVisitClicked && (
+                <VisitModal
+                    name={name}
+                    onCancle={() => setIsVisitClicked(false)}
+                    onConfirm={handleVisit}
+                />
+            )}
         </MarketContainer>
     );
 };
@@ -40,6 +52,7 @@ const MarketContainer = styled.div`
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
+    width: 100%;
 `;
 
 const VisitButton = styled(VisitIcon)`
