@@ -1,73 +1,85 @@
 import styled from "styled-components";
 import ItemCounter from "./ItemCounter";
-import { useEffect, useState } from "react";
-import useCartStore from "hooks/useCartStore";
+import { useCallback, useState } from "react";
 import Item from "../Common/Item/Item";
 import { ReactComponent as Cancel } from "assets/images/cancle.svg";
 import CheckButton from "./CheckButton";
+import useSyluvAxios from "hooks/useSyluvAxios";
 
 const CartItem = ({
     name,
     count = 0,
-    storeName,
     price,
-    desc,
+    cartId,
     ImgSrc = "https://via.placeholder.com/100",
 }) => {
     const [quantity, setQuantity] = useState(count);
-    const {
-        updateItemCount,
-        removeItem,
-        clickItem,
-        removeClickedItem,
-        clickedItem,
-    } = useCartStore();
     const [isChecked, setIsChecked] = useState(false);
+    const syluvAxios = useSyluvAxios();
 
-    useEffect(() => {
-        setIsChecked(clickedItem[storeName] && clickedItem[storeName][name]);
-    }, [clickedItem, storeName, name]);
+    const handleRemove = useCallback(() => {
+        syluvAxios
+            .delete(`/cart/${cartId}/delete`)
+            .then(() => {
+                alert("삭제되었습니다.");
+                window.location.reload();
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, [syluvAxios, cartId]);
 
-    useEffect(() => {
-        setQuantity(count);
-    }, [count]);
+    const handleChangeQuantity = useCallback(
+        (quantity) => {
+            syluvAxios
+                .patch(`/cart/${cartId}/update`, {
+                    quantity,
+                })
+                .then(() => {
+                    setQuantity(quantity);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
+        [syluvAxios, cartId]
+    );
 
-    const handleIncrease = () => {
-        const newCount = quantity + 1;
-        setQuantity(newCount);
-        updateItemCount(storeName, name, newCount);
-    };
+    const handleIncrease = useCallback(() => {
+        handleChangeQuantity(quantity + 1);
+    }, [handleChangeQuantity, quantity]);
 
-    const handleDecrease = () => {
-        const newCount = quantity > 0 ? quantity - 1 : quantity;
-        setQuantity(newCount);
-        updateItemCount(storeName, name, newCount);
-    };
-
-    const handleRemove = () => {
-        removeItem(storeName, name);
-        setQuantity(0);
-    };
+    const handleDecrease = useCallback(() => {
+        handleChangeQuantity(quantity - 1);
+    }, [handleChangeQuantity, quantity]);
 
     const handleClick = () => {
-        if (isChecked) {
-            removeClickedItem(storeName, name);
-        } else {
-            clickItem(storeName, name);
-        }
         setIsChecked(!isChecked);
     };
 
     return (
         <CartItemContainer>
             <Container>
-                <CheckButton isChecked={isChecked} onClick={handleClick} />
-                <Item name={name} price={price} desc={desc} ImgSrc={ImgSrc} />
-                <EraseButton onClick={handleRemove} />
+                <CheckButton
+                    isChecked={isChecked}
+                    onClick={() => {
+                        handleClick();
+                    }}
+                />
+                <Item name={name} price={price} ImgSrc={ImgSrc} />
+                <EraseButton
+                    onClick={() => {
+                        handleRemove();
+                    }}
+                />
                 <ItemCounter
                     quantity={quantity}
-                    onDecrease={handleDecrease}
-                    onIncrease={handleIncrease}
+                    onDecrease={() => {
+                        handleDecrease();
+                    }}
+                    onIncrease={() => {
+                        handleIncrease();
+                    }}
                 />
             </Container>
         </CartItemContainer>
