@@ -57,7 +57,7 @@ const StoreInfo = ({
 };
 
 const Container = styled.div`
-  padding: 0 20px;
+  padding: 0 0px;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -89,6 +89,7 @@ const BackButton = styled.div`
 `;
 
 const InfoContainer = styled.div`
+  margin: 0 20px;
   display: flex;
   flex-direction: column;
   gap: 8px;
