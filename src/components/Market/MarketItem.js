@@ -16,10 +16,11 @@ const MarketItem = ({
     const [selected, setIsSelected] = useState(false);
     const [isVisitClicked, setIsVisitClicked] = useState(false);
     const handleVisit = () => {
-        setIsSelected(!selected);
+        setIsSelected(true);
         syluvAxios.post(`/market/${storeId}/visitlist`, {
             storeId: storeId,
         });
+        setIsVisitClicked(false);
     };
 
     return (
@@ -31,7 +32,16 @@ const MarketItem = ({
                 desc={desc}
             />
             <VisitButton
-                onClick={() => setIsVisitClicked(true)}
+                onClick={() => {
+                    if (!selected) {
+                        setIsVisitClicked(true);
+                    } else {
+                        setIsSelected(false);
+                        syluvAxios.delete(
+                            `/market/${storeId}/visitlist/delete`
+                        );
+                    }
+                }}
                 selected={selected}
             />
             {isVisitClicked && (
