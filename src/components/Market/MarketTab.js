@@ -39,7 +39,7 @@ const MarketTab = ({ marketInfo, marketHours }) => {
             <MarketInfo
                 imgSrc={marketInfo?.image}
                 call={marketInfo?.contact}
-                address={marketInfo?.description}
+                address={marketInfo?.location}
                 time={marketHours?.toString()}
             />
             <Container>

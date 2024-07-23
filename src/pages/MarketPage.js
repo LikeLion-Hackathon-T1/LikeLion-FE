@@ -18,7 +18,7 @@ const MarketPage = () => {
 
     const { isLoading, data, isError, error } = useQuery({
         queryKey: ["get-markets"],
-        queryFn: () => syluvAxios.get("/market/info"),
+        queryFn: () => syluvAxios.get(`/market/info`),
     });
 
     useEffect(() => {
@@ -43,7 +43,7 @@ const MarketPage = () => {
 
     return (
         <>
-            <Header title={marketInfo.name} />
+            <Header title={marketInfo?.name} />
             <NavBar
                 items={items}
                 selected={selectedNav}
