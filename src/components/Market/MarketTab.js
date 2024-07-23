@@ -3,41 +3,16 @@ import CategoryBar from "./CartegoryBar";
 import MarketList from "./MarketList";
 import { ReactComponent as SearchIcon } from "assets/images/search.svg";
 import MarketInfo from "./MarketInfo";
-import useSyluvAxios from "hooks/useSyluvAxios";
-import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const categories = ["전체", "분식", "의류", "가구", "기타"];
 
-const MarketTab = ({ marketId }) => {
-    const syluvAxios = useSyluvAxios();
-    const [marketInfo, setMarketInfo] = useState(null);
-    const [marketHours, setMarketHours] = useState(null);
-    const { isLoading, data, isError, error } = useQuery({
-        queryKey: ["get-markets"],
-        queryFn: () => syluvAxios.get("/market/info"),
-    });
+const MarketTab = ({ marketInfo, marketHours }) => {
     const [searchInfo, setSearchInfo] = useState({
         search: "",
         category: "",
     });
     const [searchInput, setSearchInput] = useState("");
-
-    useEffect(() => {
-        if (data) {
-            setMarketInfo(data.data.payload);
-        }
-    }, [data]);
-
-    useEffect(() => {
-        if (data) {
-            const hour = `${data.data.payload.startHour} ~ ${data.data.payload.closeHour}`;
-            setMarketHours(hour);
-        }
-    }, [data]);
-
-    if (isLoading) return <div></div>;
-    if (isError) return <div>Error: {error.message}</div>;
 
     const handleChange = (e) => {
         setSearchInput(e.target.value);
@@ -64,7 +39,7 @@ const MarketTab = ({ marketId }) => {
             <MarketInfo
                 imgSrc={marketInfo?.image}
                 call={marketInfo?.contact}
-                address={marketInfo?.description}
+                address={marketInfo?.location}
                 time={marketHours?.toString()}
             />
             <Container>

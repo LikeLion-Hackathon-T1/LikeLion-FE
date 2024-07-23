@@ -1,31 +1,59 @@
+// StoreList.js
 import styled from "styled-components";
-import useCartStore from "hooks/useCartStore";
 import Store from "./Store";
+import useSyluvAxios from "hooks/useSyluvAxios";
+import { useEffect, useState } from "react";
 
 const StoreList = () => {
-    const { carts } = useCartStore();
-    const storeNames = Object.keys(carts);
+    const syluvAxios = useSyluvAxios();
+    const [cartList, setCartList] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
-    const totalPrice = storeNames.reduce((total, storeName) => {
-        const storeCart = carts[storeName];
-        return (
-            total +
-            storeCart.reduce(
-                (storeTotal, item) => storeTotal + item.price * item.count,
-                0
-            )
-        );
-    }, 0);
+    useEffect(() => {
+        const getCart = async () => {
+            await syluvAxios
+                .get("/cart")
+                .then((res) => {
+                    setCartList(res.data.payload);
+                    console.log(res.data.payload);
+                    setIsLoading(false);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        };
+        getCart();
+    }, []);
+
+    if (isLoading) return <div></div>;
+
+    const stores = cartList.reduce((acc, item) => {
+        acc[item.storeName] = acc[item.storeName] || [];
+        acc[item.storeName].push(item);
+        return acc;
+    }, {});
+
+    const totalAmount = cartList.reduce(
+        (acc, item) => acc + item.price * item.quantity,
+        0
+    );
+
     return (
         <CartList>
-            {storeNames.length > 0 ? (
-                storeNames.map((storeName) => <Store name={storeName} />)
+            {Object.keys(stores).length > 0 ? (
+                Object.keys(stores).map((storeName) => (
+                    <Store
+                        key={storeName}
+                        name={storeName}
+                        items={stores[storeName]}
+                    />
+                ))
             ) : (
                 <NoItem>장바구니에 등록된 물품이 없습니다.</NoItem>
             )}
-            {storeNames.length > 0 && (
+            {Object.keys(stores).length > 0 && (
                 <OrderButton>
-                    {new Intl.NumberFormat("ko-KR").format(totalPrice)}원
+                    {new Intl.NumberFormat("ko-KR").format(totalAmount)}원
                     주문하기
                 </OrderButton>
             )}

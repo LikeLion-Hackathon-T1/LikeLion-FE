@@ -27,7 +27,10 @@ const HomePage = () => {
                 장바구니 테스트
             </button>
             <button onClick={() => navigate("/market/1")}>시장 정보</button>
-            <button onClick={() => navigate("/store/1/1")}>가게 정보</button>
+            <button onClick={() => navigate("/market/1/1")}>가게 정보</button>
+            <button onClick={() => navigate("/qrgen")}>QR생성</button>
+            <button onClick={() => navigate("/qr")}>QR스캔</button>
+            <button onClick={() => navigate("/order")}>주문내역</button>
             <button
                 onClick={() =>
                     axios
@@ -64,7 +67,7 @@ const HomePage = () => {
                     로그아웃
                 </button>
             )}
-            <TabBar />
+            {/* <TabBar /> */}
         </>
     );
 };

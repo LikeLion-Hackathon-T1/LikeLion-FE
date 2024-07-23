@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { ReactComponent as VisitIcon } from "assets/images/visit.svg";
 import { useState } from "react";
-import MarketInfoSmall from "./MarketinfoSmall";
 import useSyluvAxios from "hooks/useSyluvAxios";
+import VisitModal from "./VisitModal";
+import MarketInfoSmall from "./MarketinfoSmall";
 
 const MarketItem = ({
     storeId = 0,
@@ -13,11 +14,13 @@ const MarketItem = ({
 }) => {
     const syluvAxios = useSyluvAxios();
     const [selected, setIsSelected] = useState(false);
+    const [isVisitClicked, setIsVisitClicked] = useState(false);
     const handleVisit = () => {
-        setIsSelected(!selected);
+        setIsSelected(true);
         syluvAxios.post(`/market/${storeId}/visitlist`, {
             storeId: storeId,
         });
+        setIsVisitClicked(false);
     };
 
     return (
@@ -28,7 +31,26 @@ const MarketItem = ({
                 name={name}
                 desc={desc}
             />
-            <VisitButton onClick={() => handleVisit()} selected={selected} />
+            <VisitButton
+                onClick={() => {
+                    if (!selected) {
+                        setIsVisitClicked(true);
+                    } else {
+                        setIsSelected(false);
+                        syluvAxios.delete(
+                            `/market/${storeId}/visitlist/delete` //visitlist 아이디로 바꿔야함
+                        );
+                    }
+                }}
+                selected={selected}
+            />
+            {isVisitClicked && (
+                <VisitModal
+                    name={name}
+                    onCancle={() => setIsVisitClicked(false)}
+                    onConfirm={handleVisit}
+                />
+            )}
         </MarketContainer>
     );
 };
@@ -40,6 +62,7 @@ const MarketContainer = styled.div`
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
+    width: 100%;
 `;
 
 const VisitButton = styled(VisitIcon)`

@@ -8,9 +8,12 @@ import CartPage from "pages/CartPage";
 import MenuTestPage from "pages/MenuTestPage";
 import MarketPage from "pages/MarketPage";
 import { ScrollContainer } from "styles/SyluvStyle";
-import StorePage from "pages/StorePage";
 import theme from "styles/SyluvTheme";
-
+import StorePage from "pages/StorePage";
+import QrPage from "pages/QrPage";
+import QrGenPage from "pages/QrGenPage";
+import OrderListPage from "pages/OrderListPage";
+import OrderDetailPage from "pages/OrderDetailPage";
 const App = () => {
     useEffect(() => {
         if (window.location.host === "syluv.store") {
@@ -39,9 +42,19 @@ const App = () => {
                                     element={<MenuTestPage />}
                                 />
                                 <Route
-                                    path="/store/:marketId/:storeId"
+                                    path="/market/:marketId/:storeId"
                                     element={<StorePage />}
                                 />
+                                <Route
+                                    path="/order"
+                                    element={<OrderListPage />}
+                                />
+                                <Route
+                                    path="/order/:orderId"
+                                    element={<OrderDetailPage />}
+                                />
+                                <Route path="/qr" element={<QrPage />} />
+                                <Route path="/qrgen" element={<QrGenPage />} />
                                 <Route
                                     path="/oauth/kakao/callback"
                                     element={<OauthCallback />}

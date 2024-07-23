@@ -1,23 +1,20 @@
 import styled from "styled-components";
 import CartItem from "./CartItem";
 import StoreHeader from "./StoreHeader";
-import useCartStore from "hooks/useCartStore";
 
-const Store = ({ name = "" }) => {
-    const { carts } = useCartStore();
-    const storeCart = carts[name] || [];
+const Store = ({ name = "", items = [] }) => {
     return (
         <Container>
             <StoreHeader name={name} />
             <CartItemContainer>
-                {storeCart.map((item, index) => (
+                {items.map((item, index) => (
                     <CartItem
                         key={index}
-                        name={item.name}
+                        name={item.menuName}
                         price={item.price}
-                        count={item.count}
+                        count={item.quantity}
                         storeName={name}
-                        ImgSrc={item.ImgSrc}
+                        cartId={item.cartId}
                     />
                 ))}
             </CartItemContainer>
