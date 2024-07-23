@@ -27,7 +27,7 @@ const HomePage = () => {
                 장바구니 테스트
             </button>
             <button onClick={() => navigate("/market/1")}>시장 정보</button>
-            <button onClick={() => navigate("/store/1/1")}>가게 정보</button>
+            <button onClick={() => navigate("/store")}>가게 정보</button>
             <button
                 onClick={() =>
                     axios
