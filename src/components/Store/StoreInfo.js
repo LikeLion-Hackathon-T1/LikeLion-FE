@@ -1,17 +1,28 @@
 import React from "react";
 import styled from "styled-components";
+import { ReactComponent as BackIcon } from "assets/images/back.svg";
+import headerImage from "assets/images/gimbap.png";
 import { ReactComponent as CallIcon } from "assets/images/call.svg";
 import { ReactComponent as AddressIcon } from "assets/images/address.svg";
 import { ReactComponent as TimeIcon } from "assets/images/time.svg";
 import starIcon from "../../assets/images/star.png";
+import { useNavigate } from "react-router-dom";
 
 const StoreInfo = ({
   call = "010-3164-1145",
   address = "서울시 마포구 연남동 255-23",
   time = "05:30 ~ 19:30 (일요일 휴무)",
 }) => {
+  const navigate = useNavigate();
+
   return (
     <Container>
+      <ImageContainer>
+        <HeaderImage src={headerImage} alt="Store" />
+        <BackButton onClick={() => navigate(-1)}>
+          <BackIcon />
+        </BackButton>
+      </ImageContainer>
       <InfoContainer>
         <SubTitle>분식</SubTitle>
         <Title>원조 누드치즈김밥</Title>
@@ -53,6 +64,28 @@ const Container = styled.div`
   margin-bottom: 32px;
   background-color: white;
   box-shadow: none;
+`;
+
+const ImageContainer = styled.div`
+  position: relative;
+  width: 100%;
+  padding: 0; // 패딩 제거
+  margin: 0; // 마진 제거
+`;
+
+const HeaderImage = styled.img`
+  width: 100%;
+  height: auto;
+  display: block; // 여백 제거를 위한 블록 설정
+  margin: 0; // 여백 제거
+`;
+
+const BackButton = styled.div`
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  cursor: pointer;
+  padding: 8px;
 `;
 
 const InfoContainer = styled.div`

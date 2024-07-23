@@ -3,10 +3,10 @@ import styled from "styled-components";
 import MenuItem from "../components/Store/MenuItem";
 import ReviewItem from "../components/Store/ReviewItem";
 import StoreInfo from "../components/Store/StoreInfo";
-import menuImage from "../assets/images/gimbap.png";
 import reviewImage1 from "../assets/images/menu_gimbap.png";
 import reviewImage2 from "../assets/images/menu_gimbap.png";
 import reviewImage3 from "../assets/images/menu_gimbap.png";
+import menuImage from "../assets/images/menu_gimbap.png";
 
 const PageWrapper = styled.div`
   font-family: "Pretendard", sans-serif;
@@ -15,24 +15,6 @@ const PageWrapper = styled.div`
   background-color: white;
   display: flex;
   flex-direction: column;
-`;
-
-const Header = styled.header`
-  position: relative;
-  text-align: left;
-  background-color: white;
-  width: 100%;
-  height: 300px;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-`;
-
-const HeaderImage = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
 `;
 
 const Nav = styled.nav`
@@ -149,9 +131,6 @@ const StorePage = () => {
 
   return (
     <PageWrapper>
-      <Header>
-        <HeaderImage src={menuImage} alt="Store" />
-      </Header>
       <StoreInfo />
       <Nav>
         <NavButton
