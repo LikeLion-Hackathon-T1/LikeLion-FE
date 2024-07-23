@@ -1,12 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { ReactComponent as BackIcon } from "assets/images/back.svg";
-import headerImage from "assets/images/gimbap.png";
+import headerImage1 from "assets/images/gimbap1.png";
+import headerImage2 from "assets/images/gimbap2.png";
+import headerImage3 from "assets/images/gimbap3.png";
+import headerImage4 from "assets/images/gimbap4.png";
+import headerImage5 from "assets/images/gimbap5.png";
+import headerImage6 from "assets/images/gimbap6.png";
+import headerImage7 from "assets/images/gimbap7.png";
 import { ReactComponent as CallIcon } from "assets/images/call.svg";
 import { ReactComponent as AddressIcon } from "assets/images/address.svg";
 import { ReactComponent as TimeIcon } from "assets/images/time.svg";
 import starIcon from "../../assets/images/star.png";
 import { useNavigate } from "react-router-dom";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const StoreInfo = ({
   call = "010-3164-1145",
@@ -14,14 +23,40 @@ const StoreInfo = ({
   time = "05:30 ~ 19:30 (일요일 휴무)",
 }) => {
   const navigate = useNavigate();
+  const images = [
+    headerImage1,
+    headerImage2,
+    headerImage3,
+    headerImage4,
+    headerImage5,
+    headerImage6,
+    headerImage7,
+  ];
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    afterChange: (index) => setCurrentSlide(index),
+  };
 
   return (
     <Container>
       <ImageContainer>
-        <HeaderImage src={headerImage} alt="Store" />
+        <Slider {...settings}>
+          {images.map((image, index) => (
+            <HeaderImage key={index} src={image} alt={`Store-${index}`} />
+          ))}
+        </Slider>
         <BackButton onClick={() => navigate(-1)}>
           <BackIcon />
         </BackButton>
+        <ImageCounter>
+          {currentSlide + 1} / {images.length}
+        </ImageCounter>
       </ImageContainer>
       <InfoContainer>
         <SubTitle>분식</SubTitle>
@@ -69,15 +104,15 @@ const Container = styled.div`
 const ImageContainer = styled.div`
   position: relative;
   width: 100%;
-  padding: 0; // 패딩 제거
-  margin: 0; // 마진 제거
+  padding: 0;
+  margin: 0;
 `;
 
 const HeaderImage = styled.img`
   width: 100%;
   height: auto;
-  display: block; // 여백 제거를 위한 블록 설정
-  margin: 0; // 여백 제거
+  display: block;
+  margin: 0;
 `;
 
 const BackButton = styled.div`
@@ -86,6 +121,23 @@ const BackButton = styled.div`
   left: 16px;
   cursor: pointer;
   padding: 8px;
+`;
+
+const ImageCounter = styled.div`
+  position: absolute;
+  bottom: 16px;
+  right: 24px;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 31px;
+  font-size: 12px;
+  width: 52px;
+  height: 26px;
+  display: flex; /* Flex 컨테이너로 설정 */
+  align-items: center; /* 수직 중앙 정렬 */
+  justify-content: center; /* 수평 중앙 정렬 */
+  font-weight: ${({ theme }) => theme.fontWeight.regular};
 `;
 
 const InfoContainer = styled.div`
