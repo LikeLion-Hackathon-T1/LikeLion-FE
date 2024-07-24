@@ -68,6 +68,7 @@ const ReviewImageContainerSingle = styled.div`
   justify-content: center;
   align-items: center;
   margin-top: 19px;
+  aspect-ratio: 1.6/1;
 `;
 
 const ReviewImageContainerMultiple = styled.div`
@@ -81,8 +82,10 @@ const ReviewImageContainerMultiple = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
+  gap: 6px;
   -ms-overflow-style: none; // IE 및 Edge
   scrollbar-width: none; // Firefox
+  aspect-ratio: 1.2/1;
 `;
 
 const ReviewImage = styled.img`

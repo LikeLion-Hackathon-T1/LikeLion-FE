@@ -101,7 +101,7 @@ const QuantityLabel = styled.span`
 `;
 
 const AddToCartButton = styled.button`
-  width: 335px;
+  width: 450px;
   height: 48px;
   background-color: #ff6b00;
   color: white;
