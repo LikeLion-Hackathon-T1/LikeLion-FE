@@ -5,7 +5,7 @@ import { ReactComponent as SearchIcon } from "assets/images/search.svg";
 import MarketInfo from "./MarketInfo";
 import { useState } from "react";
 
-const categories = ["전체", "분식", "의류", "가구", "기타"];
+const categories = ["전체", "한식", "분식", "중식", "양식", "일식", "일반"];
 
 const MarketTab = ({ marketInfo, marketHours }) => {
     const [searchInfo, setSearchInfo] = useState({
@@ -53,7 +53,10 @@ const MarketTab = ({ marketInfo, marketHours }) => {
                     />
                 </Search>
                 <CategoryBar categories={categories} onClick={handleCategory} />
-                <MarketList searchInfo={searchInfo} />
+                <MarketList
+                    searchInfo={searchInfo}
+                    marketId={marketInfo?.marketId}
+                />
             </Container>
         </div>
     );
