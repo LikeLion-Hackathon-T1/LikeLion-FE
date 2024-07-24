@@ -56,7 +56,7 @@ const reviewsData = [
     rating: 4.2,
     comment: "맛있네요",
     menu: "어묵 참치김밥",
-    images: [reviewImage2, reviewImage3], // 이미지 배열 추가
+    images: [], // 이미지가 없는 경우
     helpfulness: 12,
     time: "4시간",
     response:

@@ -23,6 +23,7 @@ const MenuItemName = styled.h3`
   margin-left: 12px;
   font-weight: ${({ theme }) => theme.fontWeight.medium};
   color: ${({ theme }) => theme.color.gray900};
+  margin-top: 10px;
 `;
 
 const MenuItemPrice = styled.p`
@@ -36,7 +37,7 @@ const MenuItemDescription = styled.p`
   font-weight: ${({ theme }) => theme.fontWeight.regular};
   color: ${({ theme }) => theme.color.gray500};
   margin-left: 12px;
-  margin-top: 26px;
+  margin-top: 40px;
 `;
 
 const MenuItem = ({ name, price, image, description }) => (

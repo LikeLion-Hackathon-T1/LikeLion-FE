@@ -12,6 +12,7 @@ import { ReactComponent as CallIcon } from "assets/images/call.svg";
 import { ReactComponent as AddressIcon } from "assets/images/address.svg";
 import { ReactComponent as TimeIcon } from "assets/images/time.svg";
 import starIcon from "../../assets/images/star.png";
+import emptyStarIcon from "../../assets/images/empty_star.png"; // 빈 별 아이콘 추가
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -21,6 +22,7 @@ const StoreInfo = ({
   call = "010-3164-1145",
   address = "서울시 마포구 연남동 255-23",
   time = "05:30 ~ 19:30 (일요일 휴무)",
+  rating = 4.2, // rating 기본값 설정
 }) => {
   const navigate = useNavigate();
   const images = [
@@ -43,6 +45,10 @@ const StoreInfo = ({
     afterChange: (index) => setCurrentSlide(index),
   };
 
+  // 별과 빈 별의 갯수 계산
+  const fullStars = Math.floor(rating);
+  const emptyStars = 5 - fullStars;
+
   return (
     <Container>
       <ImageContainer>
@@ -63,13 +69,18 @@ const StoreInfo = ({
         <Title>원조 누드치즈김밥</Title>
         <Rating>
           <Stars>
-            {Array(5)
+            {Array(fullStars)
               .fill()
               .map((_, i) => (
-                <img key={i} src={starIcon} alt="star" />
+                <img key={`full-${i}`} src={starIcon} alt="star" />
+              ))}
+            {Array(emptyStars)
+              .fill()
+              .map((_, i) => (
+                <img key={`empty-${i}`} src={emptyStarIcon} alt="empty star" />
               ))}
           </Stars>
-          <RatingValue>4.2</RatingValue>
+          <RatingValue>{rating.toFixed(1)}</RatingValue>
         </Rating>
         <Info>
           <CallIcon />
@@ -95,10 +106,9 @@ const Container = styled.div`
   padding: 0 0px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  margin-bottom: 32px;
   background-color: white;
   box-shadow: none;
+  margin-bottom: 20px;
 `;
 
 const ImageContainer = styled.div`
@@ -134,24 +144,23 @@ const ImageCounter = styled.div`
   font-size: 12px;
   width: 52px;
   height: 26px;
-  display: flex; /* Flex 컨테이너로 설정 */
-  align-items: center; /* 수직 중앙 정렬 */
-  justify-content: center; /* 수평 중앙 정렬 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-weight: ${({ theme }) => theme.fontWeight.regular};
 `;
 
 const InfoContainer = styled.div`
-  margin: 0 20px;
+  margin: 20px 20px 0 20px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
 `;
 
 const Info = styled.div`
   display: flex;
-  gap: 8px;
+  gap: 4px; /* 4px 간격 */
   align-items: center;
-  margin-bottom: 8px;
 `;
 
 const InfoTitle = styled.div`
@@ -163,22 +172,20 @@ const InfoTitle = styled.div`
 const InfoDetail = styled.div`
   font-size: 14px;
   font-weight: ${({ theme }) => theme.fontWeight.regular};
-  color: ${({ theme }) => theme.color.gray900};
+  color: ${({ theme }) => theme.color.gray500};
 `;
 
 const SubTitle = styled.h2`
   font-size: 14px;
   color: ${({ theme }) => theme.color.gray600};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
-  margin-top: 20px;
-  margin-bottom: 8px;
 `;
 
 const Title = styled.h1`
   font-size: 20px;
-  margin-top: 0px;
+  margin-top: 8px;
   margin-bottom: 12px;
-  font-weight: ${({ theme }) => theme.fontWeight.Bold};
+  font-weight: ${({ theme }) => theme.fontWeight.bold};
   color: ${({ theme }) => theme.color.gray900};
 `;
 
