@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 import MenuItem from "../components/Store/MenuItem";
 import ReviewItem from "../components/Store/ReviewItem";
 import StoreInfo from "../components/Store/StoreInfo";
@@ -56,7 +57,6 @@ const reviewsData = [
     rating: 4.2,
     comment: "맛있네요",
     menu: "어묵 참치김밥",
-    images: [reviewImage2, reviewImage3], // 이미지 배열 추가
     helpfulness: 12,
     time: "4시간",
     response:
@@ -66,21 +66,25 @@ const reviewsData = [
 
 const StorePage = () => {
   const [activeSection, setActiveSection] = useState("메뉴");
+  const navigate = useNavigate();
 
   const menuItems = [
     {
+      id: 1,
       name: "치즈 참치 김밥",
       price: 2500,
       image: menuImage,
       description: "원조 치즈 참치 김밥",
     },
     {
+      id: 2,
       name: "잡채 김밥",
       price: 2500,
       image: menuImage,
       description: "어린이들은 가라~어른의 맛",
     },
     {
+      id: 3,
       name: "잡채 김밥",
       price: 2500,
       image: menuImage,
@@ -89,6 +93,10 @@ const StorePage = () => {
   ];
 
   const navItems = ["메뉴", "리뷰"];
+
+  const handleMenuItemClick = (id) => {
+    navigate(`/menu/${id}`);
+  };
 
   return (
     <PageWrapper>
@@ -101,7 +109,11 @@ const StorePage = () => {
       {activeSection === "메뉴" && (
         <Section>
           {menuItems.map((item, index) => (
-            <MenuItem key={index} {...item} />
+            <MenuItem
+              key={index}
+              {...item}
+              onClick={() => handleMenuItemClick(item.id)}
+            />
           ))}
         </Section>
       )}
