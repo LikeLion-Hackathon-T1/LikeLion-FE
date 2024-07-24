@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { ReactComponent as BackIcon } from "assets/images/back.svg";
 import { ReactComponent as CartIcon } from "assets/images/cart.svg";
+import { ReactComponent as HomeIcon } from "assets/images/home.svg";
 import { useNavigate } from "react-router-dom";
 // import useCartStore from "hooks/useCartStore";
 
@@ -8,6 +9,7 @@ const Header = ({
     title,
     backSrc = -1,
     cart = true,
+    home = false,
     back = true,
     rightText = "",
     rightDisabled = false,
@@ -17,28 +19,39 @@ const Header = ({
     // const totalItemCount = useCartStore((state) => state.totalItemCount);
 
     return (
-        <Container>
-            <LeftSection>
-                {back && (
-                    <BackButton onClick={() => navigate(backSrc)}>
-                        <BackIcon />
-                    </BackButton>
-                )}
-            </LeftSection>
-            <Title>{title}</Title>
-            <RightSection>
-                {cart && (
-                    <Cart onClick={() => navigate("/cart")}>
-                        <CartIcon width="40px" height="40px" />
-                    </Cart>
-                )}
-                {rightText && (
-                    <RightText onClick={handleRight} disabled={rightDisabled}>
-                        {rightText}
-                    </RightText>
-                )}
-            </RightSection>
-        </Container>
+        <>
+            <Spacer />
+            <Container>
+                <LeftSection>
+                    {back && (
+                        <BackButton onClick={() => navigate(backSrc)}>
+                            <BackIcon />
+                        </BackButton>
+                    )}
+                </LeftSection>
+                <Title>{title}</Title>
+                <RightSection>
+                    {home && (
+                        <Cart onClick={() => navigate("/")}>
+                            <HomeIcon />
+                        </Cart>
+                    )}
+                    {cart && (
+                        <Cart onClick={() => navigate("/cart")}>
+                            <CartIcon />
+                        </Cart>
+                    )}
+                    {rightText && (
+                        <RightText
+                            onClick={handleRight}
+                            disabled={rightDisabled}
+                        >
+                            {rightText}
+                        </RightText>
+                    )}
+                </RightSection>
+            </Container>
+        </>
     );
 };
 
@@ -51,26 +64,24 @@ const RightText = styled.div`
 `;
 
 const Container = styled.div`
-    margin: 0px 20px;
+    position: fixed;
+    padding: 0px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     height: 52px;
-    background-color: #fff;
+    width: 440px;
+    background-color: white;
+    top: 0;
+    @media (max-width: 480px) {
+        width: calc(100dvw - 40px);
+    }
+    z-index: 100;
 `;
-
-// const CartCount = styled.span`
-//     position: absolute;
-//     top: 25px;
-//     right: 0px;
-//     background-color: red;
-//     border-radius: 10px;
-//     color: white;
-//     padding: 2px 2px 0px 2px;
-//     font-size: 11px;
-//     font-weight: 900;
-//     text-align: center;
-// `;
+const Spacer = styled.div`
+    width: 1px;
+    height: 52px;
+`;
 
 const LeftSection = styled.div`
     flex: 1;
@@ -83,6 +94,7 @@ const RightSection = styled.div`
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    gap: 10px;
 `;
 
 const BackButton = styled.div`

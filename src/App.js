@@ -13,6 +13,8 @@ import StorePage from "pages/StorePage";
 import QrPage from "pages/QrPage";
 import QrGenPage from "pages/QrGenPage";
 import MenuItemDetail from "./components/Store/MenuItemDetail";
+import OrderListPage from "pages/OrderListPage";
+import OrderDetailPage from "pages/OrderDetailPage";
 const App = () => {
   useEffect(() => {
     if (window.location.host === "syluv.store") {
@@ -21,37 +23,50 @@ const App = () => {
       );
     }
   }, []);
-
-  return (
-    <ThemeProvider theme={theme}>
-      <ScrollContainer>
-        <Container>
-          <MobileContainer>
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/market/:marketId" element={<MarketPage />} />
-                <Route path="/cart" element={<CartPage />} />
-                <Route path="/menuTest" element={<MenuTestPage />} />
-                <Route
-                  path="/market/:marketId/:storeId"
-                  element={<StorePage />}
-                />
-                <Route path="/qr" element={<QrPage />} />
-                <Route path="/qrgen" element={<QrGenPage />} />
-                <Route
-                  path="/oauth/kakao/callback"
-                  element={<OauthCallback />}
-                />
-                <Route path="/menu/:menuItemId" element={<MenuItemDetail />} />
-              </Routes>
-            </BrowserRouter>
-          </MobileContainer>
-        </Container>
-      </ScrollContainer>
-    </ThemeProvider>
-  );
+    return (
+        <ThemeProvider theme={theme}>
+            <ScrollContainer>
+                <Container>
+                    <MobileContainer>
+                        <BrowserRouter>
+                            <Routes>
+                                <Route path="/" element={<HomePage />} />
+                                <Route path="/login" element={<LoginPage />} />
+                                <Route
+                                    path="/market/:marketId"
+                                    element={<MarketPage />}
+                                />
+                                <Route path="/cart" element={<CartPage />} />
+                                <Route
+                                    path="/menuTest"
+                                    element={<MenuTestPage />}
+                                />
+                                <Route
+                                    path="/market/:marketId/:storeId"
+                                    element={<StorePage />}
+                                />
+                                <Route
+                                    path="/order"
+                                    element={<OrderListPage />}
+                                />
+                                <Route
+                                    path="/order/:orderId"
+                                    element={<OrderDetailPage />}
+                                />
+                                <Route path="/menu/:menuItemId" element={<MenuItemDetail />} />
+                                <Route path="/qr" element={<QrPage />} />
+                                <Route path="/qrgen" element={<QrGenPage />} />
+                                <Route
+                                    path="/oauth/kakao/callback"
+                                    element={<OauthCallback />}
+                                />
+                            </Routes>
+                        </BrowserRouter>
+                    </MobileContainer>
+                </Container>
+            </ScrollContainer>
+        </ThemeProvider>
+    );
 };
 
 const Container = styled.div`

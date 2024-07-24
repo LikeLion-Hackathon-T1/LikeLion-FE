@@ -38,7 +38,7 @@ const MarketItem = ({
                     } else {
                         setIsSelected(false);
                         syluvAxios.delete(
-                            `/market/${storeId}/visitlist/delete`
+                            `/market/${storeId}/visitlist/delete` //visitlist 아이디로 바꿔야함
                         );
                     }
                 }}
