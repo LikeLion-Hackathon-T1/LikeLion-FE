@@ -12,17 +12,17 @@ import theme from "styles/SyluvTheme";
 import StorePage from "pages/StorePage";
 import QrPage from "pages/QrPage";
 import QrGenPage from "pages/QrGenPage";
+import MenuItemDetail from "./components/Store/MenuItemDetail";
 import OrderListPage from "pages/OrderListPage";
 import OrderDetailPage from "pages/OrderDetailPage";
 const App = () => {
-    useEffect(() => {
-        if (window.location.host === "syluv.store") {
-            window.location.replace(
-                "https://www.syluv.store" + window.location.pathname
-            );
-        }
-    }, []);
-
+  useEffect(() => {
+    if (window.location.host === "syluv.store") {
+      window.location.replace(
+        "https://www.syluv.store" + window.location.pathname
+      );
+    }
+  }, []);
     return (
         <ThemeProvider theme={theme}>
             <ScrollContainer>
@@ -53,6 +53,7 @@ const App = () => {
                                     path="/order/:orderId"
                                     element={<OrderDetailPage />}
                                 />
+                                <Route path="/menu/:menuItemId" element={<MenuItemDetail />} />
                                 <Route path="/qr" element={<QrPage />} />
                                 <Route path="/qrgen" element={<QrGenPage />} />
                                 <Route
@@ -69,27 +70,27 @@ const App = () => {
 };
 
 const Container = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100vw;
-    background-color: #f0f0f0;
-    flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  background-color: #f0f0f0;
+  flex-direction: column;
 `;
 
 const MobileContainer = styled.div`
-    width: 480px;
-    min-height: 100vh;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
-    overflow: hidden;
-    overflow-wrap: break-word;
+  width: 480px;
+  min-height: 100vh;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  overflow: hidden;
+  overflow-wrap: break-word;
 
-    @media (max-width: 480px) {
-        width: 100dvw;
-        padding: 0;
-        box-shadow: none;
-    }
+  @media (max-width: 480px) {
+    width: 100dvw;
+    padding: 0;
+    box-shadow: none;
+  }
 `;
 
 export default App;

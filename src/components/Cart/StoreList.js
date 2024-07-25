@@ -1,29 +1,39 @@
-// StoreList.js
 import styled from "styled-components";
 import Store from "./Store";
+import { useCallback, useEffect } from "react";
 import useSyluvAxios from "hooks/useSyluvAxios";
-import { useEffect, useState } from "react";
 
-const StoreList = () => {
+const StoreList = ({ cartList, setCartList, isLoading }) => {
     const syluvAxios = useSyluvAxios();
-    const [cartList, setCartList] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+
+    const putCart = useCallback(async () => {
+        const payload = cartList.map((item) => {
+            return {
+                cartId: item.cartid,
+                quantity: item.quantity,
+                isChecked: item.isChecked,
+            };
+        });
+        try {
+            await syluvAxios.put("/cart", payload);
+        } catch (err) {
+            console.log(err);
+        }
+    }, [cartList]);
 
     useEffect(() => {
-        const getCart = async () => {
-            await syluvAxios
-                .get("/cart")
-                .then((res) => {
-                    setCartList(res.data.payload);
-                    console.log(res.data.payload);
-                    setIsLoading(false);
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
+        const handleBeforeUnload = (event) => {
+            putCart();
+            event.preventDefault();
+            event.returnValue = "";
         };
-        getCart();
-    }, []);
+
+        window.addEventListener("beforeunload", handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener("beforeunload", handleBeforeUnload);
+        };
+    }, [putCart]);
 
     if (isLoading) return <div></div>;
 
@@ -38,6 +48,47 @@ const StoreList = () => {
         0
     );
 
+    const changeCartList = (cartId, updatedProperties) => {
+        setCartList((prevCartList) =>
+            prevCartList.map((item) => {
+                if (item.cartid === cartId) {
+                    return { ...item, ...updatedProperties };
+                }
+                return item;
+            })
+        );
+    };
+
+    const toggleStoreCheck = (storeName, isChecked) => {
+        setCartList((prevCartList) => {
+            return prevCartList.map((item) => {
+                // 현재 스토어의 모든 아이템이 체크되어 있는지 확인
+                const allItemsChecked = prevCartList
+                    .filter((i) => i.storeName === storeName)
+                    .every((i) => i.isChecked);
+
+                // 스토어가 체크 해제되는 경우
+                if (!isChecked) {
+                    if (allItemsChecked) {
+                        // 모든 아이템이 체크되어 있다면 아이템도 함께 체크 해제
+                        if (item.storeName === storeName) {
+                            return { ...item, isChecked };
+                        }
+                    } else {
+                        // 그렇지 않다면 아이템 상태 유지
+                        return item;
+                    }
+                } else {
+                    // 스토어가 체크되는 경우 아이템 상태 변경
+                    if (item.storeName === storeName) {
+                        return { ...item, isChecked };
+                    }
+                }
+                return item;
+            });
+        });
+    };
+
     return (
         <CartList>
             {Object.keys(stores).length > 0 ? (
@@ -46,6 +97,8 @@ const StoreList = () => {
                         key={storeName}
                         name={storeName}
                         items={stores[storeName]}
+                        changeCartList={changeCartList}
+                        toggleStoreCheck={toggleStoreCheck}
                     />
                 ))
             ) : (

@@ -1,3 +1,4 @@
+import Button from "components/Common/Button";
 import styled from "styled-components";
 
 const VisitModal = ({ name, onCancle = () => {}, onConfirm = () => {} }) => {
@@ -8,8 +9,8 @@ const VisitModal = ({ name, onCancle = () => {}, onConfirm = () => {} }) => {
                 <VisitTitle>{name}</VisitTitle>
                 <VisitDesc>이 가게를 방문 리스트에 추가할까요?</VisitDesc>
                 <ButtonContainer>
-                    <Button onClick={onCancle}>아니요</Button>
-                    <YesButton onClick={onConfirm}>네</YesButton>
+                    <Button text="아니요" onClick={onCancle} />
+                    <Button text="네" type="2" onClick={onConfirm} />
                 </ButtonContainer>
             </VisitModalContainer>
         </Container>
@@ -67,22 +68,6 @@ const VisitDesc = styled.span`
     font-size: 18px;
     font-weight: ${({ theme }) => theme.fontWeight.bold};
     color: ${({ theme }) => theme.color.gray700};
-`;
-
-const Button = styled.button`
-    border: ${({ theme }) => `1px solid ${theme.color.primary}`};
-    background-color: white;
-    height: 48px;
-    border-radius: 8px;
-    width: 100%;
-    color: ${({ theme }) => theme.color.primary};
-    font-size: 16px;
-    font-weight: ${({ theme }) => theme.fontWeight.semiBold};
-`;
-
-const YesButton = styled(Button)`
-    background-color: ${({ theme }) => theme.color.primary};
-    color: white;
 `;
 
 const ButtonContainer = styled.div`

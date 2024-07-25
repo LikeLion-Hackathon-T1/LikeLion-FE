@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import starIcon from "../../assets/images/star.png";
 import goodIcon from "../../assets/images/good.png";
+import badIcon from "../../assets/images/bad.png";
 
 const ReviewContainer = styled.div`
   margin-bottom: 44px; // 각 리뷰 항목 사이의 간격을 44px로 설정
@@ -58,18 +59,40 @@ const Time = styled.div`
   font-size: 12px;
 `;
 
-const ReviewImageContainer = styled.div`
+const ReviewImageContainerSingle = styled.div`
+  width: 440px; // 넓이 고정 시켰놨는데 핸드폰에 따라 변하는거 추가해야함
+  height: 264px;
+  border-radius: 8px;
+  overflow: hidden;
   display: flex;
-  overflow-x: scroll;
-  margin-top: 10px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 19px;
+  aspect-ratio: 1.6/1;
+`;
+
+const ReviewImageContainerMultiple = styled.div`
+  width: calc(200% - 20px);
+  height: 166px;
+  border-radius: 8px;
+  overflow-x: auto;
+  display: flex;
+  margin-top: 19px;
+  padding-right: 20px;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  gap: 6px;
+  -ms-overflow-style: none; // IE 및 Edge
+  scrollbar-width: none; // Firefox
+  aspect-ratio: 1.2/1;
 `;
 
 const ReviewImage = styled.img`
-  width: 100px;
-  height: 100px;
-  margin-right: 10px;
-  border-radius: 8px;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+  border-radius: 8px;
 `;
 
 const MenuName = styled.div`
@@ -80,10 +103,11 @@ const MenuName = styled.div`
 `;
 
 const ReviewText = styled.p`
-  margin-top: 6px;
+  margin-top: 12px;
   font-size: 16px;
   font-weight: ${({ theme }) => theme.fontWeight.regular};
   color: ${({ theme }) => theme.color.gray800};
+  margin-bottom: 6px;
 `;
 
 const Helpfulness = styled.div`
@@ -94,19 +118,20 @@ const Helpfulness = styled.div`
   font-weight: ${({ theme }) => theme.fontWeight.regular};
   font-size: 14px;
   margin-top: 10px;
+  height: 24px;
 `;
 
 const HelpfulButton = styled.button`
   background: none;
-  border: 1px solid #ff6b00;
+  border: 1px solid ${({ active }) => (active ? "#9A9A9A" : "#ff6b00")};
   border-radius: 54px;
-  color: #ff6b00;
+  color: ${({ active }) => (active ? "#9A9A9A" : "#ff6b00")};
   padding: 5px 10px;
   display: flex;
   align-items: center;
   cursor: pointer;
   position: relative;
-  left: -20px; // "도움이 돼요" 버튼을 화면 왼쪽으로 20px 이동
+  left: 0px;
 `;
 
 const Icon = styled.img`
@@ -118,6 +143,8 @@ const Icon = styled.img`
 const ReviewResponse = styled.div`
   padding: 20px;
   margin-top: 20px;
+  background-color: #fafafa;
+  border-radius: 8px;
 `;
 
 const ResponseHeader = styled.div`
@@ -144,9 +171,11 @@ const ResponseText = styled.div`
 
 const ReviewItem = ({ review }) => {
   const [helpfulness, setHelpfulness] = useState(review.helpfulness);
+  const [isHelpfulClicked, setIsHelpfulClicked] = useState(false);
 
   const handleHelpfulnessClick = () => {
     setHelpfulness(helpfulness + 1);
+    setIsHelpfulClicked(true);
   };
 
   return (
@@ -167,17 +196,26 @@ const ReviewItem = ({ review }) => {
           </div>
         </UserInfo>
       </Header>
-      <ReviewImageContainer>
-        {review.images.map((image, index) => (
-          <ReviewImage key={index} src={image} alt={`review-${index}`} />
-        ))}
-      </ReviewImageContainer>
+      {review.images && review.images.length === 1 ? (
+        <ReviewImageContainerSingle>
+          <ReviewImage src={review.images[0]} alt="review" />
+        </ReviewImageContainerSingle>
+      ) : review.images && review.images.length > 1 ? (
+        <ReviewImageContainerMultiple>
+          {review.images.map((image, index) => (
+            <ReviewImage key={index} src={image} alt={`review-${index}`} />
+          ))}
+        </ReviewImageContainerMultiple>
+      ) : null}
       <MenuName>{review.menu}</MenuName>
       <ReviewText>{review.comment}</ReviewText>
       <Helpfulness>
-        <div>{helpfulness}명에게 도움이 되었습니다</div>
-        <HelpfulButton onClick={handleHelpfulnessClick}>
-          <Icon src={goodIcon} alt="thumbs up" />
+        <div>{helpfulness}명에게 도움이 되었어요</div>
+        <HelpfulButton
+          onClick={handleHelpfulnessClick}
+          active={isHelpfulClicked}
+        >
+          <Icon src={isHelpfulClicked ? badIcon : goodIcon} alt="thumbs up" />
           도움이 돼요
         </HelpfulButton>
       </Helpfulness>

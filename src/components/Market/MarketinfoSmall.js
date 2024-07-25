@@ -1,9 +1,8 @@
 import styled from "styled-components";
-import theme from "styles/SyluvTheme";
 
-const MarketInfoSmall = ({ type, name, desc, imgSrc }) => {
+const MarketInfoSmall = ({ type, name, desc, imgSrc, onClick = () => {} }) => {
     return (
-        <ItemContainer>
+        <ItemContainer onClick={onClick}>
             <MenuImage src={imgSrc} alt="메뉴 이미지" />
             <ItemInfo>
                 <ItemTitleContainer>
