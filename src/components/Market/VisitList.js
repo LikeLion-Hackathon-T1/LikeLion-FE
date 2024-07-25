@@ -1,25 +1,25 @@
 import styled from "styled-components";
 import VisitItem from "./VisitItem";
 import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import useSyluvAxios from "hooks/useSyluvAxios";
 
 const VisitList = () => {
     const syluvAxios = useSyluvAxios();
     const [newvisitList, setVisitList] = useState(null);
-    const { isLoading, data, isError, error } = useQuery({
-        queryKey: ["get-visitList"],
-        queryFn: () => syluvAxios.get("/market/visitlist"),
-    });
 
     useEffect(() => {
-        if (data) {
-            setVisitList(data.data.payload);
-        }
-    }, [data]);
-
-    if (isLoading) return <div></div>;
-    if (isError) return <div>Error: {error.message}</div>;
+        syluvAxios
+            .get("/market/visitlist")
+            .then((res) => {
+                setVisitList(res.data.payload);
+            })
+            .catch((error) => {
+                console.error(
+                    "방문 리스트 불러오기 중 에러가 발생했습니다:",
+                    error
+                );
+            });
+    }, []);
 
     const visitList = [
         {
