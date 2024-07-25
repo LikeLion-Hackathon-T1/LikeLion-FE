@@ -1,5 +1,7 @@
 import axios from "axios";
 import useTokenStore from "hooks/useTokenStore";
+import { jwtDecode } from "jwt-decode";
+import { useEffect } from "react";
 
 const baseURL = process.env.REACT_APP_BASE_URL;
 
@@ -13,25 +15,64 @@ const CreateSyluvAxios = (navigate) => {
         removeRefreshToken,
     } = useTokenStore();
 
+    const decodeToken = (token) => {
+        try {
+            return jwtDecode(token);
+        } catch (error) {
+            console.error("Invalid token:", error);
+            return null;
+        }
+    };
+
+    const isTokenExpired = (token) => {
+        const decoded = decodeToken(token);
+        if (!decoded) return true;
+        const currentTime = Date.now() / 1000;
+        return decoded.exp < currentTime;
+    };
+
+    const reissueToken = async () => {
+        try {
+            const response = await axios.get(baseURL + "/v1/users/reissue", {
+                headers: {
+                    RefreshToken: getRefreshToken(),
+                },
+            });
+
+            if (response.status === 200) {
+                setAccessToken(response.data.payload.accessToken);
+                setRefreshToken(response.data.payload.refreshToken);
+                return response.data.payload.accessToken;
+            }
+        } catch (error) {
+            console.error("Token reissue failed:", error);
+            removeAccessToken();
+            removeRefreshToken();
+            navigate("/login", { replace: true });
+            return null;
+        }
+    };
+
     const syluvAxios = axios.create({
         withCredentials: true,
         baseURL: baseURL + "/v1",
         timeout: 10000,
     });
 
-    const token = getAccessToken();
-    if (token) {
-        syluvAxios.defaults.headers.common["AccessToken"] = `${token}`;
-    }
+    let token = getAccessToken();
+
+    syluvAxios.defaults.headers.common["AccessToken"] = token;
 
     syluvAxios.interceptors.request.use(
-        function (config) {
-            console.log("Request sent:", config);
+        // 토큰 만료 확인 및 재발급 및 리턴
+        async (config) => {
+            if (isTokenExpired(token)) {
+                token = await reissueToken();
+                if (token) {
+                    config.headers["AccessToken"] = token;
+                }
+            }
             return config;
-        },
-        (error) => {
-            console.error("Request error:", error);
-            return Promise.reject(error);
         }
     );
 
@@ -42,52 +83,6 @@ const CreateSyluvAxios = (navigate) => {
         },
         function (error) {
             console.error("Response error:", error);
-            // 로그인 페이지로 이동
-            removeAccessToken();
-            removeRefreshToken();
-            navigate("/login", { replace: true });
-            console.log(error.response.status);
-            // const originalRequest = error.config;
-            // if (
-            //     error.response &&
-            //     error.response.status === 400 &&
-            //     !originalRequest._retry
-            // ) {
-            //     originalRequest._retry = true;
-            //     return syluvAxios
-            //         .get("/users/reissue", {
-            //             headers: {
-            //                 RefreshToken: getRefreshToken(),
-            //             },
-            //         })
-            //         .then((res) => {
-            //             if (res.status === 200) {
-            //                 console.log("토큰 재발급 성공");
-            //                 setAccessToken(res.data.payload.accessToken);
-            //                 setRefreshToken(res.data.payload.refreshToken);
-            //                 axios.defaults.headers.common[
-            //                     "AccessToken"
-            //                 ] = `${res.data.payload.accessToken}`;
-            //                 originalRequest.headers[
-            //                     "AccessToken"
-            //                 ] = `${res.data.payload.accessToken}`;
-            //                 return axios(originalRequest);
-            //             }
-            //         })
-            //         .catch((reissueError) => {
-            //             console.error(
-            //                 "토큰 재발급 중 에러가 발생했습니다:",
-            //                 reissueError
-            //             );
-            //             removeAccessToken();
-            //             removeRefreshToken();
-            //             navigate("/login", { replace: true });
-            //             return Promise.reject(reissueError);
-            //         });
-            // } else {
-            //     console.error("오류 발생:", error);
-            //     return Promise.reject(error);
-            // }
         }
     );
 
