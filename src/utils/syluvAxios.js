@@ -12,6 +12,7 @@ const CreateSyluvAxios = (navigate) => {
         removeAccessToken,
         removeRefreshToken,
     } = useTokenStore();
+
     const syluvAxios = axios.create({
         withCredentials: true,
         baseURL: baseURL + "/v1",
@@ -36,38 +37,40 @@ const CreateSyluvAxios = (navigate) => {
         },
         function (error) {
             const originalRequest = error.config;
-            if (error.response) {
-                if (error.response.status === 401 && !originalRequest._retry) {
-                    originalRequest._retry = true;
-                    return syluvAxios
-                        .get("/users/reissue", {
-                            headers: {
-                                RefreshToken: getRefreshToken(),
-                            },
-                        })
-                        .then((res) => {
-                            if (res.status === 200) {
-                                setAccessToken(res.data.payload.accessToken);
-                                setRefreshToken(res.data.payload.refreshToken);
-                                axios.defaults.headers.common[
-                                    "AccessToken"
-                                ] = `${res.data.accessToken}`;
-                                return syluvAxios(originalRequest);
-                            }
-                        })
-                        .catch((error) => {
-                            console.log("토큰 재발급 중 에러가 발생했습니다.");
-                            removeAccessToken();
-                            removeRefreshToken();
-                            console.log(error);
-                            navigate("/login", { replace: true });
-                            return Promise.reject(error);
-                        });
-                } else {
-                    return Promise.reject(error);
-                }
+            if (error.response && !originalRequest._retry) {
+                originalRequest._retry = true;
+                return syluvAxios
+                    .get("/users/reissue", {
+                        headers: {
+                            RefreshToken: getRefreshToken(),
+                        },
+                    })
+                    .then((res) => {
+                        if (res.status === 200) {
+                            console.log("토큰 재발급 성공");
+                            setAccessToken(res.data.payload.accessToken);
+                            setRefreshToken(res.data.payload.refreshToken);
+                            axios.defaults.headers.common[
+                                "AccessToken"
+                            ] = `${res.data.payload.accessToken}`;
+                            return axios(originalRequest);
+                        }
+                    })
+                    .catch((reissueError) => {
+                        console.log("토큰 재발급 중 에러가 발생했습니다.");
+                        removeAccessToken();
+                        removeRefreshToken();
+                        console.log(reissueError);
+                        navigate("/login", { replace: true });
+                        return Promise.reject(reissueError);
+                    });
+            } else {
+                console.log("오류 발생:", error);
+                removeAccessToken();
+                removeRefreshToken();
+                navigate("/login", { replace: true });
+                return Promise.reject(error);
             }
-            return Promise.reject(error);
         }
     );
 
