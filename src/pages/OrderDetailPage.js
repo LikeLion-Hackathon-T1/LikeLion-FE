@@ -1,56 +1,22 @@
+import Button from "components/Common/Button";
 import Header from "components/Common/Header";
+import AmountList from "components/Order/OrderDetail/AmoutList";
+import MenuList from "components/Order/OrderDetail/MenuList";
+import SimpleReceipt from "components/Order/OrderDetail/SimpleReceipt";
 import styled from "styled-components";
 
 const OrderDetailPage = () => {
     return (
         <Container>
             <Header title="주문상세" home={"true"} backSrc={"/order"} />
-            <ListContainer>
-                <GraySpace />
-                <State>배달이 완료되었어요</State>
-                <StoreContainer>
-                    <MarketName>광장시장</MarketName>
-                    <StoreItem>
-                        <StoreName>세미수산</StoreName>
-                    </StoreItem>
-                    <StoreItem>
-                        <StoreMenu>광어 모듬회 세트 외 3</StoreMenu>
-                        <StorePrice>61,000원</StorePrice>
-                    </StoreItem>
-                    <OrderInfo>
-                        <OrderItem>
-                            주문일시: 2024년 7월 17일 오후 08:12
-                        </OrderItem>
-                        <OrderItem>주문번호: B1UD01004L</OrderItem>
-                    </OrderInfo>
-                </StoreContainer>
-            </ListContainer>
-            <ListContainer>
-                <GraySpace />
-                <div>
-                    <div>
-                        <span>광어 모듬회 세트 1개</span>
-                        <span>30,000원</span>
-                    </div>
-                    <div>
-                        <span>우럭매운탕 1개</span>
-                        <span>30,000원</span>
-                    </div>
-                </div>
-            </ListContainer>
-            <ListContainer>
-                <GraySpace />
-                <div>
-                    <div>
-                        <span>결제금액</span>
-                        <span>1000원</span>
-                    </div>
-                    <div>
-                        <span>주문금액</span>
-                        <span>1000원</span>
-                    </div>
-                </div>
-            </ListContainer>
+            <SimpleReceipt />
+            <MenuList />
+            <AmountList />
+            <ButtonSpace />
+            <ButtonContainer>
+                <Button text="주문 내역 삭제" type="1" />
+                <Button text="리뷰 남기기" type="2" />
+            </ButtonContainer>
         </Container>
     );
 };
@@ -69,15 +35,17 @@ const Container = styled.div`
     }
     -ms-overflow-style: none; // IE 및 Edge
     scrollbar-width: none; // Firefox
+
+    position: relative;
 `;
 
-const GraySpace = styled.div`
+export const GraySpace = styled.div`
     background-color: ${({ theme }) => theme.color.gray100};
     width: 100%;
     height: 6px;
 `;
 
-const ListContainer = styled.div`
+export const ListContainer = styled.div`
     margin-top: 6px;
     display: flex;
     flex-direction: column;
@@ -85,61 +53,16 @@ const ListContainer = styled.div`
     margin-bottom: 22px;
 `;
 
-const State = styled.div`
-    font-size: 14px;
-    color: ${({ theme }) => theme.color.primary};
-    font-weight: ${({ theme }) => theme.fontWeight.semiBold};
-    padding: 16px 20px 13px 20px;
-    border-bottom: 1px solid ${({ theme }) => theme.color.gray100};
-    margin-bottom: 8px;
-`;
-
-const MarketName = styled.div`
-    font-size: 14px;
-    color: ${({ theme }) => theme.color.gray500};
-    font-weight: ${({ theme }) => theme.fontWeight.bold};
-    margin-bottom: 11px;
-`;
-
-const StoreContainer = styled.div`
-    padding: 0 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    cursor: pointer;
-`;
-
-const StoreItem = styled.div`
+const ButtonContainer = styled.div`
     display: flex;
     justify-content: space-between;
+    width: calc(100% - 68px);
+    gap: 17px;
+    position: absolute;
+    bottom: 32px;
 `;
 
-const StoreName = styled.div`
-    font-size: 18px;
-    color: ${({ theme }) => theme.color.gray900};
-    font-weight: ${({ theme }) => theme.fontWeight.bold};
-`;
-
-const StoreMenu = styled.div`
-    font-size: 14px;
-    color: ${({ theme }) => theme.color.gray500};
-    font-weight: ${({ theme }) => theme.fontWeight.bold};
-`;
-
-const StorePrice = styled.div`
-    font-size: 18px;
-    color: ${({ theme }) => theme.color.gray900};
-    font-weight: ${({ theme }) => theme.fontWeight.semiBold};
-`;
-
-const OrderInfo = styled.div`
-    display: flex;
-    flex-direction: column;
-`;
-
-const OrderItem = styled.div`
-    font-size: 14px;
-    color: ${({ theme }) => theme.color.gray500};
-    font-weight: ${({ theme }) => theme.fontWeight.bold};
-    margin-top: 13px;
+const ButtonSpace = styled.div`
+    height: 48px;
+    margin-bottom: 32px;
 `;
