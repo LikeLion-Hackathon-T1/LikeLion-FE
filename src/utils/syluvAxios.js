@@ -1,7 +1,6 @@
 import axios from "axios";
 import useTokenStore from "hooks/useTokenStore";
 import { jwtDecode } from "jwt-decode";
-import { useEffect } from "react";
 
 const baseURL = process.env.REACT_APP_BASE_URL;
 

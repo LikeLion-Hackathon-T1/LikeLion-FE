@@ -1,8 +1,8 @@
 import Button from "components/Common/Button";
 import Header from "components/Common/Header";
-import AmountList from "components/Order/OrderDetail/AmoutList";
-import MenuList from "components/Order/OrderDetail/MenuList";
-import SimpleReceipt from "components/Order/OrderDetail/SimpleReceipt";
+import AmountList from "components/OrderList/OrderDetail/AmoutList";
+import MenuList from "components/OrderList/OrderDetail/MenuList";
+import SimpleReceipt from "components/OrderList/OrderDetail/SimpleReceipt";
 import styled from "styled-components";
 
 const OrderDetailPage = () => {
