@@ -11,8 +11,6 @@ import headerImage7 from "assets/images/gimbap7.png";
 import { ReactComponent as CallIcon } from "assets/images/call.svg";
 import { ReactComponent as AddressIcon } from "assets/images/address.svg";
 import { ReactComponent as TimeIcon } from "assets/images/time.svg";
-import starIcon from "../../assets/images/star.png";
-import emptyStarIcon from "../../assets/images/empty_star.png"; // 빈 별 아이콘 추가
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -22,7 +20,7 @@ const StoreInfo = ({
   call = "010-3164-1145",
   address = "서울시 마포구 연남동 255-23",
   time = "05:30 ~ 19:30 (일요일 휴무)",
-  rating = 4.2, // rating 기본값 설정
+  rating = 4.5, // rating 기본값 설정
 }) => {
   const navigate = useNavigate();
   const images = [
@@ -46,8 +44,10 @@ const StoreInfo = ({
   };
 
   // 별과 빈 별의 갯수 계산
-  const fullStars = Math.floor(rating);
-  const emptyStars = 5 - fullStars;
+  const ratingToPercent = (rating) => {
+    const score = rating * 20;
+    return score + 1.5;
+  };
 
   return (
     <Container>
@@ -68,18 +68,22 @@ const StoreInfo = ({
         <SubTitle>분식</SubTitle>
         <Title>원조 누드치즈김밥</Title>
         <Rating>
-          <Stars>
-            {Array(fullStars)
-              .fill()
-              .map((_, i) => (
-                <img key={`full-${i}`} src={starIcon} alt="star" />
-              ))}
-            {Array(emptyStars)
-              .fill()
-              .map((_, i) => (
-                <img key={`empty-${i}`} src={emptyStarIcon} alt="empty star" />
-              ))}
-          </Stars>
+          <StarRatings>
+            <StarRatingsFill style={{ width: `${ratingToPercent(rating)}%` }}>
+              <span>★</span>
+              <span>★</span>
+              <span>★</span>
+              <span>★</span>
+              <span>★</span>
+            </StarRatingsFill>
+            <StarRatingsBase>
+              <span>★</span>
+              <span>★</span>
+              <span>★</span>
+              <span>★</span>
+              <span>★</span>
+            </StarRatingsBase>
+          </StarRatings>
           <RatingValue>{rating.toFixed(1)}</RatingValue>
         </Rating>
         <Info>
@@ -195,15 +199,30 @@ const Rating = styled.div`
   margin-bottom: 16px;
 `;
 
-const Stars = styled.div`
-  display: flex;
-  align-items: center;
+const StarRatings = styled.div`
+  position: relative;
+  unicode-bidi: bidi-override;
+  width: max-content;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke-width: 1.3px;
+  -webkit-text-stroke-color: #2b2a29;
+`;
 
-  & img {
-    width: 14px;
-    height: 14px;
-    margin-right: 1px;
-  }
+const StarRatingsFill = styled.div`
+  color: #fff58c;
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  -webkit-text-fill-color: gold;
+`;
+
+const StarRatingsBase = styled.div`
+  color: #aaa9a9;
+  z-index: 0;
+  display: flex;
 `;
 
 const RatingValue = styled.span`
