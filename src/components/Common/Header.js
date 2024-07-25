@@ -24,7 +24,13 @@ const Header = ({
             <Container>
                 <LeftSection>
                     {back && (
-                        <BackButton onClick={() => navigate(backSrc)}>
+                        <BackButton
+                            onClick={() =>
+                                navigate(backSrc, {
+                                    replace: true,
+                                })
+                            }
+                        >
                             <BackIcon />
                         </BackButton>
                     )}
