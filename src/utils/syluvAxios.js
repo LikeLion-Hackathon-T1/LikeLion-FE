@@ -52,7 +52,7 @@ const CreateSyluvAxios = (navigate) => {
                                 axios.defaults.headers.common[
                                     "AccessToken"
                                 ] = `${res.data.accessToken}`;
-                                return axios(originalRequest);
+                                return syluvAxios(originalRequest);
                             }
                         })
                         .catch((error) => {
