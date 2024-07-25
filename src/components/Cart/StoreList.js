@@ -2,9 +2,11 @@ import styled from "styled-components";
 import Store from "./Store";
 import { useCallback, useEffect } from "react";
 import useSyluvAxios from "hooks/useSyluvAxios";
+import { useNavigate } from "react-router-dom";
 
 const StoreList = ({ cartList, setCartList, isLoading }) => {
     const syluvAxios = useSyluvAxios();
+    const navigate = useNavigate();
 
     const putCart = useCallback(async () => {
         const payload = cartList.map((item) => {
@@ -105,7 +107,7 @@ const StoreList = ({ cartList, setCartList, isLoading }) => {
                 <NoItem>장바구니에 등록된 물품이 없습니다.</NoItem>
             )}
             {Object.keys(stores).length > 0 && (
-                <OrderButton>
+                <OrderButton onClick={() => navigate("/order")}>
                     {new Intl.NumberFormat("ko-KR").format(totalAmount)}원
                     주문하기
                 </OrderButton>
