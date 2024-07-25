@@ -8,7 +8,7 @@ import styled from "styled-components";
 const OrderDetailPage = () => {
     return (
         <Container>
-            <Header title="주문상세" home={"true"} backSrc={"/order"} />
+            <Header title="주문상세" home={"true"} />
             <SimpleReceipt />
             <MenuList />
             <AmountList />
