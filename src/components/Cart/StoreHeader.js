@@ -1,33 +1,26 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import CheckButton from "./CheckButton";
-import useCartStore from "hooks/useCartStore";
 import { useEffect, useState } from "react";
 
-const StoreHeader = ({ name, storeSrc = "/" }) => {
+const StoreHeader = ({ name, storeSrc = "/", isChecked, onCheck }) => {
     const navigate = useNavigate();
-    const { clickStore, isStoreClicked, removeClickedStore } = useCartStore();
-    const [isChecked, setIsChecked] = useState(false);
-
-    const storeIsClicked = isStoreClicked(name);
+    const [checked, setChecked] = useState(isChecked);
 
     useEffect(() => {
-        setIsChecked(storeIsClicked);
-    }, [storeIsClicked]);
+        setChecked(isChecked);
+    }, [isChecked]);
 
     const handleClick = () => {
-        if (isChecked) {
-            removeClickedStore(name);
-        } else {
-            clickStore(name);
-        }
-        setIsChecked(!isChecked);
+        const newChecked = !checked;
+        setChecked(newChecked);
+        onCheck(newChecked);
     };
 
     return (
         <Header>
             <Container>
-                <CheckButton isChecked={isChecked} onClick={handleClick} />
+                <CheckButton isChecked={checked} onClick={handleClick} />
                 <StoreName onClick={() => navigate(storeSrc)}>{name}</StoreName>
             </Container>
         </Header>

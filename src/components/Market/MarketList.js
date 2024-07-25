@@ -3,7 +3,7 @@ import MarketItem from "./MarketItem";
 import useSyluvAxios from "hooks/useSyluvAxios";
 import { useEffect, useState } from "react";
 
-const MarketList = ({ searchInfo }) => {
+const MarketList = ({ searchInfo, marketId = 0 }) => {
     const syluvAxios = useSyluvAxios();
     const [storeList, setStoreList] = useState(null);
 
@@ -47,6 +47,7 @@ const MarketList = ({ searchInfo }) => {
                 <MarketItem
                     key={store.storeId}
                     storeId={store.storeId}
+                    marketId={marketId}
                     type={store.type}
                     name={store.name}
                     desc={store.desc}

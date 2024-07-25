@@ -4,6 +4,7 @@ import { useState } from "react";
 import useSyluvAxios from "hooks/useSyluvAxios";
 import VisitModal from "./VisitModal";
 import MarketInfoSmall from "./MarketinfoSmall";
+import { useNavigate } from "react-router-dom";
 
 const MarketItem = ({
     storeId = 0,
@@ -11,7 +12,9 @@ const MarketItem = ({
     name = "가게 이름",
     desc = "설명이 없습니다.",
     imgSrc = "https://via.placeholder.com/150",
+    marketId = 0,
 }) => {
+    const navigate = useNavigate();
     const syluvAxios = useSyluvAxios();
     const [selected, setIsSelected] = useState(false);
     const [isVisitClicked, setIsVisitClicked] = useState(false);
@@ -23,6 +26,10 @@ const MarketItem = ({
         setIsVisitClicked(false);
     };
 
+    const handleClick = () => {
+        navigate(`/market/${marketId}/${storeId}`);
+    };
+
     return (
         <MarketContainer>
             <MarketInfoSmall
@@ -30,6 +37,7 @@ const MarketItem = ({
                 type={type}
                 name={name}
                 desc={desc}
+                onClick={handleClick}
             />
             <VisitButton
                 onClick={() => {
