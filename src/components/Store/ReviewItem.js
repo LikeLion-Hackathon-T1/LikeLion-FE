@@ -60,39 +60,46 @@ const Time = styled.div`
 `;
 
 const ReviewImageContainerSingle = styled.div`
-  width: 440px; // 넓이 고정 시켰놨는데 핸드폰에 따라 변하는거 추가해야함
-  height: 264px;
+  width: 100%; // 너비를 100%로 설정하여 기기에 따라 반응형으로 변경
+  height: auto;
   border-radius: 8px;
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 19px;
-  aspect-ratio: 1.6/1;
+  aspect-ratio: 1.6 / 1;
 `;
 
 const ReviewImageContainerMultiple = styled.div`
-  width: calc(200% - 20px);
-  height: 166px;
+  width: 100%;
+  height: 180px;
   border-radius: 8px;
   overflow-x: auto;
   display: flex;
   margin-top: 19px;
   padding-right: 20px;
-  &::-webkit-scrollbar {
-    display: none;
-  }
   gap: 6px;
   -ms-overflow-style: none; // IE 및 Edge
   scrollbar-width: none; // Firefox
-  aspect-ratio: 1.2/1;
+  &::-webkit-scrollbar {
+    display: none; // 스크롤바 숨김
+  }
 `;
 
-const ReviewImage = styled.img`
+const SingleReviewImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 8px;
+`;
+
+const MultipleReviewImage = styled.img`
+  width: 250px;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  flex: 0 0 auto; // 이미지들이 가로로 나란히 배치되도록 설정 !!!
 `;
 
 const MenuName = styled.div`
@@ -198,12 +205,16 @@ const ReviewItem = ({ review }) => {
       </Header>
       {review.images && review.images.length === 1 ? (
         <ReviewImageContainerSingle>
-          <ReviewImage src={review.images[0]} alt="review" />
+          <SingleReviewImage src={review.images[0]} alt="review" />
         </ReviewImageContainerSingle>
       ) : review.images && review.images.length > 1 ? (
         <ReviewImageContainerMultiple>
           {review.images.map((image, index) => (
-            <ReviewImage key={index} src={image} alt={`review-${index}`} />
+            <MultipleReviewImage
+              key={index}
+              src={image}
+              alt={`review-${index}`}
+            />
           ))}
         </ReviewImageContainerMultiple>
       ) : null}
