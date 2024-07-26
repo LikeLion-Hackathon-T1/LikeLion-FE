@@ -37,7 +37,7 @@ const StorePage = () => {
 
   const fetchStoreAndMenuData = async () => {
     try {
-      const response = await axiosInstance.get("/v1/store/info");
+      const response = await axiosInstance.get("/store/info");
       console.log("Full Store and Menu Data Response:", response.data);
       if (response.data && response.data.payload) {
         const store = response.data.payload.find(
@@ -83,7 +83,16 @@ const StorePage = () => {
     <PageWrapper>
       {storeData && (
         <>
-          <StoreInfo {...storeData} />
+          <StoreInfo
+            name={storeData.name}
+            call={storeData.contact}
+            address={storeData.location}
+            openHours={storeData.openHours}
+            closeHours={storeData.closeHours}
+            ratingAvg={storeData.ratingAvg}
+            storeImage={storeData.storeImage}
+            category={storeData.category}
+          />
           <NavBar
             items={["메뉴", "리뷰"]}
             selected={activeSection}

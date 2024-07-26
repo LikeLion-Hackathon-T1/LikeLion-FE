@@ -41,13 +41,13 @@ const MenuItemDescription = styled.p`
   margin-top: 40px;
 `;
 
-const MenuItem = ({ name, price, image, description, onClick }) => (
+const MenuItem = ({ name, price, menuImage, content, onClick }) => (
   <MenuItemWrapper onClick={onClick}>
-    <MenuItemImage src={image} alt={name} />
+    <MenuItemImage src={menuImage} alt={name} />
     <MenuItemInfo>
       <MenuItemName>{name}</MenuItemName>
       <MenuItemPrice>{price}원</MenuItemPrice>
-      {description && <MenuItemDescription>{description}</MenuItemDescription>}
+      {content && <MenuItemDescription>{content}</MenuItemDescription>}
     </MenuItemInfo>
   </MenuItemWrapper>
 );

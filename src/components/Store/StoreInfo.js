@@ -1,13 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { ReactComponent as BackIcon } from "assets/images/back.svg";
-import headerImage1 from "assets/images/gimbap1.png";
-import headerImage2 from "assets/images/gimbap2.png";
-import headerImage3 from "assets/images/gimbap3.png";
-import headerImage4 from "assets/images/gimbap4.png";
-import headerImage5 from "assets/images/gimbap5.png";
-import headerImage6 from "assets/images/gimbap6.png";
-import headerImage7 from "assets/images/gimbap7.png";
 import { ReactComponent as CallIcon } from "assets/images/call.svg";
 import { ReactComponent as AddressIcon } from "assets/images/address.svg";
 import { ReactComponent as TimeIcon } from "assets/images/time.svg";
@@ -17,21 +10,17 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 const StoreInfo = ({
-  call = "010-3164-1145",
-  address = "서울시 마포구 연남동 255-23",
-  time = "05:30 ~ 19:30 (일요일 휴무)",
-  rating = 4.5, // rating 기본값 설정
+  name,
+  category,
+  call,
+  address,
+  openHours,
+  closeHours,
+  ratingAvg,
+  storeImage,
 }) => {
   const navigate = useNavigate();
-  const images = [
-    headerImage1,
-    headerImage2,
-    headerImage3,
-    headerImage4,
-    headerImage5,
-    headerImage6,
-    headerImage7,
-  ];
+  const images = [storeImage];
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const settings = {
@@ -44,8 +33,8 @@ const StoreInfo = ({
   };
 
   // 별과 빈 별의 갯수 계산
-  const ratingToPercent = (rating) => {
-    const score = rating * 20;
+  const ratingToPercent = (ratingAvg) => {
+    const score = ratingAvg * 20;
     return score + 1.5;
   };
 
@@ -65,11 +54,13 @@ const StoreInfo = ({
         </ImageCounter>
       </ImageContainer>
       <InfoContainer>
-        <SubTitle>분식</SubTitle>
-        <Title>원조 누드치즈김밥</Title>
+        <SubTitle>{category}</SubTitle>
+        <Title>={name}</Title>
         <Rating>
           <StarRatings>
-            <StarRatingsFill style={{ width: `${ratingToPercent(rating)}%` }}>
+            <StarRatingsFill
+              style={{ width: `${ratingToPercent(ratingAvg)}%` }}
+            >
               <span>★</span>
               <span>★</span>
               <span>★</span>
@@ -84,7 +75,7 @@ const StoreInfo = ({
               <span>★</span>
             </StarRatingsBase>
           </StarRatings>
-          <RatingValue>{rating.toFixed(1)}</RatingValue>
+          <RatingValue>{ratingAvg.toFixed(1)}</RatingValue>
         </Rating>
         <Info>
           <CallIcon />
@@ -99,7 +90,7 @@ const StoreInfo = ({
         <Info>
           <TimeIcon />
           <InfoTitle>영업시간</InfoTitle>
-          <InfoDetail>{time}</InfoDetail>
+          <InfoDetail>{`${openHours} ~ ${closeHours}`}</InfoDetail>
         </Info>
       </InfoContainer>
     </Container>
