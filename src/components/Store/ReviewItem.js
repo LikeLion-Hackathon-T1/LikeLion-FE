@@ -177,7 +177,7 @@ const ResponseText = styled.div`
 `;
 
 const ReviewItem = ({ review }) => {
-  const [helpfulness, setHelpfulness] = useState(review.helpfulness);
+  const [helpfulness, setHelpfulness] = useState(review.likeCount);
   const [isHelpfulClicked, setIsHelpfulClicked] = useState(false);
 
   const handleHelpfulnessClick = () => {
@@ -189,9 +189,9 @@ const ReviewItem = ({ review }) => {
     <ReviewContainer>
       <Header>
         <UserInfo>
-          <UserProfile />
+          <UserProfile>{review.picture}</UserProfile>
           <div>
-            <UserName>{review.reviewer}</UserName>
+            <UserName>{review.name}</UserName>
             <StarsAndTime>
               <Stars>
                 {[...Array(5)].map((_, index) => (
@@ -203,13 +203,13 @@ const ReviewItem = ({ review }) => {
           </div>
         </UserInfo>
       </Header>
-      {review.images && review.images.length === 1 ? (
+      {Array.isArray(review.image) && review.image.length === 1 ? (
         <ReviewImageContainerSingle>
-          <SingleReviewImage src={review.images[0]} alt="review" />
+          <SingleReviewImage src={review.image[0]} alt="review" />
         </ReviewImageContainerSingle>
-      ) : review.images && review.images.length > 1 ? (
+      ) : Array.isArray(review.image) && review.image.length > 1 ? (
         <ReviewImageContainerMultiple>
-          {review.images.map((image, index) => (
+          {review.image.map((image, index) => (
             <MultipleReviewImage
               key={index}
               src={image}
@@ -217,9 +217,13 @@ const ReviewItem = ({ review }) => {
             />
           ))}
         </ReviewImageContainerMultiple>
+      ) : review.image ? (
+        <ReviewImageContainerSingle>
+          <SingleReviewImage src={review.image} alt="review" />
+        </ReviewImageContainerSingle>
       ) : null}
-      <MenuName>{review.menu}</MenuName>
-      <ReviewText>{review.comment}</ReviewText>
+      <MenuName>{review.menuName}</MenuName>
+      <ReviewText>{review.content}</ReviewText>
       <Helpfulness>
         <div>{helpfulness}명에게 도움이 되었어요</div>
         <HelpfulButton

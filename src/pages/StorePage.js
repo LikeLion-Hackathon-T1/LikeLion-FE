@@ -60,6 +60,24 @@ const StorePage = () => {
     }
   };
 
+  const fetchReviewData = async () => {
+    try {
+      const response = await axiosInstance.get(`/review`, {
+        params: { storeId },
+      });
+      console.log("Full Review Data Response:", response.data);
+      if (response.data && response.data.payload) {
+        return response.data.payload;
+      } else {
+        console.error("Invalid review data response", response);
+        throw new Error("Invalid review data response");
+      }
+    } catch (error) {
+      console.error("Error fetching review data:", error);
+      throw error;
+    }
+  };
+
   const {
     data: storeData,
     error: storeError,
@@ -70,13 +88,23 @@ const StorePage = () => {
     queryFn: fetchStoreAndMenuData,
   });
 
-  if (isStoreLoading) {
+  const {
+    data: reviewData,
+    error: reviewError,
+    isError: isReviewError,
+    isLoading: isReviewLoading,
+  } = useQuery({
+    queryKey: ["reviewData", storeId],
+    queryFn: fetchReviewData,
+  });
+
+  if (isStoreLoading || isReviewLoading) {
     return <div>Loading...</div>;
   }
 
-  if (isStoreError) {
-    console.error("Error fetching store data", storeError);
-    return <div>Error fetching store data</div>;
+  if (isStoreError || isReviewError) {
+    console.error("Error fetching data", { storeError, reviewError });
+    return <div>Error fetching data</div>;
   }
 
   return (
@@ -111,10 +139,9 @@ const StorePage = () => {
           )}
           {activeSection === "리뷰" && (
             <Section>
-              {storeData.reviews &&
-                storeData.reviews.map((review, index) => (
-                  <ReviewItem key={index} review={review} />
-                ))}
+              {reviewData.map((review, index) => (
+                <ReviewItem key={index} review={review} />
+              ))}
             </Section>
           )}
         </>
