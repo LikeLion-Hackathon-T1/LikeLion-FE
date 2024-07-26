@@ -23,20 +23,6 @@ const StoreList = ({ cartList, setCartList, isLoading }) => {
         }
     }, [cartList]);
 
-    useEffect(() => {
-        const handleBeforeUnload = (event) => {
-            putCart();
-            event.preventDefault();
-            event.returnValue = "";
-        };
-
-        window.addEventListener("beforeunload", handleBeforeUnload);
-
-        return () => {
-            window.removeEventListener("beforeunload", handleBeforeUnload);
-        };
-    }, [putCart]);
-
     if (isLoading) return <div></div>;
 
     const stores = cartList.reduce((acc, item) => {
@@ -51,6 +37,14 @@ const StoreList = ({ cartList, setCartList, isLoading }) => {
     );
 
     const changeCartList = (cartId, updatedProperties) => {
+        if (updatedProperties.quantity === 0) {
+            setCartList((prevCartList) =>
+                prevCartList.filter((item) => item.cartid !== cartId)
+            );
+            syluvAxios.delete(`/cart/${cartId}/delete`);
+            return;
+        }
+
         setCartList((prevCartList) =>
             prevCartList.map((item) => {
                 if (item.cartid === cartId) {
@@ -59,6 +53,13 @@ const StoreList = ({ cartList, setCartList, isLoading }) => {
                 return item;
             })
         );
+
+        syluvAxios.put(`/cart`, [
+            {
+                cartId: cartId,
+                quantity: updatedProperties.quantity,
+            },
+        ]);
     };
 
     const toggleStoreCheck = (storeName, isChecked) => {
