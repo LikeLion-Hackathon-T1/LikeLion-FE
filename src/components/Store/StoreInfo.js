@@ -25,7 +25,7 @@ const StoreInfo = ({
 
   const settings = {
     dots: false,
-    infinite: true,
+    infinite: images.length > 1,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
@@ -49,9 +49,11 @@ const StoreInfo = ({
         <BackButton onClick={() => navigate(-1)}>
           <BackIcon />
         </BackButton>
-        <ImageCounter>
-          {currentSlide + 1} / {images.length}
-        </ImageCounter>
+        {images.length > 1 && (
+          <ImageCounter>
+            {currentSlide + 1} / {images.length}
+          </ImageCounter>
+        )}
       </ImageContainer>
       <InfoContainer>
         <SubTitle>{category}</SubTitle>
