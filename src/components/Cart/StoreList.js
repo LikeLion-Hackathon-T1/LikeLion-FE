@@ -2,9 +2,11 @@ import styled from "styled-components";
 import Store from "./Store";
 import { useCallback, useEffect } from "react";
 import useSyluvAxios from "hooks/useSyluvAxios";
+import { useNavigate } from "react-router-dom";
 
 const StoreList = ({ cartList, setCartList, isLoading }) => {
     const syluvAxios = useSyluvAxios();
+    const navigate = useNavigate();
 
     const putCart = useCallback(async () => {
         const payload = cartList.map((item) => {
@@ -21,20 +23,6 @@ const StoreList = ({ cartList, setCartList, isLoading }) => {
         }
     }, [cartList]);
 
-    useEffect(() => {
-        const handleBeforeUnload = (event) => {
-            putCart();
-            event.preventDefault();
-            event.returnValue = "";
-        };
-
-        window.addEventListener("beforeunload", handleBeforeUnload);
-
-        return () => {
-            window.removeEventListener("beforeunload", handleBeforeUnload);
-        };
-    }, [putCart]);
-
     if (isLoading) return <div></div>;
 
     const stores = cartList.reduce((acc, item) => {
@@ -49,6 +37,14 @@ const StoreList = ({ cartList, setCartList, isLoading }) => {
     );
 
     const changeCartList = (cartId, updatedProperties) => {
+        if (updatedProperties.quantity === 0) {
+            setCartList((prevCartList) =>
+                prevCartList.filter((item) => item.cartid !== cartId)
+            );
+            syluvAxios.delete(`/cart/${cartId}/delete`);
+            return;
+        }
+
         setCartList((prevCartList) =>
             prevCartList.map((item) => {
                 if (item.cartid === cartId) {
@@ -57,6 +53,13 @@ const StoreList = ({ cartList, setCartList, isLoading }) => {
                 return item;
             })
         );
+
+        syluvAxios.put(`/cart`, [
+            {
+                cartId: cartId,
+                quantity: updatedProperties.quantity,
+            },
+        ]);
     };
 
     const toggleStoreCheck = (storeName, isChecked) => {
@@ -105,7 +108,7 @@ const StoreList = ({ cartList, setCartList, isLoading }) => {
                 <NoItem>장바구니에 등록된 물품이 없습니다.</NoItem>
             )}
             {Object.keys(stores).length > 0 && (
-                <OrderButton>
+                <OrderButton onClick={() => navigate("/order")}>
                     {new Intl.NumberFormat("ko-KR").format(totalAmount)}원
                     주문하기
                 </OrderButton>

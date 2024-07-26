@@ -30,7 +30,7 @@ const HomePage = () => {
             <button onClick={() => navigate("/market/1/1")}>가게 정보</button>
             <button onClick={() => navigate("/qrgen")}>QR생성</button>
             <button onClick={() => navigate("/qr")}>QR스캔</button>
-            <button onClick={() => navigate("/order")}>주문내역</button>
+            <button onClick={() => navigate("/orderlist")}>주문내역</button>
             <button
                 onClick={() =>
                     axios
