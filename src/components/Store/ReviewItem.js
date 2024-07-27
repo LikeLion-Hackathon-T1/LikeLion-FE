@@ -23,11 +23,10 @@ const UserInfo = styled.div`
   align-items: center;
 `;
 
-const UserProfile = styled.div`
+const UserProfileImage = styled.img`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: #ccc;
   margin-right: 10px;
 `;
 
@@ -99,7 +98,7 @@ const MultipleReviewImage = styled.img`
   height: 100%;
   object-fit: cover;
   border-radius: 8px;
-  flex: 0 0 auto; // 이미지들이 가로로 나란히 배치되도록 설정 !!!
+  flex: 0 0 auto; // 이미지들이 가로로 나란히 배치되도록 설정
 `;
 
 const MenuName = styled.div`
@@ -130,15 +129,16 @@ const Helpfulness = styled.div`
 
 const HelpfulButton = styled.button`
   background: none;
-  border: 1px solid ${({ active }) => (active ? "#9A9A9A" : "#ff6b00")};
+  border: 1px solid ${({ active }) => (active ? "#ff6b00" : "#9A9A9A")};
   border-radius: 54px;
-  color: ${({ active }) => (active ? "#9A9A9A" : "#ff6b00")};
+  color: ${({ active }) => (active ? "#ff6b00" : "#9A9A9A")};
   padding: 5px 10px;
   display: flex;
   align-items: center;
   cursor: pointer;
   position: relative;
   left: 0px;
+  outline: none; // 검정색 테두리 제거
 `;
 
 const Icon = styled.img`
@@ -178,18 +178,37 @@ const ResponseText = styled.div`
 
 const ReviewItem = ({ review }) => {
   const [helpfulness, setHelpfulness] = useState(review.likeCount);
-  const [isHelpfulClicked, setIsHelpfulClicked] = useState(false);
+  const [isHelpfulClicked, setIsHelpfulClicked] = useState(
+    review.isHelpfulClicked || false
+  );
 
-  const handleHelpfulnessClick = () => {
-    setHelpfulness(helpfulness + 1);
-    setIsHelpfulClicked(true);
+  const handleHelpfulnessClick = async () => {
+    if (!isHelpfulClicked) {
+      try {
+        const response = await fetch(`/review/${review.id}/like`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const result = await response.json();
+        if (result.result.code === 0) {
+          setHelpfulness(
+            (prevHelpfulness) => parseInt(prevHelpfulness, 10) + 1
+          );
+          setIsHelpfulClicked(true);
+        }
+      } catch (error) {
+        console.error("Error liking the review:", error);
+      }
+    }
   };
 
   return (
     <ReviewContainer>
       <Header>
         <UserInfo>
-          <UserProfile>{review.picture}</UserProfile>
+          <UserProfileImage src={review.picture} alt="User Profile" />
           <div>
             <UserName>{review.name}</UserName>
             <StarsAndTime>
@@ -230,7 +249,7 @@ const ReviewItem = ({ review }) => {
           onClick={handleHelpfulnessClick}
           active={isHelpfulClicked}
         >
-          <Icon src={isHelpfulClicked ? badIcon : goodIcon} alt="thumbs up" />
+          <Icon src={isHelpfulClicked ? goodIcon : badIcon} alt="thumbs up" />
           도움이 돼요
         </HelpfulButton>
       </Helpfulness>
