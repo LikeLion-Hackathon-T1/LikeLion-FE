@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import MenuItem from "../components/Store/MenuItem";
 import ReviewItem from "../components/Store/ReviewItem";
 import StoreInfo from "../components/Store/StoreInfo";
@@ -34,6 +34,7 @@ const StorePage = () => {
   const navigate = useNavigate();
   const { storeId } = useParams();
   const axiosInstance = useSyluvAxios();
+  const queryClient = useQueryClient();
 
   const fetchStoreAndMenuData = async () => {
     try {
@@ -98,6 +99,12 @@ const StorePage = () => {
     queryFn: fetchReviewData,
   });
 
+  const handleReviewDelete = (reviewId) => {
+    queryClient.setQueryData(["reviewData", storeId], (oldData) =>
+      oldData.filter((review) => review.id !== reviewId)
+    );
+  };
+
   if (isStoreLoading || isReviewLoading) {
     return <div>Loading...</div>;
   }
@@ -140,7 +147,11 @@ const StorePage = () => {
           {activeSection === "리뷰" && (
             <Section>
               {reviewData.map((review, index) => (
-                <ReviewItem key={index} review={review} />
+                <ReviewItem
+                  key={index}
+                  review={review}
+                  onDelete={handleReviewDelete}
+                />
               ))}
             </Section>
           )}

@@ -37,6 +37,7 @@ const UserName = styled.span`
 const StarsAndTime = styled.div`
   display: flex;
   align-items: center;
+  width: 100%;
 `;
 
 const StarContainer = styled.div`
@@ -47,17 +48,30 @@ const StarContainer = styled.div`
 
 const Star = styled.span`
   font-size: 14px; /* 별의 크기 */
-  color: ${({ filled }) =>
-    filled ? "gold" : "#CCCCCC"}; /* 채워진 별과 빈 별의 색상 */
-  margin-right: 1.33px;
-  margin-top: 5px;
+  color: ${({ filled }) => (filled ? "gold" : "#CCCCCC")};
+  margin-top: 4px;
+  gap: 1px;
 `;
 
 const Time = styled.div`
   font-weight: ${({ theme }) => theme.fontWeight.regular};
   color: ${({ theme }) => theme.color.gray400};
   font-size: 12px;
-  margin-top: 5px;
+  margin-top: 4px;
+  margin-right: 4px; /* Time과 DeleteButton 간격 설정 */
+`;
+
+const DeleteButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: ${({ theme }) => theme.fontWeight.regular};
+  outline: none;
+  color: ${({ theme }) => theme.color.gray400};
+  margin-left: auto; /* DeleteButton을 오른쪽 끝으로 이동 */
+  margin-right: 0px; /* 화면 오른쪽에서 20px 여백 */
+  margin-top: 16px;
 `;
 
 const ReviewImageContainerSingle = styled.div`
@@ -178,7 +192,7 @@ const ResponseText = styled.div`
   color: ${({ theme }) => theme.color.gray800};
 `;
 
-const ReviewItem = ({ review }) => {
+const ReviewItem = ({ review, onDelete }) => {
   const [helpfulness, setHelpfulness] = useState(review.likeCount);
   const [isHelpfulClicked, setIsHelpfulClicked] = useState(
     review.isHelpfulClicked || false
@@ -206,6 +220,25 @@ const ReviewItem = ({ review }) => {
     }
   };
 
+  const handleDelete = async () => {
+    try {
+      const response = await fetch(`/review/${review.id}/delete`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const result = await response.json();
+      if (result.result.code === 0) {
+        onDelete(review.id);
+      } else {
+        console.error("Error deleting the review:", result);
+      }
+    } catch (error) {
+      console.error("Error deleting the review:", error);
+    }
+  };
+
   return (
     <ReviewContainer>
       <Header>
@@ -221,10 +254,11 @@ const ReviewItem = ({ review }) => {
                   </Star>
                 ))}
               </StarContainer>
-              <Time>{review.time} 전</Time>
+              <Time>{review.beforeHours}시간 전</Time>
             </StarsAndTime>
           </div>
         </UserInfo>
+        <DeleteButton onClick={handleDelete}>삭제하기</DeleteButton>
       </Header>
       {Array.isArray(review.image) && review.image.length === 1 ? (
         <ReviewImageContainerSingle>
