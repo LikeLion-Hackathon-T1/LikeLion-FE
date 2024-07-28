@@ -46,9 +46,9 @@ const StarContainer = styled.div`
 `;
 
 const Star = styled.span`
-  font-size: 16px; /* 별의 크기 */
+  font-size: 14px; /* 별의 크기 */
   color: ${({ filled }) =>
-    filled ? "gold" : "#ddd"}; /* 채워진 별과 빈 별의 색상 */
+    filled ? "gold" : "#CCCCCC"}; /* 채워진 별과 빈 별의 색상 */
   margin-right: 1.33px;
   margin-top: 5px;
 `;
