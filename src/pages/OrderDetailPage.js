@@ -3,9 +3,12 @@ import Header from "components/Common/Header";
 import AmountList from "components/OrderList/OrderDetail/AmoutList";
 import MenuList from "components/OrderList/OrderDetail/MenuList";
 import SimpleReceipt from "components/OrderList/OrderDetail/SimpleReceipt";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 
 const OrderDetailPage = () => {
+    const navigate = useNavigate();
+    const { orderId } = useParams();
     return (
         <Container>
             <Header title="주문상세" home={"true"} />
@@ -15,7 +18,13 @@ const OrderDetailPage = () => {
             <ButtonSpace />
             <ButtonContainer>
                 <Button text="주문 내역 삭제" type="1" />
-                <Button text="리뷰 남기기" type="2" />
+                <Button
+                    text="리뷰 남기기"
+                    type="2"
+                    onClick={() => {
+                        navigate("/review/" + orderId);
+                    }}
+                />
             </ButtonContainer>
         </Container>
     );

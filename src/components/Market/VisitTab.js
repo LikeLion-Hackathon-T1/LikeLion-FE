@@ -2,13 +2,13 @@ import styled from "styled-components";
 import VisitList from "./VisitList";
 import { Map } from "react-kakao-maps-sdk";
 
-const VisitTab = () => {
+const VisitTab = ({ visitList }) => {
     return (
         <Container>
             <Map
                 style={{
                     width: "100%",
-                    height: "300px",
+                    height: "224px",
                 }}
                 center={{
                     lat: 37.5665,
@@ -16,7 +16,7 @@ const VisitTab = () => {
                 }}
                 level={3}
             />
-            <VisitList />
+            <VisitList visitList={visitList} />
         </Container>
     );
 };
@@ -26,5 +26,5 @@ export default VisitTab;
 const Container = styled.div`
     display: flex;
     flex-direction: column;
-    margin-top: 16px;
+    margin-top: -30px;
 `;

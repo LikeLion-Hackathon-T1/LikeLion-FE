@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import useIsLogin from "hooks/useIsLogin";
 import KakaoLogin from "assets/images/kakao_login.png";
 import { ReactComponent as SyluvLogo } from "assets/images/syluv.svg";
+import Splash from "components/Common/Splash";
 
 const LoginPage = () => {
     const REST_API_KEY = process.env.REACT_APP_KAKAO_REST_API_KEY;
@@ -20,10 +21,11 @@ const LoginPage = () => {
             navigate("/", { replace: true });
         }
     }, [isLogin, navigate]);
+
     return (
         <Container>
             <Header>
-                <Title>달콤한 시장 여행의 시작,</Title>
+                <Title>달콤한 시장 나들이,</Title>
                 <SyluvLogo />
             </Header>
             <Body>
@@ -39,9 +41,8 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
     height: 100dvh;
-    gap: 72px;
 `;
 
 const Header = styled.header`
@@ -49,12 +50,13 @@ const Header = styled.header`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 26px;
+    gap: 19px;
 `;
 
 const Title = styled.h1`
     font-size: 24px;
     font-weight: ${({ theme }) => theme.fontWeight.bold};
+    color: ${({ theme }) => theme.color.primary};
 `;
 
 const Body = styled.div`

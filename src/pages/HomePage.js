@@ -37,9 +37,7 @@ const HomePage = () => {
                         .get("https://syluv.link/v1/users/reissue", {
                             headers: { RefreshToken: getRefreshToken() },
                         })
-                        .then((res) => {
-                            console.log(res);
-                        })
+                        .then((res) => {})
                 }
             >
                 재발급

@@ -3,43 +3,29 @@ import MarketItem from "./MarketItem";
 import useSyluvAxios from "hooks/useSyluvAxios";
 import { useEffect, useState } from "react";
 
-const MarketList = ({ searchInfo, marketId = 0 }) => {
+const MarketList = ({ searchInfo, marketId = 0, visitList }) => {
     const syluvAxios = useSyluvAxios();
     const [storeList, setStoreList] = useState(null);
 
     let fetchData;
 
-    if (searchInfo.search === "" && searchInfo.category === "") {
-        fetchData = async () => {
-            try {
-                const response = await syluvAxios.get("/store/info");
-                setStoreList(response.data.payload);
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
-        };
-    } else {
-        fetchData = async () => {
-            try {
-                const response = await syluvAxios.get("/market/store", {
-                    params: {
-                        search: searchInfo.search,
-                        category: searchInfo.category,
-                    },
-                });
-                setStoreList(response.data.payload);
-                console.log(response.data.payload);
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
-        };
-    }
+    fetchData = async () => {
+        try {
+            const response = await syluvAxios.get("/market/store", {
+                params: {
+                    search: searchInfo.search,
+                    category: searchInfo.category,
+                },
+            });
+            setStoreList(response.data.payload);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
 
     useEffect(() => {
         fetchData();
     }, [searchInfo]);
-
-    console.log(storeList);
 
     return (
         <Container>
@@ -48,10 +34,11 @@ const MarketList = ({ searchInfo, marketId = 0 }) => {
                     key={store.storeId}
                     storeId={store.storeId}
                     marketId={marketId}
-                    type={store.type}
+                    type={store.category}
                     name={store.name}
-                    desc={store.desc}
-                    imgSrc={store.storeImage}
+                    desc={store.description}
+                    imgSrc={store.image}
+                    visitList={visitList}
                 />
             ))}
         </Container>

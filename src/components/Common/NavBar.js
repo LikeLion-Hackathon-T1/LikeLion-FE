@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
+import { ReactComponent as DotIcon } from "assets/images/dot.svg";
 
-const NavBar = ({ items, selected, handleSelected }) => {
+const NavBar = ({ items, selected, handleSelected, num = 0 }) => {
     return (
         <NavBarContainer>
             {items.map((item, index) => (
@@ -11,6 +12,7 @@ const NavBar = ({ items, selected, handleSelected }) => {
                     onClick={() => handleSelected(item)}
                 >
                     {item}
+                    {index === 1 && num > 0 && <DotIcon />}
                 </NavItem>
             ))}
         </NavBarContainer>
@@ -38,6 +40,12 @@ const NavItem = styled.div`
     border-bottom: 2px solid
         ${(props) =>
             props.selected ? props.theme.color.gray900 : "transparent"};
+    position: relative;
+
+    svg {
+        position: relative;
+        bottom: 10px;
+    }
 `;
 
 export default NavBar;
