@@ -61,7 +61,7 @@ const App = () => {
                                     element={<MenuItemDetail />}
                                 />
                                 <Route
-                                    path="/review"
+                                    path="/review/:orderId"
                                     element={<ReviewPage />}
                                 />
                                 <Route path="/qr" element={<QrPage />} />

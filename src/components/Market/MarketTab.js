@@ -7,7 +7,7 @@ import { useState } from "react";
 
 const categories = ["전체", "한식", "분식", "중식", "양식", "일식", "일반"];
 
-const MarketTab = ({ marketInfo, marketHours }) => {
+const MarketTab = ({ marketInfo, marketHours, visitList }) => {
     const [searchInfo, setSearchInfo] = useState({
         search: "",
         category: "",
@@ -56,6 +56,7 @@ const MarketTab = ({ marketInfo, marketHours }) => {
                 <MarketList
                     searchInfo={searchInfo}
                     marketId={marketInfo?.marketId}
+                    visitList={visitList}
                 />
             </Container>
         </div>

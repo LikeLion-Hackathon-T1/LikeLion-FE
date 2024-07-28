@@ -77,7 +77,7 @@ const CreateSyluvAxios = (navigate) => {
 
     syluvAxios.interceptors.response.use(
         (response) => {
-            console.log("Response received:", response);
+            // console.log("Response received:", response);
             return response;
         },
         function (error) {

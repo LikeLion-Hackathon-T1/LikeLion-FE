@@ -5,12 +5,14 @@ import starFilled from "assets/images/star-fill.png";
 import add from "assets/images/add-button.png";
 import { useEffect, useState } from "react";
 import Button from "components/Common/Button";
+import { useParams } from "react-router-dom";
 
 const ReviewPage = () => {
     const [review, setReview] = useState("");
     const [currentCount, setCurrentCount] = useState(0);
     const [rating, setRating] = useState(0);
     const [ratingText, setRatingText] = useState("");
+    const { orderId } = useParams();
 
     useEffect(() => {
         setCurrentCount(review.length);

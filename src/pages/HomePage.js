@@ -5,7 +5,6 @@ import useTokenStore from "hooks/useTokenStore";
 import useIsLogin from "hooks/useIsLogin";
 import axios from "axios";
 import useSyluvAxios from "hooks/useSyluvAxios";
-import TabBar from "components/Common/TabBar";
 
 const HomePage = () => {
     const navigate = useNavigate();
@@ -37,9 +36,7 @@ const HomePage = () => {
                         .get("https://syluv.link/v1/users/reissue", {
                             headers: { RefreshToken: getRefreshToken() },
                         })
-                        .then((res) => {
-                            console.log(res);
-                        })
+                        .then((res) => {})
                 }
             >
                 재발급

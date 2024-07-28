@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { ReactComponent as VisitIcon } from "assets/images/visit.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useSyluvAxios from "hooks/useSyluvAxios";
 import VisitModal from "./VisitModal";
 import MarketInfoSmall from "./MarketinfoSmall";
@@ -13,17 +13,30 @@ const MarketItem = ({
     desc = "설명이 없습니다.",
     imgSrc = "https://via.placeholder.com/150",
     marketId = 0,
+    visitList,
 }) => {
     const navigate = useNavigate();
     const syluvAxios = useSyluvAxios();
-    const [selected, setIsSelected] = useState(false);
+    const [isSelected, setIsSelected] = useState(false);
     const [isVisitClicked, setIsVisitClicked] = useState(false);
+    const [visitListId, setVisitListId] = useState(null);
+
+    useEffect(() => {
+        const matchedVisit = visitList?.find(
+            (item) => item.storeId === storeId
+        );
+        const inVisitList = matchedVisit !== undefined;
+        const visitListId = matchedVisit ? matchedVisit.visitListId : null;
+        setIsSelected(inVisitList);
+        setVisitListId(visitListId);
+    }, [visitList, storeId]);
+
     const handleVisit = () => {
-        setIsSelected(true);
         syluvAxios.post(`/market/${storeId}/visitlist`, {
             storeId: storeId,
         });
         setIsVisitClicked(false);
+        setIsSelected(true);
     };
 
     const handleClick = () => {
@@ -41,16 +54,17 @@ const MarketItem = ({
             />
             <VisitButton
                 onClick={() => {
-                    if (!selected) {
-                        setIsVisitClicked(true);
+                    if (isSelected) {
+                        syluvAxios
+                            .delete(`/market/${visitListId}/visitlist/delete`)
+                            .then((response) => {
+                                setIsSelected(false);
+                            });
                     } else {
-                        setIsSelected(false);
-                        syluvAxios.delete(
-                            `/market/${storeId}/visitlist/delete` //visitlist 아이디로 바꿔야함
-                        );
+                        handleVisit();
                     }
                 }}
-                selected={selected}
+                selected={isSelected}
             />
             {isVisitClicked && (
                 <VisitModal

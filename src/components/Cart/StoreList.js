@@ -1,8 +1,10 @@
 import styled from "styled-components";
 import Store from "./Store";
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import useSyluvAxios from "hooks/useSyluvAxios";
 import { useNavigate } from "react-router-dom";
+import { ReactComponent as NoItem } from "assets/images/no-item.svg";
+import Button from "components/Common/Button";
 
 const StoreList = ({ cartList, setCartList, isLoading }) => {
     const syluvAxios = useSyluvAxios();
@@ -105,7 +107,14 @@ const StoreList = ({ cartList, setCartList, isLoading }) => {
                     />
                 ))
             ) : (
-                <NoItem>장바구니에 등록된 물품이 없습니다.</NoItem>
+                <NoItemContainer>
+                    <NoItem />
+                    <Button
+                        onClick={() => navigate("/")}
+                        type="2"
+                        text="유도문구 뭐하지"
+                    />
+                </NoItemContainer>
             )}
             {Object.keys(stores).length > 0 && (
                 <OrderButton onClick={() => navigate("/order")}>
@@ -125,15 +134,6 @@ const CartList = styled.div`
     margin-bottom: 72px;
 `;
 
-const NoItem = styled.div`
-    font-size: 20px;
-    text-align: center;
-    border: 1px solid #e0e0e0;
-    border-radius: 10px;
-    padding: 20px;
-    margin: 0px 20px;
-`;
-
 const OrderButton = styled.button`
     position: fixed;
     bottom: 12px;
@@ -151,6 +151,18 @@ const OrderButton = styled.button`
     @media (max-width: 480px) {
         width: calc(100% - 40px);
     }
+`;
+
+const NoItemContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    padding: 0 20px;
+    gap: 43px;
+
+    height: calc(100dvh - 140px);
 `;
 
 export default StoreList;
