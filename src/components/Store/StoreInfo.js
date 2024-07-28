@@ -196,9 +196,8 @@ const StarRatings = styled.div`
   position: relative;
   unicode-bidi: bidi-override;
   width: max-content;
-  -webkit-text-fill-color: transparent;
-  -webkit-text-stroke-width: 1.3px;
-  -webkit-text-stroke-color: #2b2a29;
+  color: gold; /* 별의 색상 지정 */
+  font-size: 14px; /* 별의 크기 조정 */
 `;
 
 const StarRatingsFill = styled.div`
@@ -213,7 +212,7 @@ const StarRatingsFill = styled.div`
 `;
 
 const StarRatingsBase = styled.div`
-  color: #aaa9a9;
+  color: #cccccc;
   z-index: 0;
   display: flex;
 `;
