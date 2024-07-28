@@ -5,7 +5,6 @@ import useTokenStore from "hooks/useTokenStore";
 import useIsLogin from "hooks/useIsLogin";
 import axios from "axios";
 import useSyluvAxios from "hooks/useSyluvAxios";
-import TabBar from "components/Common/TabBar";
 
 const HomePage = () => {
     const navigate = useNavigate();
