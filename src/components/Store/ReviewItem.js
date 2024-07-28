@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import starIcon from "../../assets/images/star.png";
 import goodIcon from "../../assets/images/good.png";
 import badIcon from "../../assets/images/bad.png";
 
 const ReviewContainer = styled.div`
-  margin-bottom: 44px; // 각 리뷰 항목 사이의 간격을 44px로 설정
+  margin-bottom: 44px;
   &:first-child {
-    margin-top: 0; // 첫 번째 리뷰의 상단 여백 제거
+    margin-top: 0;
   }
 `;
 
@@ -40,26 +39,29 @@ const StarsAndTime = styled.div`
   align-items: center;
 `;
 
-const Stars = styled.div`
+const StarContainer = styled.div`
   display: flex;
   align-items: center;
   margin-right: 4px;
 `;
 
-const Star = styled.img`
-  width: 16px;
-  height: 16px;
+const Star = styled.span`
+  font-size: 16px; /* 별의 크기 */
+  color: ${({ filled }) =>
+    filled ? "gold" : "#ddd"}; /* 채워진 별과 빈 별의 색상 */
   margin-right: 1.33px;
+  margin-top: 5px;
 `;
 
 const Time = styled.div`
   font-weight: ${({ theme }) => theme.fontWeight.regular};
   color: ${({ theme }) => theme.color.gray400};
   font-size: 12px;
+  margin-top: 5px;
 `;
 
 const ReviewImageContainerSingle = styled.div`
-  width: 100%; // 너비를 100%로 설정하여 기기에 따라 반응형으로 변경
+  width: 100%;
   height: auto;
   border-radius: 8px;
   overflow: hidden;
@@ -79,10 +81,10 @@ const ReviewImageContainerMultiple = styled.div`
   margin-top: 19px;
   padding-right: 20px;
   gap: 6px;
-  -ms-overflow-style: none; // IE 및 Edge
-  scrollbar-width: none; // Firefox
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   &::-webkit-scrollbar {
-    display: none; // 스크롤바 숨김
+    display: none;
   }
 `;
 
@@ -98,7 +100,7 @@ const MultipleReviewImage = styled.img`
   height: 100%;
   object-fit: cover;
   border-radius: 8px;
-  flex: 0 0 auto; // 이미지들이 가로로 나란히 배치되도록 설정
+  flex: 0 0 auto;
 `;
 
 const MenuName = styled.div`
@@ -138,7 +140,7 @@ const HelpfulButton = styled.button`
   cursor: pointer;
   position: relative;
   left: 0px;
-  outline: none; // 검정색 테두리 제거
+  outline: none;
 `;
 
 const Icon = styled.img`
@@ -212,11 +214,13 @@ const ReviewItem = ({ review }) => {
           <div>
             <UserName>{review.name}</UserName>
             <StarsAndTime>
-              <Stars>
+              <StarContainer>
                 {[...Array(5)].map((_, index) => (
-                  <Star key={index} src={starIcon} alt="star" />
+                  <Star key={index} filled={index < review.rating}>
+                    ★
+                  </Star>
                 ))}
-              </Stars>
+              </StarContainer>
               <Time>{review.time} 전</Time>
             </StarsAndTime>
           </div>
