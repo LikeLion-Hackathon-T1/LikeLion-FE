@@ -23,6 +23,15 @@ const ButtonStyle1 = styled.button`
     color: ${({ theme }) => theme.color.primary};
     font-size: 16px;
     font-weight: ${({ theme }) => theme.fontWeight.semiBold};
+    cursor: pointer;
+
+    // 호버시 살짝 커지고 살짝 밝아지고
+    &:hover {
+        transform: scale(1.01);
+        transition: transform 0.2s;
+
+        filter: brightness(1.02);
+    }
 `;
 
 const ButtonStyle2 = styled(ButtonStyle1)`

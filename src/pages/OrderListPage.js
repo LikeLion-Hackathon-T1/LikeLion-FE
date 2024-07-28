@@ -1,5 +1,5 @@
 import Header from "components/Common/Header";
-import DayList from "components/Order/DayList";
+import DayList from "components/OrderList/DayList";
 import styled from "styled-components";
 
 const OrderListPage = () => {

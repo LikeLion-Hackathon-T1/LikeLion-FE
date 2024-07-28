@@ -1,7 +1,6 @@
 import axios from "axios";
 import useTokenStore from "hooks/useTokenStore";
 import { jwtDecode } from "jwt-decode";
-import { useEffect } from "react";
 
 const baseURL = process.env.REACT_APP_BASE_URL;
 
@@ -78,7 +77,7 @@ const CreateSyluvAxios = (navigate) => {
 
     syluvAxios.interceptors.response.use(
         (response) => {
-            console.log("Response received:", response);
+            // console.log("Response received:", response);
             return response;
         },
         function (error) {

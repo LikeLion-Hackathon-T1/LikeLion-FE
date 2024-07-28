@@ -13,7 +13,6 @@ const MenuTestPage = () => {
     useEffect(() => {
         if (data) {
             setStoreList(data.data.payload);
-            console.log(data.data.payload);
         }
     }, [data]);
 
@@ -38,9 +37,7 @@ const MenuTestPage = () => {
                                             menuId: menu.menuId,
                                             quantity: 1,
                                         })
-                                        .then((res) => {
-                                            console.log(res.data.payload);
-                                        })
+                                        .then((res) => {})
                                 }
                             >
                                 장바구니에 추가
@@ -49,13 +46,7 @@ const MenuTestPage = () => {
                     ))}
                 </div>
             ))}
-            <button
-                onClick={() =>
-                    syluvAxios.get("/cart").then((res) => {
-                        console.log(res.data.payload);
-                    })
-                }
-            >
+            <button onClick={() => syluvAxios.get("/cart").then((res) => {})}>
                 장바구니 확인하기
             </button>
         </div>

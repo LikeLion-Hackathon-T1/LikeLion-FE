@@ -1,10 +1,14 @@
 import styled from "styled-components";
 import Store from "./Store";
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import useSyluvAxios from "hooks/useSyluvAxios";
+import { useNavigate } from "react-router-dom";
+import { ReactComponent as NoItem } from "assets/images/no-item.svg";
+import Button from "components/Common/Button";
 
 const StoreList = ({ cartList, setCartList, isLoading }) => {
     const syluvAxios = useSyluvAxios();
+    const navigate = useNavigate();
 
     const putCart = useCallback(async () => {
         const payload = cartList.map((item) => {
@@ -21,20 +25,6 @@ const StoreList = ({ cartList, setCartList, isLoading }) => {
         }
     }, [cartList]);
 
-    useEffect(() => {
-        const handleBeforeUnload = (event) => {
-            putCart();
-            event.preventDefault();
-            event.returnValue = "";
-        };
-
-        window.addEventListener("beforeunload", handleBeforeUnload);
-
-        return () => {
-            window.removeEventListener("beforeunload", handleBeforeUnload);
-        };
-    }, [putCart]);
-
     if (isLoading) return <div></div>;
 
     const stores = cartList.reduce((acc, item) => {
@@ -49,6 +39,14 @@ const StoreList = ({ cartList, setCartList, isLoading }) => {
     );
 
     const changeCartList = (cartId, updatedProperties) => {
+        if (updatedProperties.quantity === 0) {
+            setCartList((prevCartList) =>
+                prevCartList.filter((item) => item.cartid !== cartId)
+            );
+            syluvAxios.delete(`/cart/${cartId}/delete`);
+            return;
+        }
+
         setCartList((prevCartList) =>
             prevCartList.map((item) => {
                 if (item.cartid === cartId) {
@@ -57,6 +55,13 @@ const StoreList = ({ cartList, setCartList, isLoading }) => {
                 return item;
             })
         );
+
+        syluvAxios.put(`/cart`, [
+            {
+                cartId: cartId,
+                quantity: updatedProperties.quantity,
+            },
+        ]);
     };
 
     const toggleStoreCheck = (storeName, isChecked) => {
@@ -102,10 +107,17 @@ const StoreList = ({ cartList, setCartList, isLoading }) => {
                     />
                 ))
             ) : (
-                <NoItem>장바구니에 등록된 물품이 없습니다.</NoItem>
+                <NoItemContainer>
+                    <NoItem />
+                    <Button
+                        onClick={() => navigate("/")}
+                        type="2"
+                        text="유도문구 뭐하지"
+                    />
+                </NoItemContainer>
             )}
             {Object.keys(stores).length > 0 && (
-                <OrderButton>
+                <OrderButton onClick={() => navigate("/order")}>
                     {new Intl.NumberFormat("ko-KR").format(totalAmount)}원
                     주문하기
                 </OrderButton>
@@ -120,15 +132,6 @@ const CartList = styled.div`
     flex-direction: column;
     position: relative;
     margin-bottom: 72px;
-`;
-
-const NoItem = styled.div`
-    font-size: 20px;
-    text-align: center;
-    border: 1px solid #e0e0e0;
-    border-radius: 10px;
-    padding: 20px;
-    margin: 0px 20px;
 `;
 
 const OrderButton = styled.button`
@@ -148,6 +151,18 @@ const OrderButton = styled.button`
     @media (max-width: 480px) {
         width: calc(100% - 40px);
     }
+`;
+
+const NoItemContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    padding: 0 20px;
+    gap: 43px;
+
+    height: calc(100dvh - 140px);
 `;
 
 export default StoreList;

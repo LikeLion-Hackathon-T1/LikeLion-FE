@@ -1,9 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import QrScanner from "qr-scanner";
 import styled from "styled-components";
-
+import { ReactComponent as QrIcon } from "assets/images/qr.svg";
+import { ReactComponent as Back } from "assets/images/back-white.svg";
+import { useNavigate } from "react-router-dom";
+import useSyluvAxios from "hooks/useSyluvAxios";
 const QrScanPage = () => {
     const videoRef = useRef(null);
+    const navigate = useNavigate();
+    const syluvAxios = useSyluvAxios();
     const [qrCodeMessage, setQrCodeMessage] = useState("");
 
     useEffect(() => {
@@ -11,15 +16,26 @@ const QrScanPage = () => {
             videoRef.current,
             (result) => {
                 setQrCodeMessage(result.data);
-                if (result.data.startsWith("https://syluv.store/market/")) {
-                    window.location.href = result.data; // QR 코드 인식 후 해당 URL로 이동합니다.
+                if (result.data.indexOf("syluv") === 0) {
+                    qrScanner.stop();
+                    const params = new URLSearchParams(
+                        result.data.split("?")[1]
+                    );
+                    const marketId = params.get("marketId");
+                    const storeId = params.get("storeId");
+
+                    if (marketId && storeId) {
+                        qrScanner.stop();
+
+                        syluvAxios
+                            .post(`/home/${storeId}/qrvisit`)
+                            .finally(() => {
+                                navigate(`/market/${marketId}/${storeId}`);
+                            });
+                    }
                 }
             },
             {
-                onDecodeError: (error) => {
-                    console.error(error);
-                },
-                highlightScanRegion: true,
                 highlightCodeOutline: true,
             }
         );
@@ -33,39 +49,120 @@ const QrScanPage = () => {
 
     return (
         <Container>
-            <CameraContainer>
-                <Camera ref={videoRef} style={{ width: "100%" }} />
-            </CameraContainer>
-            <Text>가게에 부착되어 있는 QR을 정확히 인식해주세요</Text>
+            <Header>
+                <Back
+                    onClick={() => {
+                        navigate(-1);
+                    }}
+                    cursor={"pointer"}
+                />
+                <div className="title">가게 스캔</div>
+                <span className="space" />
+            </Header>
+            <Overlay />
+            <Hole />
+            <Camera ref={videoRef} />
+            <Text>
+                <QrIcon />
+                가게의 QR코드를 스캔해주세요
+            </Text>
         </Container>
     );
 };
 
-const Container = styled.div`
-    margin: 0 40px;
+const Header = styled.div`
+    position: absolute;
+    z-index: 5;
+    top: 0;
+    left: 0;
+
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    height: 100dvh;
-    gap: 90px;
+
+    width: 440px;
+    height: 52px;
+
+    padding: 0 20px;
+
+    .title {
+        font-size: 20px;
+        font-weight: ${({ theme }) => theme.fontWeight.bold};
+        color: white;
+    }
+
+    .space {
+        width: 24px;
+        height: 24px;
+    }
+
+    @media (max-width: 480px) {
+        width: calc(100vw - 40px);
+    }
 `;
 
-const CameraContainer = styled.div`
-    width: 100%;
-    max-width: 400px; /* 최대 크기를 설정할 수 있습니다. 필요에 따라 조정하세요 */
+const Container = styled.div`
+    height: 100vh;
+    width: 480px;
+    position: relative;
+
+    @media (max-width: 480px) {
+        width: 100dvw;
+    }
 `;
 
 const Camera = styled.video`
+    object-fit: cover;
     width: 100%;
-    aspect-ratio: 1; /* 정사각형 비율을 설정 */
-    object-fit: cover; /* 비율을 유지하면서 요소를 덮도록 설정 */
+    height: 100%;
 `;
 
-const Text = styled.span`
-    font-size: 16px;
-    color: ${({ theme }) => theme.color.gray900};
-    font-weight: ${({ theme }) => theme.fontWeight.bold};
+const Hole = styled.div`
+    z-index: 3;
+
+    aspect-ratio: 1/1;
+    border-radius: 20px;
+    border: 2px solid ${({ theme }) => theme.color.primary};
+
+    width: 85%;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 `;
 
+const Overlay = styled.div`
+    z-index: 2;
+
+    width: 85%;
+
+    aspect-ratio: 1/1;
+    border-radius: 414px;
+    border: 400px solid rgba(0, 0, 0, 0.8);
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+`;
+
+const Text = styled.div`
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+
+    z-index: 4;
+    display: flex;
+    gap: 4px;
+
+    top: 73%;
+    left: 50%;
+    transform: translate(-50%, 50%);
+
+    color: white;
+    font-size: 18px;
+    font-weight: ${({ theme }) => theme.fontWeight.medium};
+`;
 export default QrScanPage;
