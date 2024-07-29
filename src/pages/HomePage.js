@@ -5,7 +5,6 @@ import useTokenStore from "hooks/useTokenStore";
 import useIsLogin from "hooks/useIsLogin";
 import axios from "axios";
 import useSyluvAxios from "hooks/useSyluvAxios";
-import TabBar from "components/Common/TabBar";
 
 const HomePage = () => {
     const navigate = useNavigate();
@@ -30,16 +29,14 @@ const HomePage = () => {
             <button onClick={() => navigate("/market/1/1")}>가게 정보</button>
             <button onClick={() => navigate("/qrgen")}>QR생성</button>
             <button onClick={() => navigate("/qr")}>QR스캔</button>
-            <button onClick={() => navigate("/order")}>주문내역</button>
+            <button onClick={() => navigate("/orderlist")}>주문내역</button>
             <button
                 onClick={() =>
                     axios
                         .get("https://syluv.link/v1/users/reissue", {
                             headers: { RefreshToken: getRefreshToken() },
                         })
-                        .then((res) => {
-                            console.log(res);
-                        })
+                        .then((res) => {})
                 }
             >
                 재발급

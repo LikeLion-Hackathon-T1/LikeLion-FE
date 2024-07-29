@@ -3,10 +3,11 @@ import axios from "axios";
 import useTokenStore from "hooks/useTokenStore";
 import { useNavigate } from "react-router-dom";
 import Welcome from "components/Login/Welcome";
+import Splash from "components/Common/Splash";
 
 const OauthCallback = () => {
     const [isLoading, setIsLoading] = useState(true);
-    const [isFIrstLogin, setIsFirstLogin] = useState(false);
+    const [isFIrstLogin, setIsFirstLogin] = useState(true);
     const [isError, setIsError] = useState(false);
     const [error, setError] = useState(null);
     const { setRefreshToken, setAccessToken, setName } = useTokenStore();
@@ -57,11 +58,10 @@ const OauthCallback = () => {
             setAccessToken(syluvData.accessToken);
             setRefreshToken(syluvData.refreshToken);
             setName(syluvData.nickname);
-            console.log(syluvData.existYn);
             if (syluvData.existYn === false) {
                 setIsFirstLogin(true);
             } else {
-                navigate("/", { replace: true });
+                // navigate("/", { replace: true });
             }
         } catch (error) {
             setIsError(true);
@@ -84,10 +84,10 @@ const OauthCallback = () => {
     }, []);
 
     if (isFIrstLogin) return <Welcome />;
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <Splash />;
     if (isError) return <div>Error: {error.message}</div>;
 
-    return <p>Login</p>;
+    return <Splash />;
 };
 
 export default OauthCallback;
