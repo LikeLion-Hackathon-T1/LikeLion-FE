@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useParams, useNavigate } from "react-router-dom";
 import menuImage from "../../assets/images/gimbap1.png";
 import { ReactComponent as BackIcon } from "assets/images/back.svg";
-import cartIcon from "assets/images/cart.png";
+import cartIcon from "assets/images/marketbag.svg";
+import useSyluvAxios from "hooks/useSyluvAxios";
 
 const Container = styled.div`
   font-family: "Pretendard", sans-serif;
   background-color: white;
-  padding-bottom: 70px; // 버튼 영역을 고려한 패딩
+  padding-bottom: 70px;
 `;
 
 const ImageContainer = styled.div`
@@ -92,7 +93,7 @@ const Quantity = styled.span`
   font-size: 16px;
   font-weight: ${({ theme }) => theme.fontWeight.medium};
   margin: 0 10px;
-  width: 40px; // 수량 넣을 때 "개"가 뒤로 밀려서 넓이 설정
+  width: 40px;
   text-align: center;
 `;
 
@@ -115,23 +116,10 @@ const AddToCartButton = styled.button`
   transform: translateX(-50%);
 `;
 
-const MenuItemDetail = () => {
-  const { menuItemId } = useParams();
+const MenuItemDetail = ({ menu, onClick = () => {} }) => {
   const navigate = useNavigate();
+  const [menuItem, setMenuItem] = useState(null);
   const [quantity, setQuantity] = useState(1);
-
-  // 예시 데이터
-  const menuItems = [
-    {
-      id: 1,
-      name: "치즈 참치 김밥",
-      price: 2500,
-      image: menuImage,
-      description: "원조 치즈 김밥",
-    },
-  ];
-
-  const menuItem = menuItems.find((item) => item.id === parseInt(menuItemId));
 
   const handleIncrease = () => {
     setQuantity(quantity + 1);
@@ -143,9 +131,9 @@ const MenuItemDetail = () => {
     }
   };
 
-  if (!menuItem) {
-    return <div>메뉴 아이템을 찾을 수 없습니다.</div>;
-  }
+  const onPutClick = () => {
+    onClick(null);
+  };
 
   return (
     <Container>
@@ -156,10 +144,10 @@ const MenuItemDetail = () => {
         <CartButton>
           <img src={cartIcon} alt="cart" />
         </CartButton>
-        <Image src={menuItem.image} alt={menuItem.name} />
+        <Image src={menu.menuImage} alt={menu.name} />
       </ImageContainer>
-      <Title>{menuItem.name}</Title>
-      <Description>{menuItem.description}</Description>
+      <Title>{menu.name}</Title>
+      <Description>{menu.content}</Description>
       <QuantityContainer>
         <QuantityLabel>수량</QuantityLabel>
         <QuantityWrapper>
@@ -168,7 +156,9 @@ const MenuItemDetail = () => {
           <QuantityButton onClick={handleIncrease}>+</QuantityButton>
         </QuantityWrapper>
       </QuantityContainer>
-      <AddToCartButton>{menuItem.price}원 담기</AddToCartButton>
+      <AddToCartButton onClick={() => onClick(null)}>
+        {menu.price}원 담기
+      </AddToCartButton>
     </Container>
   );
 };

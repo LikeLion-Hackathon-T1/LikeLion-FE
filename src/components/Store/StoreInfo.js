@@ -4,6 +4,7 @@ import { ReactComponent as BackIcon } from "assets/images/back.svg";
 import { ReactComponent as CallIcon } from "assets/images/call.svg";
 import { ReactComponent as AddressIcon } from "assets/images/address.svg";
 import { ReactComponent as TimeIcon } from "assets/images/time.svg";
+import cartIcon from "assets/images/marketbag.svg";
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -49,6 +50,9 @@ const StoreInfo = ({
         <BackButton onClick={() => navigate(-1)}>
           <BackIcon />
         </BackButton>
+        <CartButton>
+          <img src={cartIcon} alt="cart" />
+        </CartButton>
         {images.length > 1 && (
           <ImageCounter>
             {currentSlide + 1} / {images.length}
@@ -126,6 +130,14 @@ const BackButton = styled.div`
   position: absolute;
   top: 16px;
   left: 16px;
+  cursor: pointer;
+  padding: 8px;
+`;
+
+const CartButton = styled.div`
+  position: absolute;
+  top: 16px;
+  right: 20px;
   cursor: pointer;
   padding: 8px;
 `;

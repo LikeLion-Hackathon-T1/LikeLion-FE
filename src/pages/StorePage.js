@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -7,6 +7,7 @@ import ReviewItem from "../components/Store/ReviewItem";
 import StoreInfo from "../components/Store/StoreInfo";
 import NavBar from "../components/Common/NavBar.js";
 import useSyluvAxios from "hooks/useSyluvAxios";
+import MenuItemDetail from "components/Store/MenuItemDetail";
 
 const PageWrapper = styled.div`
   font-family: "Pretendard", sans-serif;
@@ -35,6 +36,11 @@ const StorePage = () => {
   const { storeId } = useParams();
   const axiosInstance = useSyluvAxios();
   const queryClient = useQueryClient();
+  const [selectedMenu, setSelectedMenu] = useState(null);
+
+  useEffect(() => {
+    console.log(selectedMenu);
+  }, [selectedMenu]);
 
   const fetchStoreAndMenuData = async () => {
     try {
@@ -114,7 +120,13 @@ const StorePage = () => {
     return <div>Error fetching data</div>;
   }
 
-  return (
+  const handleMenuClick = (menu) => {
+    setSelectedMenu(menu);
+  };
+
+  return selectedMenu ? (
+    <MenuItemDetail menu={selectedMenu} onClick={handleMenuClick} />
+  ) : (
     <PageWrapper>
       {storeData && (
         <>
@@ -136,11 +148,7 @@ const StorePage = () => {
           {activeSection === "메뉴" && (
             <Section>
               {storeData.menuDetails.map((item, index) => (
-                <MenuItem
-                  key={index}
-                  {...item}
-                  onClick={() => navigate(`/menu/${item.menuId}`)}
-                />
+                <MenuItem key={index} item={item} onClick={handleMenuClick} />
               ))}
             </Section>
           )}
