@@ -33,10 +33,12 @@ const HomePage = () => {
             <Wrapper>
                 <Search />
                 <NearbyMarket />
-                <LatestMarketList latestMarkets={latestMarkets} />
+                {latestMarkets.length > 0 && (
+                    <LatestMarketList latestMarkets={latestMarkets} />
+                )}
                 <HotMarketList hotMarkets={hotMarkets} />
             </Wrapper>
-            <TabBar />
+            <TabBar activeTab={""} />
         </>
     );
 };

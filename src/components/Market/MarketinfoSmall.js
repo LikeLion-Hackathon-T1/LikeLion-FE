@@ -30,19 +30,31 @@ const Category = styled.div`
 `;
 
 const ItemContainer = styled.div`
+    height: 104px;
     display: flex;
     gap: 12px;
 `;
 
 const ItemDescription = styled.span`
+    margin-top: 16px;
     font-size: 14px;
     color: ${({ theme }) => theme.color.gray600};
     font-weight: ${({ theme }) => theme.fontWeight.regular};
     margin-right: 80px;
     word-break: keep-all;
+
+    overflow: auto;
+
+    // 스크롤바를 숨기는 스타일
+    &::-webkit-scrollbar {
+        display: none;
+    }
+    -ms-overflow-style: none; // IE 및 Edge
+    scrollbar-width: none; // Firefox
 `;
 
 const MenuImage = styled.img`
+    min-width: 104px;
     width: 104px;
     height: 104px;
     border-radius: 12px;
