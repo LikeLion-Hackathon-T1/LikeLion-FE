@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import { ReactComponent as Location } from "assets/images/location.svg";
+import { useNavigate } from "react-router-dom";
 
 const NearbyMarket = () => {
+    const navigate = useNavigate();
     return (
         <Container>
             <span className="title">
@@ -9,7 +11,7 @@ const NearbyMarket = () => {
                 <br />
                 지금 가까운 시장은?
             </span>
-            <div className="location">
+            <div className="location" onClick={() => navigate("/market/1")}>
                 <Location />
                 <span>광장시장</span>
             </div>
@@ -37,6 +39,7 @@ const Container = styled.div`
         display: flex;
         align-items: center;
         gap: 4px;
+        cursor: pointer;
 
         span {
             font-size: 20px;
