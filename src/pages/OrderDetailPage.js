@@ -1,6 +1,5 @@
 import Button from "components/Common/Button";
 import Header from "components/Common/Header";
-import AmountList from "components/OrderList/OrderDetail/AmoutList";
 import MenuList from "components/OrderList/OrderDetail/MenuList";
 import SimpleReceipt from "components/OrderList/OrderDetail/SimpleReceipt";
 import { useNavigate, useParams } from "react-router-dom";
@@ -11,13 +10,10 @@ const OrderDetailPage = () => {
     const { orderId } = useParams();
     return (
         <Container>
-            <Header title="주문상세" home={"true"} />
+            <Header title="주문상세" />
             <SimpleReceipt />
             <MenuList />
-            <AmountList />
-            <ButtonSpace />
             <ButtonContainer>
-                <Button text="주문 내역 삭제" type="1" />
                 <Button
                     text="리뷰 남기기"
                     type="2"
@@ -48,30 +44,11 @@ const Container = styled.div`
     position: relative;
 `;
 
-export const GraySpace = styled.div`
-    background-color: ${({ theme }) => theme.color.gray100};
-    width: 100%;
-    height: 6px;
-`;
-
-export const ListContainer = styled.div`
-    margin-top: 6px;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    margin-bottom: 22px;
-`;
-
 const ButtonContainer = styled.div`
     display: flex;
     justify-content: space-between;
-    width: calc(100% - 68px);
+    width: calc(100% - 30px);
     gap: 17px;
     position: absolute;
     bottom: 32px;
-`;
-
-const ButtonSpace = styled.div`
-    height: 48px;
-    margin-bottom: 32px;
 `;
