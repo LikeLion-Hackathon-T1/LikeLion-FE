@@ -1,5 +1,8 @@
 import { useState } from "react";
 import styled from "styled-components";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
 
 const CategoryBar = ({ categories, onClick }) => {
     const [selectedCategory, setSelectedCategory] = useState("전체");
@@ -15,17 +18,20 @@ const CategoryBar = ({ categories, onClick }) => {
 
     return (
         <CategoryContainer>
-            {categories.map((categories) => (
-                <Category
-                    key={categories}
-                    onClick={() => {
-                        handleClick(categories);
-                    }}
-                    selected={selectedCategory === categories}
-                >
-                    {categories}
-                </Category>
-            ))}
+            <Swiper slidesPerView={7} spaceBetween={8}>
+                {categories.map((categories) => (
+                    <SwiperSlide key={categories}>
+                        <Category
+                            onClick={() => {
+                                handleClick(categories);
+                            }}
+                            selected={selectedCategory === categories}
+                        >
+                            {categories}
+                        </Category>
+                    </SwiperSlide>
+                ))}
+            </Swiper>
         </CategoryContainer>
     );
 };
@@ -33,9 +39,11 @@ const CategoryBar = ({ categories, onClick }) => {
 export default CategoryBar;
 
 const CategoryContainer = styled.div`
+    width: 100%;
     display: flex;
     gap: 12px;
     margin-bottom: 12px;
+    text-wrap: nowrap;
 `;
 
 const Category = styled.div`
@@ -46,7 +54,7 @@ const Category = styled.div`
     border-radius: 54px;
     font-size: 14px;
     text-align: center;
-    padding: 8px 12px;
+    padding: 8px 0px;
     cursor: pointer;
     color: ${(props) =>
         props.selected ? props.theme.color.primary : props.theme.color.gray400};
