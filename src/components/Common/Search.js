@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Hangul from "hangul-js";
 
 const Search = () => {
-    const [searchInput, setSearchInput] = useState("123");
+    const [searchInput, setSearchInput] = useState("");
     const marketList = [
         "광동시장",
         "광명시장",

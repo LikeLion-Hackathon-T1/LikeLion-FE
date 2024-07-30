@@ -88,6 +88,7 @@ const MarketContainer = styled.div`
 `;
 
 const VisitButton = styled(VisitIcon)`
+    min-width: 24px;
     cursor: pointer;
     color: gray;
     opacity: ${(props) => (props.selected ? 1 : 0.5)};
