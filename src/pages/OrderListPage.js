@@ -1,5 +1,4 @@
 import Header from "components/Common/Header";
-import DayList from "components/OrderList/DayList";
 import styled from "styled-components";
 import { ReactComponent as NoItem } from "assets/images/no-item.svg";
 import Button from "components/Common/Button";
@@ -10,12 +9,11 @@ const OrderListPage = () => {
     const orderList = null;
     return orderList === null ? (
         <Container>
-            <Header title="주문내역" home={"true"} />
-            <DayList />
+            <Header title="주문내역" />
         </Container>
     ) : (
         <>
-            <Header title="주문내역" home={"true"} />
+            <Header title="주문내역" />
             <NoItemContainer>
                 <NoItem />
                 <Button
