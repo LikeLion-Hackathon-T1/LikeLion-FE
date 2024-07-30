@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { ReactComponent as BackIcon } from "assets/images/back.svg";
 import { ReactComponent as CartIcon } from "assets/images/cart.svg";
 import { ReactComponent as HomeIcon } from "assets/images/home.svg";
+import { ReactComponent as Syluv } from "assets/images/syluv-small.svg";
 import { useNavigate } from "react-router-dom";
 // import useCartStore from "hooks/useCartStore";
 
@@ -11,6 +12,7 @@ const Header = ({
     cart = true,
     home = false,
     back = true,
+    logo = false,
     rightText = "",
     rightDisabled = false,
     handleRight = () => {},
@@ -34,6 +36,7 @@ const Header = ({
                             <BackIcon />
                         </BackButton>
                     )}
+                    {logo && <Syluv />}
                 </LeftSection>
                 <Title>{title}</Title>
                 <RightSection>
