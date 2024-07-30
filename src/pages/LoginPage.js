@@ -83,7 +83,7 @@ const Body = styled.div`
 const LoginImg = styled.img`
     width: 400px;
     @media (max-width: 480px) {
-        width: calc(100dvw-80px);
+        width: 335px;
     }
 `;
 
