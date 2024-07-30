@@ -5,6 +5,7 @@ import useSyluvAxios from "hooks/useSyluvAxios";
 import { useNavigate } from "react-router-dom";
 import { ReactComponent as NoItem } from "assets/images/no-item.svg";
 import Button from "components/Common/Button";
+import Splash from "components/Common/Splash";
 
 const StoreList = ({ cartList, setCartList, isLoading }) => {
     const syluvAxios = useSyluvAxios();
@@ -25,7 +26,7 @@ const StoreList = ({ cartList, setCartList, isLoading }) => {
         }
     }, [cartList]);
 
-    if (isLoading) return <div></div>;
+    if (isLoading) return <Splash />;
 
     const stores = cartList.reduce((acc, item) => {
         acc[item.storeName] = acc[item.storeName] || [];

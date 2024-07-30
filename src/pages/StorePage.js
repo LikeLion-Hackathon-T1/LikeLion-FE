@@ -8,6 +8,7 @@ import StoreInfo from "../components/Store/StoreInfo";
 import NavBar from "../components/Common/NavBar.js";
 import useSyluvAxios from "hooks/useSyluvAxios";
 import MenuItemDetail from "components/Store/MenuItemDetail";
+import Splash from "components/Common/Splash";
 
 const PageWrapper = styled.div`
     font-family: "Pretendard", sans-serif;
@@ -112,7 +113,7 @@ const StorePage = () => {
     };
 
     if (isStoreLoading || isReviewLoading) {
-        return <div>Loading...</div>;
+        return <Splash />;
     }
 
     if (isStoreError || isReviewError) {

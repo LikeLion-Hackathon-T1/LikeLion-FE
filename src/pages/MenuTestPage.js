@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import Splash from "components/Common/Splash";
 import useSyluvAxios from "hooks/useSyluvAxios";
 import React, { useEffect, useState } from "react";
 
@@ -16,7 +17,7 @@ const MenuTestPage = () => {
         }
     }, [data]);
 
-    if (isLoading) return <div></div>;
+    if (isLoading) return <Splash />;
     if (isError) return <div>Error: {error.message}</div>;
 
     return (

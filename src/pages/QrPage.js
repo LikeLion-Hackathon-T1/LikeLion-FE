@@ -102,13 +102,15 @@ const Header = styled.div`
 `;
 
 const Container = styled.div`
-    height: 100vh;
+    height: 100dvh;
     width: 480px;
     position: relative;
 
     @media (max-width: 480px) {
         width: 100dvw;
     }
+    overflow: hidden;
+    max-height: 100vh;
 `;
 
 const Camera = styled.video`
@@ -120,11 +122,16 @@ const Camera = styled.video`
 const Hole = styled.div`
     z-index: 3;
 
-    aspect-ratio: 1/1;
     border-radius: 20px;
     border: 2px solid ${({ theme }) => theme.color.primary};
 
-    width: 85%;
+    width: 400px;
+    height: 400px;
+
+    @media (max-width: 480px) {
+        height: calc(100vw - 40px);
+        width: calc(100vw - 40px);
+    }
 
     position: absolute;
     top: 50%;
@@ -135,9 +142,8 @@ const Hole = styled.div`
 const Overlay = styled.div`
     z-index: 2;
 
-    width: 85%;
-
-    aspect-ratio: 1/1;
+    height: 400px;
+    width: 400px;
     border-radius: 414px;
     border: 400px solid rgba(0, 0, 0, 0.8);
 
@@ -145,6 +151,13 @@ const Overlay = styled.div`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+
+    @media (max-width: 480px) {
+        height: calc(100vw - 40px);
+        width: calc(100vw - 40px);
+    }
+
+    overflow: hidden;
 `;
 
 const Text = styled.div`
@@ -157,7 +170,7 @@ const Text = styled.div`
     display: flex;
     gap: 4px;
 
-    top: 73%;
+    top: 80%;
     left: 50%;
     transform: translate(-50%, 50%);
 
