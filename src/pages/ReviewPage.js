@@ -6,12 +6,16 @@ import add from "assets/images/add-button.png";
 import { useEffect, useState } from "react";
 import Button from "components/Common/Button";
 import { useParams } from "react-router-dom";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
 
 const ReviewPage = () => {
     const [review, setReview] = useState("");
     const [currentCount, setCurrentCount] = useState(0);
     const [rating, setRating] = useState(0);
     const [ratingText, setRatingText] = useState("");
+    const [photos, setPhotos] = useState([]);
     const { orderId } = useParams();
 
     useEffect(() => {
@@ -33,6 +37,11 @@ const ReviewPage = () => {
         ];
         setRatingText(ratingTexts[rating]);
     }, [rating]);
+
+    const handlePhotoChange = (e) => {
+        const files = Array.from(e.target.files);
+        setPhotos([...photos, ...files]);
+    };
 
     return (
         <Wrapper>
@@ -82,10 +91,37 @@ const ReviewPage = () => {
                             /300
                         </div>
                     </div>
-                    <div className="photo-section">
-                        <span>사진을 추가해주세요</span>
-                        <img src={add} alt="review" />
-                    </div>
+                    <StyledSwiper slidesPerView={4} spaceBetween={20}>
+                        <SwiperSlide>
+                            <div
+                                className={`photo-section ${
+                                    photos.length > 0 ? "photo-added" : ""
+                                }`}
+                            >
+                                <span>사진을 추가해주세요</span>
+                                <label htmlFor="photo-upload">
+                                    <img src={add} alt="add" />
+                                </label>
+                                <input
+                                    id="photo-upload"
+                                    type="file"
+                                    multiple
+                                    accept="image/*"
+                                    style={{ display: "none" }}
+                                    onChange={handlePhotoChange}
+                                />
+                            </div>
+                        </SwiperSlide>
+                        {photos.map((photo, index) => (
+                            <SwiperSlide key={index}>
+                                <img
+                                    src={URL.createObjectURL(photo)}
+                                    alt={`preview-${index}`}
+                                    className="preview-image"
+                                />
+                            </SwiperSlide>
+                        ))}
+                    </StyledSwiper>
                 </Review>
             </div>
             <BottomBar>
@@ -94,6 +130,10 @@ const ReviewPage = () => {
         </Wrapper>
     );
 };
+
+const StyledSwiper = styled(Swiper)`
+    width: 99%;
+`;
 
 const BottomBar = styled.div`
     padding: 0 20px 25px 20px;
@@ -191,12 +231,13 @@ const Review = styled.div`
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        width: 100%;
+        width: calc(100% - 40px);
         height: 154px;
         background-color: ${({ theme }) => theme.color.gray50};
         gap: 11px;
         border-radius: 8px;
         border: 1px solid ${({ theme }) => theme.color.gray100};
+        padding: 20px;
 
         span {
             font-size: 18px;
@@ -211,6 +252,23 @@ const Review = styled.div`
                 transition: transform 0.1s;
             }
         }
+    }
+
+    .photo-added {
+        width: 104px;
+        height: 104px;
+        padding: 0;
+        span {
+            display: none;
+        }
+    }
+
+    .preview-image {
+        width: 104px;
+        height: 104px;
+        object-fit: cover;
+        border-radius: 12px;
+        border: 1px solid ${({ theme }) => theme.color.gray100};
     }
 `;
 

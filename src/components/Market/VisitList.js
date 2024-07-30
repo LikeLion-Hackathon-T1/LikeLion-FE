@@ -1,7 +1,13 @@
 import styled from "styled-components";
 import VisitItem from "./VisitItem";
+import { useState } from "react";
 
 const VisitList = ({ visitList }) => {
+    const [openedModal, setOpenedModal] = useState(null);
+    const handleOpenModal = (id) => {
+        setOpenedModal(id);
+    };
+    console.log(visitList);
     return (
         <ListContainer>
             {visitList.map((item, index) => (
@@ -10,6 +16,8 @@ const VisitList = ({ visitList }) => {
                     index={index}
                     isLast={index === visitList.length - 1}
                     key={index} // 추가된 부분: key prop
+                    openId={openedModal}
+                    handleOpenModal={handleOpenModal}
                 />
             ))}
         </ListContainer>

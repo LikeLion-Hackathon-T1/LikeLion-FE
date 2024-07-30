@@ -1,85 +1,40 @@
-import styled from "styled-components";
-import { ReactComponent as Time } from "assets/images/visit_time.svg";
-import { ReactComponent as Time2 } from "assets/images/visit_time2.svg";
+import CheckButton from "components/Cart/CheckButton";
 import { useState } from "react";
-import Button from "components/Common/Button";
+import styled from "styled-components";
 
-const VisitItem = ({
-    index,
-    item,
-    isLast,
-    openId,
-    handleOpenModal = () => {},
-}) => {
-    const onCompleteClick = () => {
-        handleOpenModal(null);
+const EditVisitItem = ({ item, handleSelect = () => {} }) => {
+    const [isChecked, setIsChecked] = useState(false);
+
+    const handleClick = () => {
+        setIsChecked(!isChecked);
+        handleSelect(item.id);
     };
-    const onCancelClick = () => {
-        handleOpenModal(null);
-    };
+
     return (
-        <>
-            <ListItem
+        <ListItem>
+            <CheckButton
                 onClick={() => {
-                    handleOpenModal(index);
+                    handleClick();
                 }}
-            >
-                <Container>
-                    <Number>{index}</Number>
-                    {!isLast && <div className="line" />} {/* 수정된 부분 */}
-                </Container>
-
-                <Wrapper>
-                    <div className="store">
-                        <img
-                            src="https://via.placeholder.com/100"
-                            alt="store"
-                        />
-                        <div className="store-info">
-                            <di className="store-header">
-                                <span>분식</span>
-                                <span className="store-name">{item.store}</span>
-                            </di>
-                            <div className="time">
-                                <Time />
-                                <span>11:21</span>
-                            </div>
-                        </div>
+                isChecked={isChecked}
+            />
+            <Wrapper>
+                <div className="store">
+                    <img src="https://via.placeholder.com/100" alt="store" />
+                    <div className="store-info">
+                        <di className="store-header">
+                            <span>분식</span>
+                            <span className="store-name">{item.store}</span>
+                        </di>
+                        <div className="status">{item.status}</div>
                     </div>
-                    <div className="status">{item.status}</div>
-                </Wrapper>
-            </ListItem>
-            {openId === index && (
-                <ModalContainer>
-                    <VisitModal>
-                        <span>이 가게에 방문 완료하셨나요?</span>
-                        <span className="title-text">{item.store}</span>
-                        <span className="sub-text">
-                            다시 한 번 확인해주세요
-                        </span>
-                        <div className="buttons">
-                            <Button
-                                text="완료했어요"
-                                onClick={() => {
-                                    onCompleteClick();
-                                }}
-                            />
-                            <Button
-                                text="아직이에요"
-                                type="2"
-                                onClick={() => {
-                                    onCancelClick();
-                                }}
-                            />
-                        </div>
-                    </VisitModal>
-                </ModalContainer>
-            )}
-        </>
+                </div>
+            </Wrapper>
+        </ListItem>
     );
 };
 
-export default VisitItem;
+export default EditVisitItem;
 
 const ModalContainer = styled.div`
     z-index: 1000;

@@ -22,8 +22,8 @@ const HomePage = () => {
 
     useEffect(() => {
         syluvAxios.get("/home").then((res) => {
-            setLatestMarkets(res.data.payload.visitListHomeList);
-            setHotMarkets(res.data.payload.hotListHomeList);
+            setLatestMarkets(res.data?.payload.visitListHomeList);
+            setHotMarkets(res.data?.payload.hotListHomeList);
         });
     }, []);
 
