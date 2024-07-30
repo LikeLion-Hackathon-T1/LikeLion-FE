@@ -5,6 +5,7 @@ import useIsLogin from "hooks/useIsLogin";
 import KakaoLogin from "assets/images/kakao_login.png";
 import { ReactComponent as SyluvLogo } from "assets/images/syluv.svg";
 import Splash from "components/Common/Splash";
+import SyluvIcon from "assets/images/app-icon.png";
 
 const LoginPage = () => {
     const [isLoading, setIsLoading] = useState(true);
@@ -39,6 +40,7 @@ const LoginPage = () => {
                 <Title>달콤한 시장 나들이,</Title>
                 <SyluvLogo />
             </Header>
+            <img src={SyluvIcon} alt="syluv icon" />
             <Body>
                 <LoginButton onClick={handleLogin}>
                     <LoginImg src={KakaoLogin} alt="kakao login" />
@@ -52,7 +54,8 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-around;
+    justify-content: center;
+    gap: 68px;
     height: 100dvh;
 `;
 
@@ -62,6 +65,7 @@ const Header = styled.header`
     justify-content: center;
     align-items: center;
     gap: 19px;
+    margin-bottom: 11px;
 `;
 
 const Title = styled.h1`

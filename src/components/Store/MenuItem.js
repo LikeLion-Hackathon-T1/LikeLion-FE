@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import MenuItemDetail from "./MenuItemDetail";
 
 const MenuItemWrapper = styled.div`
   display: flex;
@@ -41,15 +42,23 @@ const MenuItemDescription = styled.p`
   margin-top: 40px;
 `;
 
-const MenuItem = ({ name, price, image, description, onClick }) => (
-  <MenuItemWrapper onClick={onClick}>
-    <MenuItemImage src={image} alt={name} />
-    <MenuItemInfo>
-      <MenuItemName>{name}</MenuItemName>
-      <MenuItemPrice>{price}원</MenuItemPrice>
-      {description && <MenuItemDescription>{description}</MenuItemDescription>}
-    </MenuItemInfo>
-  </MenuItemWrapper>
-);
+const MenuItem = ({ item, onClick }) => {
+  return (
+    <MenuItemWrapper
+      onClick={() => {
+        onClick(item);
+      }}
+    >
+      <MenuItemImage src={item.menuImage} alt={item.name} />
+      <MenuItemInfo>
+        <MenuItemName>{item.name}</MenuItemName>
+        <MenuItemPrice>{item.price}원</MenuItemPrice>
+        {item.content && (
+          <MenuItemDescription>{item.content}</MenuItemDescription>
+        )}
+      </MenuItemInfo>
+    </MenuItemWrapper>
+  );
+};
 
 export default MenuItem;

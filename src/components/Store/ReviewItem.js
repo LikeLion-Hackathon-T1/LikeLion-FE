@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import starIcon from "../../assets/images/star.png";
 import goodIcon from "../../assets/images/good.png";
 import badIcon from "../../assets/images/bad.png";
 
 const ReviewContainer = styled.div`
-  margin-bottom: 44px; // 각 리뷰 항목 사이의 간격을 44px로 설정
+  margin-bottom: 44px;
   &:first-child {
-    margin-top: 0; // 첫 번째 리뷰의 상단 여백 제거
+    margin-top: 0;
   }
 `;
 
@@ -23,11 +22,10 @@ const UserInfo = styled.div`
   align-items: center;
 `;
 
-const UserProfile = styled.div`
+const UserProfileImage = styled.img`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: #ccc;
   margin-right: 10px;
 `;
 
@@ -39,60 +37,84 @@ const UserName = styled.span`
 const StarsAndTime = styled.div`
   display: flex;
   align-items: center;
+  width: 100%;
 `;
 
-const Stars = styled.div`
+const StarContainer = styled.div`
   display: flex;
   align-items: center;
   margin-right: 4px;
 `;
 
-const Star = styled.img`
-  width: 16px;
-  height: 16px;
-  margin-right: 1.33px;
+const Star = styled.span`
+  font-size: 14px; /* 별의 크기 */
+  color: ${({ filled }) => (filled ? "gold" : "#CCCCCC")};
+  margin-top: 4px;
+  gap: 1px;
 `;
 
 const Time = styled.div`
   font-weight: ${({ theme }) => theme.fontWeight.regular};
   color: ${({ theme }) => theme.color.gray400};
   font-size: 12px;
+  margin-top: 4px;
+  margin-right: 4px; /* Time과 DeleteButton 간격 설정 */
+`;
+
+const DeleteButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: ${({ theme }) => theme.fontWeight.regular};
+  outline: none;
+  color: ${({ theme }) => theme.color.gray400};
+  margin-left: auto; /* DeleteButton을 오른쪽 끝으로 이동 */
+  margin-right: 0px; /* 화면 오른쪽에서 20px 여백 */
+  margin-top: 16px;
 `;
 
 const ReviewImageContainerSingle = styled.div`
-  width: 440px; // 넓이 고정 시켰놨는데 핸드폰에 따라 변하는거 추가해야함
-  height: 264px;
+  width: 100%;
+  height: auto;
   border-radius: 8px;
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 19px;
-  aspect-ratio: 1.6/1;
+  aspect-ratio: 1.6 / 1;
 `;
 
 const ReviewImageContainerMultiple = styled.div`
-  width: calc(200% - 20px);
-  height: 166px;
+  width: 100%;
+  height: 180px;
   border-radius: 8px;
   overflow-x: auto;
   display: flex;
   margin-top: 19px;
   padding-right: 20px;
+  gap: 6px;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   &::-webkit-scrollbar {
     display: none;
   }
-  gap: 6px;
-  -ms-overflow-style: none; // IE 및 Edge
-  scrollbar-width: none; // Firefox
-  aspect-ratio: 1.2/1;
 `;
 
-const ReviewImage = styled.img`
+const SingleReviewImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 8px;
+`;
+
+const MultipleReviewImage = styled.img`
+  width: 250px;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  flex: 0 0 auto;
 `;
 
 const MenuName = styled.div`
@@ -123,15 +145,16 @@ const Helpfulness = styled.div`
 
 const HelpfulButton = styled.button`
   background: none;
-  border: 1px solid ${({ active }) => (active ? "#9A9A9A" : "#ff6b00")};
+  border: 1px solid ${({ active }) => (active ? "#ff6b00" : "#9A9A9A")};
   border-radius: 54px;
-  color: ${({ active }) => (active ? "#9A9A9A" : "#ff6b00")};
+  color: ${({ active }) => (active ? "#ff6b00" : "#9A9A9A")};
   padding: 5px 10px;
   display: flex;
   align-items: center;
   cursor: pointer;
   position: relative;
   left: 0px;
+  outline: none;
 `;
 
 const Icon = styled.img`
@@ -169,53 +192,102 @@ const ResponseText = styled.div`
   color: ${({ theme }) => theme.color.gray800};
 `;
 
-const ReviewItem = ({ review }) => {
-  const [helpfulness, setHelpfulness] = useState(review.helpfulness);
-  const [isHelpfulClicked, setIsHelpfulClicked] = useState(false);
+const ReviewItem = ({ review, onDelete }) => {
+  const [helpfulness, setHelpfulness] = useState(review.likeCount);
+  const [isHelpfulClicked, setIsHelpfulClicked] = useState(
+    review.isHelpfulClicked || false
+  );
 
-  const handleHelpfulnessClick = () => {
-    setHelpfulness(helpfulness + 1);
-    setIsHelpfulClicked(true);
+  const handleHelpfulnessClick = async () => {
+    if (!isHelpfulClicked) {
+      try {
+        const response = await fetch(`/review/${review.id}/like`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const result = await response.json();
+        if (result.result.code === 0) {
+          setHelpfulness(
+            (prevHelpfulness) => parseInt(prevHelpfulness, 10) + 1
+          );
+          setIsHelpfulClicked(true);
+        }
+      } catch (error) {
+        console.error("Error liking the review:", error);
+      }
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      const response = await fetch(`/review/${review.id}/delete`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const result = await response.json();
+      if (result.result.code === 0) {
+        onDelete(review.id);
+      } else {
+        console.error("Error deleting the review:", result);
+      }
+    } catch (error) {
+      console.error("Error deleting the review:", error);
+    }
   };
 
   return (
     <ReviewContainer>
       <Header>
         <UserInfo>
-          <UserProfile />
+          <UserProfileImage src={review.picture} alt="User Profile" />
           <div>
-            <UserName>{review.reviewer}</UserName>
+            <UserName>{review.name}</UserName>
             <StarsAndTime>
-              <Stars>
+              <StarContainer>
                 {[...Array(5)].map((_, index) => (
-                  <Star key={index} src={starIcon} alt="star" />
+                  <Star key={index} filled={index < review.rating}>
+                    ★
+                  </Star>
                 ))}
-              </Stars>
-              <Time>{review.time} 전</Time>
+              </StarContainer>
+              <Time>{review.beforeHours}시간 전</Time>
             </StarsAndTime>
           </div>
         </UserInfo>
+        <DeleteButton onClick={handleDelete}>삭제하기</DeleteButton>
       </Header>
-      {review.images && review.images.length === 1 ? (
+      {Array.isArray(review.image) && review.image.length === 1 ? (
         <ReviewImageContainerSingle>
-          <ReviewImage src={review.images[0]} alt="review" />
+          <SingleReviewImage src={review.image[0]} alt="review" />
         </ReviewImageContainerSingle>
-      ) : review.images && review.images.length > 1 ? (
+      ) : Array.isArray(review.image) && review.image.length > 1 ? (
         <ReviewImageContainerMultiple>
-          {review.images.map((image, index) => (
-            <ReviewImage key={index} src={image} alt={`review-${index}`} />
+          {review.image.map((image, index) => (
+            <MultipleReviewImage
+              key={index}
+              src={image}
+              alt={`review-${index}`}
+            />
           ))}
         </ReviewImageContainerMultiple>
+      ) : review.image ? (
+        <ReviewImageContainerSingle>
+          <SingleReviewImage src={review.image} alt="review" />
+        </ReviewImageContainerSingle>
       ) : null}
-      <MenuName>{review.menu}</MenuName>
-      <ReviewText>{review.comment}</ReviewText>
+      <MenuName>{review.menuName}</MenuName>
+      <ReviewText>{review.content}</ReviewText>
       <Helpfulness>
         <div>{helpfulness}명에게 도움이 되었어요</div>
         <HelpfulButton
           onClick={handleHelpfulnessClick}
           active={isHelpfulClicked}
         >
-          <Icon src={isHelpfulClicked ? badIcon : goodIcon} alt="thumbs up" />
+          <Icon src={isHelpfulClicked ? goodIcon : badIcon} alt="thumbs up" />
           도움이 돼요
         </HelpfulButton>
       </Helpfulness>

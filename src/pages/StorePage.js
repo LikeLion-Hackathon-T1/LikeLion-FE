@@ -1,14 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import MenuItem from "../components/Store/MenuItem";
 import ReviewItem from "../components/Store/ReviewItem";
 import StoreInfo from "../components/Store/StoreInfo";
 import NavBar from "../components/Common/NavBar.js";
-import reviewImage1 from "../assets/images/menu_gimbap.png";
-import reviewImage2 from "../assets/images/menu_gimbap.png";
-import reviewImage3 from "../assets/images/menu_gimbap.png";
-import menuImage from "../assets/images/menu_gimbap.png";
+import useSyluvAxios from "hooks/useSyluvAxios";
+import MenuItemDetail from "components/Store/MenuItemDetail";
 
 const PageWrapper = styled.div`
     font-family: "Pretendard", sans-serif;
@@ -31,98 +30,144 @@ const Section = styled.section`
     scrollbar-width: none; // Firefox
 `;
 
-const reviewsData = [
-    {
-        reviewer: "박*연",
-        rating: 4.2,
-        comment: "소문대로 맛있네요",
-        menu: "어묵 참치김밥",
-        images: [reviewImage1, reviewImage2, reviewImage3], // 이미지 배열 추가
-        helpfulness: 12,
-        time: "4시간",
-        response: "",
-    },
-    {
-        reviewer: "박*연",
-        rating: 4.2,
-        comment: "맛있네요",
-        menu: "어묵 참치김밥",
-        images: [reviewImage1], // 이미지 배열 추가
-        helpfulness: 12,
-        time: "4시간",
-        response: "",
-    },
-    {
-        reviewer: "박*연",
-        rating: 4.2,
-        comment: "맛있네요",
-        menu: "어묵 참치김밥",
-        helpfulness: 12,
-        time: "4시간",
-        response:
-            "고객님 맘에 드셨다니 다행이에요^^ 항상 더 노력하는 원조 참치 어쩌구 되겠습니다~",
-    },
-];
-
 const StorePage = () => {
     const [activeSection, setActiveSection] = useState("메뉴");
     const navigate = useNavigate();
+    const { storeId } = useParams();
+    const axiosInstance = useSyluvAxios();
+    const queryClient = useQueryClient();
+    const [selectedMenu, setSelectedMenu] = useState(null);
 
-    const menuItems = [
-        {
-            id: 1,
-            name: "치즈 참치 김밥",
-            price: 2500,
-            image: menuImage,
-            description: "원조 치즈 참치 김밥",
-        },
-        {
-            id: 2,
-            name: "잡채 김밥",
-            price: 2500,
-            image: menuImage,
-            description: "어린이들은 가라~어른의 맛",
-        },
-        {
-            id: 3,
-            name: "잡채 김밥",
-            price: 2500,
-            image: menuImage,
-            description: "어린이들은 가라~어른의 맛",
-        },
-    ];
+    useEffect(() => {
+        console.log(selectedMenu);
+    }, [selectedMenu]);
 
-    const navItems = ["메뉴", "리뷰"];
-
-    const handleMenuItemClick = (id) => {
-        navigate(`/menu/${id}`);
+    const fetchStoreAndMenuData = async () => {
+        try {
+            const response = await axiosInstance.get("/store/info");
+            console.log("Full Store and Menu Data Response:", response.data);
+            if (response.data && response.data.payload) {
+                const store = response.data.payload.find(
+                    (item) => item.storeId === parseInt(storeId)
+                );
+                if (store) {
+                    console.log("Store Data:", store);
+                    return store;
+                } else {
+                    console.error("Store not found");
+                    throw new Error("Store not found");
+                }
+            } else {
+                console.error("Invalid store data response", response);
+                throw new Error("Invalid store data response");
+            }
+        } catch (error) {
+            console.error("Error fetching store data:", error);
+            throw error;
+        }
     };
 
-    return (
+    const fetchReviewData = async () => {
+        try {
+            const response = await axiosInstance.get(`/review`, {
+                params: { storeId },
+            });
+            console.log("Full Review Data Response:", response.data);
+            if (response.data && response.data.payload) {
+                return response.data.payload;
+            } else {
+                console.error("Invalid review data response", response);
+                throw new Error("Invalid review data response");
+            }
+        } catch (error) {
+            console.error("Error fetching review data:", error);
+            throw error;
+        }
+    };
+
+    const {
+        data: storeData,
+        error: storeError,
+        isError: isStoreError,
+        isLoading: isStoreLoading,
+    } = useQuery({
+        queryKey: ["storeAndMenuData", storeId],
+        queryFn: fetchStoreAndMenuData,
+    });
+
+    const {
+        data: reviewData,
+        error: reviewError,
+        isError: isReviewError,
+        isLoading: isReviewLoading,
+    } = useQuery({
+        queryKey: ["reviewData", storeId],
+        queryFn: fetchReviewData,
+    });
+
+    const handleReviewDelete = (reviewId) => {
+        queryClient.setQueryData(["reviewData", storeId], (oldData) =>
+            oldData.filter((review) => review.id !== reviewId)
+        );
+    };
+
+    if (isStoreLoading || isReviewLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (isStoreError || isReviewError) {
+        console.error("Error fetching data", { storeError, reviewError });
+        return <div>Error fetching data</div>;
+    }
+
+    const handleMenuClick = (menu) => {
+        setSelectedMenu(menu);
+    };
+
+    return selectedMenu ? (
+        <MenuItemDetail menu={selectedMenu} onClick={handleMenuClick} />
+    ) : (
         <PageWrapper>
-            <StoreInfo />
-            <NavBar
-                items={navItems}
-                selected={activeSection}
-                handleSelected={setActiveSection}
-            />
-            {activeSection === "메뉴" && (
-                <Section>
-                    {menuItems.map((item, index) => (
-                        <MenuItem
-                            key={index}
-                            {...item}
-                            onClick={() => handleMenuItemClick(item.id)}
-                        />
-                    ))}
-                </Section>
-            )}
-            {activeSection === "리뷰" && (
-                <Section>
-                    {reviewsData.map((review, index) => (
-                        <ReviewItem key={index} review={review} />
-                    ))}
-                </Section>
+            {storeData && (
+                <>
+                    <StoreInfo
+                        name={storeData.name}
+                        call={storeData.contact}
+                        address={storeData.location}
+                        openHours={storeData.openHours}
+                        closeHours={storeData.closeHours}
+                        ratingAvg={storeData.ratingAvg}
+                        storeImage={storeData.storeImage}
+                        category={storeData.category}
+                    />
+                    <NavBar
+                        items={["메뉴", "리뷰"]}
+                        selected={activeSection}
+                        handleSelected={setActiveSection}
+                    />
+                    {activeSection === "메뉴" && (
+                        <Section>
+                            {storeData.menuDetails.map((item, index) => (
+                                <MenuItem
+                                    key={index}
+                                    item={item}
+                                    onClick={handleMenuClick}
+                                />
+                            ))}
+                        </Section>
+                    )}
+                    {activeSection === "리뷰" && (
+                        <Section>
+                            {reviewData.map((review, index) => (
+                                <ReviewItem
+                                    key={index}
+                                    review={review}
+                                    onDelete={handleReviewDelete}
+                                />
+                            ))}
+                        </Section>
+                    )}
+                </>
             )}
         </PageWrapper>
     );
