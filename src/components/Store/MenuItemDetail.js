@@ -3,7 +3,8 @@ import styled from "styled-components";
 import { useParams, useNavigate } from "react-router-dom";
 import menuImage from "../../assets/images/gimbap1.png";
 import { ReactComponent as BackIcon } from "assets/images/back.svg";
-import cartIcon from "assets/images/marketbag.svg";
+import cartIcon from "../../assets/images/marketbag.svg";
+import HomeIcon from "../../assets/images/newhome.svg";
 import useSyluvAxios from "hooks/useSyluvAxios";
 
 const Container = styled.div`
@@ -40,6 +41,14 @@ const CartButton = styled.div`
   right: 20px;
   cursor: pointer;
   padding: 8px;
+`;
+
+const HomeButton = styled.div`
+  position: absolute;
+  top: 16px;
+  right: calc(20px + 32px + 12px);
+  padding: 8px;
+  cursor: pointer;
 `;
 
 const Title = styled.h1`
@@ -144,6 +153,9 @@ const MenuItemDetail = ({ menu, onClick = () => {} }) => {
         <CartButton>
           <img src={cartIcon} alt="cart" />
         </CartButton>
+        <HomeButton>
+          <img src={HomeIcon} alt="home" />
+        </HomeButton>
         <Image src={menu.menuImage} alt={menu.name} />
       </ImageContainer>
       <Title>{menu.name}</Title>

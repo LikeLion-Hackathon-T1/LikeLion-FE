@@ -4,6 +4,7 @@ import { ReactComponent as BackIcon } from "assets/images/back.svg";
 import { ReactComponent as CallIcon } from "assets/images/call.svg";
 import { ReactComponent as AddressIcon } from "assets/images/address.svg";
 import { ReactComponent as TimeIcon } from "assets/images/time.svg";
+import { ReactComponent as HomeIcon } from "assets/images/newhome.svg";
 import cartIcon from "assets/images/marketbag.svg";
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
@@ -50,6 +51,9 @@ const StoreInfo = ({
         <BackButton onClick={() => navigate(-1)}>
           <BackIcon />
         </BackButton>
+        <HomeButton onClick={() => navigate("/")}>
+          <HomeIcon />
+        </HomeButton>
         <CartButton>
           <img src={cartIcon} alt="cart" />
         </CartButton>
@@ -104,34 +108,42 @@ const StoreInfo = ({
 };
 
 const Container = styled.div`
-    padding: 0 0px;
-    display: flex;
-    flex-direction: column;
-    background-color: white;
-    box-shadow: none;
-    margin-bottom: 20px;
+  padding: 0 0px;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  box-shadow: none;
+  margin-bottom: 20px;
 `;
 
 const ImageContainer = styled.div`
-    position: relative;
-    width: 100%;
-    padding: 0;
-    margin: 0;
+  position: relative;
+  width: 100%;
+  padding: 0;
+  margin: 0;
 `;
 
 const HeaderImage = styled.img`
-    width: 100%;
-    height: auto;
-    display: block;
-    margin: 0;
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 0;
 `;
 
 const BackButton = styled.div`
-    position: absolute;
-    top: 16px;
-    left: 16px;
-    cursor: pointer;
-    padding: 8px;
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  cursor: pointer;
+  padding: 8px;
+`;
+
+const HomeButton = styled.div`
+  position: absolute;
+  top: 16px;
+  right: calc(20px + 32px + 12px);
+  padding: 8px;
+  cursor: pointer;
 `;
 
 const CartButton = styled.div`
@@ -143,65 +155,65 @@ const CartButton = styled.div`
 `;
 
 const ImageCounter = styled.div`
-    position: absolute;
-    bottom: 16px;
-    right: 24px;
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
-    padding: 4px 8px;
-    border-radius: 31px;
-    font-size: 12px;
-    width: 52px;
-    height: 26px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: ${({ theme }) => theme.fontWeight.regular};
+  position: absolute;
+  bottom: 16px;
+  right: 24px;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 31px;
+  font-size: 12px;
+  width: 52px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: ${({ theme }) => theme.fontWeight.regular};
 `;
 
 const InfoContainer = styled.div`
-    margin: 20px 20px 0 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+  margin: 20px 20px 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 `;
 
 const Info = styled.div`
-    display: flex;
-    gap: 4px; /* 4px 간격 */
-    align-items: center;
+  display: flex;
+  gap: 4px; /* 4px 간격 */
+  align-items: center;
 `;
 
 const InfoTitle = styled.div`
-    font-size: 14px;
-    font-weight: ${({ theme }) => theme.fontWeight.medium};
-    color: ${({ theme }) => theme.color.gray800};
+  font-size: 14px;
+  font-weight: ${({ theme }) => theme.fontWeight.medium};
+  color: ${({ theme }) => theme.color.gray800};
 `;
 
 const InfoDetail = styled.div`
-    font-size: 14px;
-    font-weight: ${({ theme }) => theme.fontWeight.regular};
-    color: ${({ theme }) => theme.color.gray500};
+  font-size: 14px;
+  font-weight: ${({ theme }) => theme.fontWeight.regular};
+  color: ${({ theme }) => theme.color.gray500};
 `;
 
 const SubTitle = styled.h2`
-    font-size: 14px;
-    color: ${({ theme }) => theme.color.gray600};
-    font-weight: ${({ theme }) => theme.fontWeight.medium};
+  font-size: 14px;
+  color: ${({ theme }) => theme.color.gray600};
+  font-weight: ${({ theme }) => theme.fontWeight.medium};
 `;
 
 const Title = styled.h1`
-    font-size: 20px;
-    margin-top: 8px;
-    margin-bottom: 12px;
-    font-weight: ${({ theme }) => theme.fontWeight.bold};
-    color: ${({ theme }) => theme.color.gray900};
+  font-size: 20px;
+  margin-top: 8px;
+  margin-bottom: 12px;
+  font-weight: ${({ theme }) => theme.fontWeight.bold};
+  color: ${({ theme }) => theme.color.gray900};
 `;
 
 const Rating = styled.div`
-    display: flex;
-    align-items: center;
-    margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
 `;
 
 const StarRatings = styled.div`
@@ -230,10 +242,10 @@ const StarRatingsBase = styled.div`
 `;
 
 const RatingValue = styled.span`
-    color: ${({ theme }) => theme.color.gray900};
-    font-weight: ${({ theme }) => theme.fontWeight.semiBold};
-    font-size: 14px;
-    margin-left: 4px;
+  color: ${({ theme }) => theme.color.gray900};
+  font-weight: ${({ theme }) => theme.fontWeight.semiBold};
+  font-size: 14px;
+  margin-left: 4px;
 `;
 
 export default StoreInfo;
