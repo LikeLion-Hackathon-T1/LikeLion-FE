@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import useSyluvAxios from "hooks/useSyluvAxios";
 import { useQuery } from "@tanstack/react-query";
 import Splash from "components/Common/Splash";
+import styled from "styled-components";
 
 const MarketPage = () => {
     const items = ["홈", "방문"];
@@ -66,7 +67,7 @@ const MarketPage = () => {
         setSelectedNav(navItem);
     };
     return (
-        <>
+        <Wrapper>
             <Header title={marketInfo?.name} />
             <NavBar
                 items={items}
@@ -88,8 +89,12 @@ const MarketPage = () => {
                     onChange={onListChange}
                 />
             )}
-        </>
+        </Wrapper>
     );
 };
 
 export default MarketPage;
+
+const Wrapper = styled.div`
+    margin-bottom: 20px;
+`;

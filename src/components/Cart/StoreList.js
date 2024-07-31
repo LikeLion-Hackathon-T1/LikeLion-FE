@@ -11,35 +11,42 @@ const StoreList = ({ cartList, setCartList, isLoading }) => {
     const syluvAxios = useSyluvAxios();
     const navigate = useNavigate();
 
-    const putCart = useCallback(async () => {
-        const payload = cartList.map((item) => {
-            return {
-                cartId: item.cartid,
-                quantity: item.quantity,
-                isChecked: item.isChecked,
-            };
-        });
-        try {
-            await syluvAxios.put("/cart", payload);
-        } catch (err) {
-            console.log(err);
-        }
-    }, [cartList]);
+    console.log(cartList);
 
-    if (isLoading) return <Splash />;
+    const toggleStoreCheck = useCallback(
+        (storeName, isChecked) => {
+            setCartList((prevCartList) => {
+                return prevCartList.map((item) => {
+                    // 현재 스토어의 모든 아이템이 체크되어 있는지 확인
+                    const allItemsChecked = prevCartList
+                        .filter((i) => i.storeName === storeName)
+                        .every((i) => i.isChecked);
 
-    const stores = cartList.reduce((acc, item) => {
-        acc[item.storeName] = acc[item.storeName] || [];
-        acc[item.storeName].push(item);
-        return acc;
-    }, {});
-
-    const totalAmount = cartList.reduce(
-        (acc, item) => acc + item.price * item.quantity,
-        0
+                    // 스토어가 체크 해제되는 경우
+                    if (!isChecked) {
+                        if (allItemsChecked) {
+                            // 모든 아이템이 체크되어 있다면 아이템도 함께 체크 해제
+                            if (item.storeName === storeName) {
+                                return { ...item, isChecked };
+                            }
+                        } else {
+                            // 그렇지 않다면 아이템 상태 유지
+                            return item;
+                        }
+                    } else {
+                        // 스토어가 체크되는 경우 아이템 상태 변경
+                        if (item.storeName === storeName) {
+                            return { ...item, isChecked };
+                        }
+                    }
+                    return item;
+                });
+            });
+        },
+        [setCartList]
     );
 
-    const changeCartList = (cartId, updatedProperties) => {
+    const changeCartList = useCallback((cartId, updatedProperties) => {
         if (updatedProperties.quantity === 0) {
             setCartList((prevCartList) =>
                 prevCartList.filter((item) => item.cartid !== cartId)
@@ -63,37 +70,20 @@ const StoreList = ({ cartList, setCartList, isLoading }) => {
                 quantity: updatedProperties.quantity,
             },
         ]);
-    };
+    }, []);
 
-    const toggleStoreCheck = (storeName, isChecked) => {
-        setCartList((prevCartList) => {
-            return prevCartList.map((item) => {
-                // 현재 스토어의 모든 아이템이 체크되어 있는지 확인
-                const allItemsChecked = prevCartList
-                    .filter((i) => i.storeName === storeName)
-                    .every((i) => i.isChecked);
+    if (isLoading) return <Splash />;
 
-                // 스토어가 체크 해제되는 경우
-                if (!isChecked) {
-                    if (allItemsChecked) {
-                        // 모든 아이템이 체크되어 있다면 아이템도 함께 체크 해제
-                        if (item.storeName === storeName) {
-                            return { ...item, isChecked };
-                        }
-                    } else {
-                        // 그렇지 않다면 아이템 상태 유지
-                        return item;
-                    }
-                } else {
-                    // 스토어가 체크되는 경우 아이템 상태 변경
-                    if (item.storeName === storeName) {
-                        return { ...item, isChecked };
-                    }
-                }
-                return item;
-            });
-        });
-    };
+    const stores = cartList.reduce((acc, item) => {
+        acc[item.storeName] = acc[item.storeName] || [];
+        acc[item.storeName].push(item);
+        return acc;
+    }, {});
+
+    const totalAmount = cartList.reduce(
+        (acc, item) => acc + item.price * item.quantity,
+        0
+    );
 
     return (
         <CartList>
