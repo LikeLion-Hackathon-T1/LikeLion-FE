@@ -29,7 +29,7 @@ const QrScanPage = () => {
 
                         syluvAxios
                             .post(`/home/${storeId}/qrvisit`)
-                            .then.catch.finally(() => {
+                            .finally(() => {
                                 navigate(`/market/${marketId}/${storeId}`);
                             });
                     }
