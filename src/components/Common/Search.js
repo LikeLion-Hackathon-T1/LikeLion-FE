@@ -8,6 +8,22 @@ const Search = ({ marketList }) => {
     const navigate = useNavigate();
     const [searchInput, setSearchInput] = useState("");
 
+    const getHighlightedText = (text, highlight) => {
+        const highlightIndex = Hangul.search(text, highlight);
+        if (highlightIndex === -1) return text;
+
+        const startIndex = highlightIndex;
+        const endIndex = highlightIndex + highlight.length;
+
+        return (
+            <>
+                {text.substring(0, startIndex)}
+                <Highlight>{text.substring(startIndex, endIndex)}</Highlight>
+                {text.substring(endIndex)}
+            </>
+        );
+    };
+
     const filteredMarkets = marketList.filter(
         (market) => Hangul.search(market.marketName, searchInput) >= 0
     );
@@ -24,7 +40,7 @@ const Search = ({ marketList }) => {
                 }
             }
         },
-        [filteredMarkets]
+        [filteredMarkets, navigate]
     );
 
     return (
@@ -41,14 +57,17 @@ const Search = ({ marketList }) => {
                     <div>
                         {filteredMarkets.length > 0 ? (
                             filteredMarkets.map((market, index) => (
-                                <span
+                                <SearchResult
                                     key={index}
                                     onClick={() => {
                                         navigate(`/market/${market.marketId}`);
                                     }}
                                 >
-                                    {market.marketName}
-                                </span>
+                                    {getHighlightedText(
+                                        market.marketName,
+                                        searchInput
+                                    )}
+                                </SearchResult>
                             ))
                         ) : (
                             <NoResults>검색 결과가 없습니다.</NoResults>
@@ -111,15 +130,6 @@ const Container = styled.div`
             flex-direction: column;
             gap: 10px;
             margin-bottom: 10px;
-
-            span {
-                padding: 0 14px;
-                padding-top: 10px;
-                font-size: 16px;
-                color: ${({ theme }) => theme.color.gray500};
-                font-weight: ${({ theme }) => theme.fontWeight.regular};
-                border-top: 1px solid ${({ theme }) => theme.color.gray100};
-            }
         }
     }
 `;
@@ -140,6 +150,16 @@ const SearchInput = styled.input`
     }
 `;
 
+const SearchResult = styled.span`
+    padding: 0 14px;
+    padding-top: 10px;
+    font-size: 16px;
+    color: ${({ theme }) => theme.color.gray500};
+    font-weight: ${({ theme }) => theme.fontWeight.regular};
+    border-top: 1px solid ${({ theme }) => theme.color.gray100};
+    cursor: pointer;
+`;
+
 const NoResults = styled.span`
     padding: 0 14px;
     padding-top: 10px;
@@ -147,4 +167,8 @@ const NoResults = styled.span`
     color: ${({ theme }) => theme.color.gray500};
     font-weight: ${({ theme }) => theme.fontWeight.regular};
     border-top: 1px solid ${({ theme }) => theme.color.gray100};
+`;
+
+const Highlight = styled.span`
+    color: ${({ theme }) => theme.color.primary};
 `;
