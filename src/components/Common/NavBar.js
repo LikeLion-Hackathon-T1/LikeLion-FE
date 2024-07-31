@@ -2,9 +2,15 @@ import React from "react";
 import styled from "styled-components";
 import { ReactComponent as DotIcon } from "assets/images/dot.svg";
 
-const NavBar = ({ items, selected, handleSelected, num = 0 }) => {
+const NavBar = ({
+    items,
+    selected,
+    handleSelected,
+    num = 0,
+    margin = true,
+}) => {
     return (
-        <NavBarContainer>
+        <NavBarContainer className={`${margin ? margin : ""}`}>
             {items.map((item, index) => (
                 <NavItem
                     key={index}
@@ -21,11 +27,15 @@ const NavBar = ({ items, selected, handleSelected, num = 0 }) => {
 
 const NavBarContainer = styled.div`
     margin-top: 16px;
-    margin-bottom: 29px;
+
     display: flex;
     justify-content: center;
     height: 36px;
     border-bottom: ${({ theme }) => `1px solid ${theme.color.gray100}`};
+
+    .margin {
+        margin-bottom: 29px;
+    }
 `;
 
 const NavItem = styled.div`
