@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Header from "components/Common/Header";
 import NavBar from "components/Common/NavBar";
 import MarketTab from "components/Market/MarketTab";
@@ -22,9 +22,13 @@ const MarketPage = () => {
 
     const [listChanged, setListChanged] = useState(false);
 
-    const onListChange = () => {
-        setListChanged(!listChanged);
+    const isEmptyObject = (obj) => {
+        return Object.keys(obj).length === 0;
     };
+
+    const onListChange = useCallback(() => {
+        setListChanged(!listChanged);
+    }, [listChanged]);
 
     const { isLoading, data, isError, error } = useQuery({
         queryKey: ["get-markets"],
@@ -48,7 +52,7 @@ const MarketPage = () => {
         syluvAxios
             .get("/market/visitlist/today")
             .then((res) => {
-                if (res.data.payload.length === undefined) {
+                if (isEmptyObject(res.data.payload)) {
                     setVisitNum(0);
                     return;
                 } else {
