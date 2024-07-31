@@ -7,7 +7,7 @@ const VisitList = ({ visitList }) => {
     const handleOpenModal = (id) => {
         setOpenedModal(id);
     };
-    console.log(visitList);
+
     return (
         <ListContainer>
             {visitList.map((item, index) => (

@@ -25,7 +25,6 @@ const VisitTab = ({ visitList, onChange = () => {} }) => {
                     syluvAxios.delete(`/market/${id}/visitlist/delete`)
                 )
             );
-            console.log("방문 리스트 삭제 성공");
 
             setSelectedList([]);
             onChange(selectedList);

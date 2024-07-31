@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { ReactComponent as Time } from "assets/images/visit_time.svg";
 import { ReactComponent as Time2 } from "assets/images/visit_time2.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "components/Common/Button";
 
 const VisitItem = ({
@@ -11,12 +11,36 @@ const VisitItem = ({
     openId,
     handleOpenModal = () => {},
 }) => {
+    const [status, setStatus] = useState(null);
+    const [style, setStyle] = useState(true);
+    console.log(item);
     const onCompleteClick = () => {
         handleOpenModal(null);
     };
     const onCancelClick = () => {
         handleOpenModal(null);
     };
+    useEffect(() => {
+        switch (item.status) {
+            case "BEFORE":
+                setStatus("방문 전");
+                break;
+            case "PREPARING":
+                setStatus("준비 중");
+                setStyle(true);
+                break;
+            case "PREPARED":
+                setStatus("준비 완료");
+                setStyle(true);
+                break;
+            case "VISITED":
+                setStatus("방문 완료");
+                break;
+            default:
+                setStatus("Unknown status");
+                break;
+        }
+    }, []);
     return (
         <>
             <ListItem
@@ -36,17 +60,23 @@ const VisitItem = ({
                             alt="store"
                         />
                         <div className="store-info">
-                            <di className="store-header">
-                                <span>분식</span>
-                                <span className="store-name">{item.store}</span>
-                            </di>
-                            <div className="time">
-                                <Time />
-                                <span>11:21</span>
+                            <div>
+                                <div className="store-header">
+                                    <span>분식</span>
+                                    <span className="store-name">
+                                        {item.store}
+                                    </span>
+                                </div>
+                            </div>
+                            <div className={`status ${style ? "color" : ""}`}>
+                                {status}
                             </div>
                         </div>
                     </div>
-                    <div className="status">{item.status}</div>
+                    <div className="time">
+                        {style ? <Time2 /> : <Time />}
+                        <span className={`${style ? "color" : ""}`}>11:21</span>
+                    </div>
                 </Wrapper>
             </ListItem>
             {openId === index && (
@@ -217,5 +247,9 @@ const Wrapper = styled.div`
         font-size: 12px;
         color: ${({ theme }) => theme.color.gray300};
         font-weight: ${({ theme }) => theme.fontWeight.medium};
+    }
+
+    .color {
+        color: ${({ theme }) => theme.color.primary};
     }
 `;

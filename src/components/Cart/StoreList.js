@@ -11,8 +11,6 @@ const StoreList = ({ cartList, setCartList, isLoading }) => {
     const syluvAxios = useSyluvAxios();
     const navigate = useNavigate();
 
-    console.log(cartList);
-
     const toggleStoreCheck = useCallback(
         (storeName, isChecked) => {
             setCartList((prevCartList) => {

@@ -47,9 +47,10 @@ const MarketTab = ({
 
     const handleCategory = (category) => {
         setSearchInfo({
-            ...searchInfo,
+            search: "",
             category: category,
         });
+        setSearchInput("");
     };
 
     return (

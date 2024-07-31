@@ -7,23 +7,30 @@ import useSyluvAxios from "hooks/useSyluvAxios";
 import HotMarketList from "components/Home/HotMarketList";
 import LatestMarketList from "components/Home/LatestMarketList";
 import Search from "components/Common/Search";
+import useTokenStore from "hooks/useTokenStore";
 
 const HomePage = () => {
+    const { getName } = useTokenStore();
     const syluvAxios = useSyluvAxios();
-
+    const username = getName();
+    const [allMarkets, setAllMarkets] = useState([]);
     const [latestMarkets, setLatestMarkets] = useState([]);
     const [hotMarkets, setHotMarkets] = useState([]);
 
     useEffect(() => {
-        syluvAxios.get("/home/search").then((res) => {
-            console.log(res);
+        syluvAxios.get("/home").then((res) => {
+            if (res) {
+                setLatestMarkets(res.data?.payload.visitListHomeList);
+                setHotMarkets(res.data?.payload.hotListHomeList);
+                console.log(res.data.payload);
+            }
         });
     }, []);
 
     useEffect(() => {
-        syluvAxios.get("/home").then((res) => {
-            setLatestMarkets(res.data?.payload.visitListHomeList);
-            setHotMarkets(res.data?.payload.hotListHomeList);
+        syluvAxios.get("/home/search").then((res) => {
+            setAllMarkets(res.data.payload);
+            console.log(res.data.payload);
         });
     }, []);
 
@@ -31,8 +38,8 @@ const HomePage = () => {
         <>
             <Header title="" back={false} logo={true} />
             <Wrapper>
-                <Search />
-                <NearbyMarket />
+                <Search marketList={allMarkets} />
+                <NearbyMarket username={username} />
                 {latestMarkets.length > 0 && (
                     <LatestMarketList latestMarkets={latestMarkets} />
                 )}

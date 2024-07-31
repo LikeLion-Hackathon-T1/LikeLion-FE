@@ -58,10 +58,10 @@ const OauthCallback = () => {
             setAccessToken(syluvData.accessToken);
             setRefreshToken(syluvData.refreshToken);
             setName(syluvData.nickname);
-            if (syluvData.existYn === false) {
+            if (syluvData.existYn === true) {
                 setIsFirstLogin(true);
             } else {
-                // navigate("/", { replace: true });
+                navigate("/", { replace: true });
             }
         } catch (error) {
             setIsError(true);
