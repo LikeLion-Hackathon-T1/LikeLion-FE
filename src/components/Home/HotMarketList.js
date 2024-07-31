@@ -7,7 +7,7 @@ import "swiper/css/navigation";
 const HotMarketList = ({ hotMarkets }) => {
     return (
         <MarketWrapper>
-            <span className="text-title  mt">요즘 핫한 시장</span>
+            <span className="text-title mt">요즘 핫한 시장</span>
             <StyledSwiper slidesPerView={2} spaceBetween={20}>
                 {hotMarkets.map((market, index) => (
                     <SwiperSlide key={index}>
@@ -29,10 +29,6 @@ const MarketWrapper = styled.div`
     margin-top: 44px;
     gap: 20px;
     width: 100%;
-
-    .mt {
-        margin-top: 12px;
-    }
 
     .text-title {
         font-size: 20px;

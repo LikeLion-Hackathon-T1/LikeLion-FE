@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 const TabBar = ({ activeTab }) => {
     const navigate = useNavigate();
     const handleTabClick = (tab) => {
-        navigate(`/${tab}`);
+        navigate(`/${tab}`, { replace: true });
     };
     return (
         <>
@@ -99,7 +99,7 @@ const TabBar = ({ activeTab }) => {
 export default TabBar;
 
 const Spacer = styled.div`
-    height: 72px;
+    height: 80px;
     width: 1px;
 `;
 
@@ -111,6 +111,7 @@ const Container = styled.div`
     height: 72px;
     background-color: white;
     box-shadow: 0px -2px 4px rgba(0, 0, 0, 0.05);
+    margin-bottom: 8px;
     .wrapper {
         position: relative;
         padding: 0 40px;

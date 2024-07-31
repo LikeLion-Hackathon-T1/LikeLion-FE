@@ -1,15 +1,17 @@
 import styled from "styled-components";
 import Store from "./Store";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import useSyluvAxios from "hooks/useSyluvAxios";
 import { useNavigate } from "react-router-dom";
-import { ReactComponent as NoItem } from "assets/images/no-item.svg";
-import Button from "components/Common/Button";
+import noItem from "assets/images/no-cart.png";
 import Splash from "components/Common/Splash";
+import Toast from "components/Common/Toast";
 
 const StoreList = ({ cartList, setCartList, isLoading }) => {
     const syluvAxios = useSyluvAxios();
     const navigate = useNavigate();
+    const [selectedStore, setSelectedStore] = useState(null);
+    const [toastMessage, setToastMessage] = useState("");
 
     const toggleStoreCheck = useCallback(
         (storeName, isChecked) => {
@@ -40,6 +42,9 @@ const StoreList = ({ cartList, setCartList, isLoading }) => {
                     return item;
                 });
             });
+
+            // 체크된 스토어 업데이트
+            setSelectedStore(isChecked ? storeName : null);
         },
         [setCartList]
     );
@@ -78,10 +83,26 @@ const StoreList = ({ cartList, setCartList, isLoading }) => {
         return acc;
     }, {});
 
-    const totalAmount = cartList.reduce(
+    const selectedItems = cartList.filter((item) => item.isChecked);
+    const totalAmount = selectedItems.reduce(
         (acc, item) => acc + item.price * item.quantity,
         0
     );
+
+    const handleOrder = () => {
+        const selectedStores = [
+            ...new Set(selectedItems.map((item) => item.storeName)),
+        ];
+        if (selectedStores.length > 1) {
+            setToastMessage("한 번에 한 가게만 주문할 수 있어요");
+        } else {
+            navigate("/order");
+        }
+    };
+
+    const closeToast = () => {
+        setToastMessage("");
+    };
 
     return (
         <CartList>
@@ -97,35 +118,45 @@ const StoreList = ({ cartList, setCartList, isLoading }) => {
                 ))
             ) : (
                 <NoItemContainer>
-                    <NoItem />
-                    <Button
-                        onClick={() => navigate("/")}
-                        type="2"
-                        text="유도문구 뭐하지"
-                    />
+                    <span className="title-text">장바구니가 비어있어요</span>
+                    <img src={noItem} alt="no-item" width={158} height={158} />
+                    <span className="sub-text">
+                        시장을 구경하고
+                        <br />
+                        장바구니를 채워주세요
+                    </span>
                 </NoItemContainer>
             )}
-            {Object.keys(stores).length > 0 && (
-                <OrderButton onClick={() => navigate("/order")}>
-                    {new Intl.NumberFormat("ko-KR").format(totalAmount)}원
+            <ButtonContainer>
+                <OrderButton onClick={handleOrder} disabled={totalAmount === 0}>
+                    {totalAmount > 0
+                        ? `${new Intl.NumberFormat("ko-KR").format(
+                              totalAmount
+                          )}원 `
+                        : null}
                     주문하기
                 </OrderButton>
+            </ButtonContainer>
+            {toastMessage && (
+                <Toast
+                    message={toastMessage}
+                    message2="먼저 주문할 가게만 선택해주세요"
+                    onClose={closeToast}
+                />
             )}
         </CartList>
     );
 };
 
-const CartList = styled.div`
-    margin-top: 7px;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    margin-bottom: 72px;
+const ButtonContainer = styled.div`
+    position: fixed;
+    bottom: 0px;
+    padding: 20px 0px;
+    background-color: white;
+    border-top: 1px solid ${({ theme }) => theme.color.gray100};
 `;
 
 const OrderButton = styled.button`
-    position: fixed;
-    bottom: 12px;
     width: 440px;
     height: 48px;
     margin: 0px 20px;
@@ -138,8 +169,21 @@ const OrderButton = styled.button`
     cursor: pointer;
 
     @media (max-width: 480px) {
-        width: calc(100% - 40px);
+        width: calc(100dvw - 40px);
     }
+
+    &:disabled {
+        background-color: ${({ theme }) => theme.color.gray300};
+        cursor: default;
+    }
+`;
+
+const CartList = styled.div`
+    margin-top: 7px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin-bottom: 88px;
 `;
 
 const NoItemContainer = styled.div`
@@ -152,6 +196,18 @@ const NoItemContainer = styled.div`
     gap: 43px;
 
     height: calc(100dvh - 140px);
+
+    .title-text {
+        font-size: 20px;
+        font-weight: ${({ theme }) => theme.fontWeight.semiBold};
+    }
+
+    .sub-text {
+        font-size: 18px;
+        font-weight: ${({ theme }) => theme.fontWeight.medium};
+        text-align: center;
+        color: ${({ theme }) => theme.color.gray600};
+    }
 `;
 
 export default StoreList;

@@ -13,7 +13,10 @@ const Splash = () => {
 export default Splash;
 
 const Wrapper = styled.div`
-    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 5000;
+    width: 480px;
     height: 100dvh;
 
     background-color: ${({ theme }) => theme.color.primary};
@@ -30,5 +33,9 @@ const Wrapper = styled.div`
         font-size: 24px;
         font-weight: ${({ theme }) => theme.fontWeight.bold};
         color: white;
+    }
+
+    @media (max-width: 480px) {
+        width: 100%;
     }
 `;

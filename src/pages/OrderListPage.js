@@ -3,15 +3,13 @@ import styled from "styled-components";
 import { ReactComponent as NoItem } from "assets/images/no-item.svg";
 import Button from "components/Common/Button";
 import { useNavigate } from "react-router-dom";
+import OrderItem from "components/OrderList/OrderItem";
+import TabBar from "components/Common/TabBar";
 
 const OrderListPage = () => {
     const navigate = useNavigate();
     const orderList = null;
-    return orderList === null ? (
-        <Container>
-            <Header title="주문내역" />
-        </Container>
-    ) : (
+    return orderList !== null ? (
         <>
             <Header title="주문내역" />
             <NoItemContainer>
@@ -22,21 +20,26 @@ const OrderListPage = () => {
                     text="유도문구 뭐하지"
                 />
             </NoItemContainer>
+            <TabBar activeTab={"orderlist"} />
+        </>
+    ) : (
+        <>
+            <Header title="주문내역" back={false} />
+            <OrderList>
+                <OrderItem />
+                <OrderItem />
+            </OrderList>
+            <TabBar activeTab={"orderlist"} />
         </>
     );
 };
 
-const Container = styled.div`
+const OrderList = styled.div`
     display: flex;
-    min-height: 100dvh;
     flex-direction: column;
-    align-items: center;
-    overflow-y: auto;
-    &::-webkit-scrollbar {
-        display: none;
-    }
-    -ms-overflow-style: none; // IE 및 Edge
-    scrollbar-width: none; // Firefox
+    gap: 6px;
+    width: 100%;
+    background-color: ${({ theme }) => theme.color.gray100};
 `;
 
 const NoItemContainer = styled.div`

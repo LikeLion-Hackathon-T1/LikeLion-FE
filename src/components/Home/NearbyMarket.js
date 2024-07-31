@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import useSyluvAxios from "hooks/useSyluvAxios";
 import { useCallback, useEffect, useState } from "react";
 import { useGeoLocation } from "hooks/useGeoLocation";
-import Splash from "components/Common/Splash";
 
 const geolocationOptions = {
     enableHighAccuracy: true,
@@ -16,7 +15,7 @@ const NearbyMarket = ({ username }) => {
     const navigate = useNavigate();
     const syluvAxios = useSyluvAxios();
     const { location, error } = useGeoLocation(geolocationOptions);
-    const [nearMarket, setNearMarket] = useState("...");
+    const [nearMarket, setNearMarket] = useState("");
 
     const getLocation = useCallback(() => {
         syluvAxios
@@ -40,16 +39,18 @@ const NearbyMarket = ({ username }) => {
     return (
         <Container>
             <span className="title">
-                {username}님과
+                {username ? username : "시럽"}님과
                 <br />
                 지금 가까운 시장은?
             </span>
             <div
                 className="location"
-                onClick={() => navigate(`/market/${nearMarket.marketId}`)}
+                onClick={() =>
+                    navigate(`/market/${nearMarket ? nearMarket.marketId : 1}`)
+                }
             >
                 <Location />
-                <span>{nearMarket.marketName}</span>
+                <span>{nearMarket ? nearMarket.marketName : "광장시장"}</span>
             </div>
         </Container>
     );
