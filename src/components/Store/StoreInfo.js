@@ -4,13 +4,11 @@ import { ReactComponent as BackIcon } from "assets/images/back.svg";
 import { ReactComponent as CallIcon } from "assets/images/call.svg";
 import { ReactComponent as AddressIcon } from "assets/images/address.svg";
 import { ReactComponent as TimeIcon } from "assets/images/time.svg";
-import { ReactComponent as HomeIcon } from "assets/images/newhome.svg"; // 추가
-import { ReactComponent as CartIcon } from "assets/images/marketbag.svg"; // 추가
+import cartIcon from "assets/images/marketbag.svg";
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import useImageAnalysis from "../../hooks/Colors"; // 올바른 경로로 수정
 
 const StoreInfo = ({
   name,
@@ -25,7 +23,6 @@ const StoreInfo = ({
   const navigate = useNavigate();
   const images = [storeImage];
   const [currentSlide, setCurrentSlide] = useState(0);
-  const isDarkImage = useImageAnalysis(storeImage);
 
   const settings = {
     dots: false,
@@ -51,13 +48,10 @@ const StoreInfo = ({
           ))}
         </Slider>
         <BackButton onClick={() => navigate(-1)}>
-          <BackIcon style={{ color: isDarkImage ? "white" : "black" }} />
+          <BackIcon />
         </BackButton>
-        <HomeButton onClick={() => navigate("/")}>
-          <HomeIcon style={{ color: isDarkImage ? "white" : "black" }} />
-        </HomeButton>
         <CartButton>
-          <CartIcon style={{ color: isDarkImage ? "white" : "black" }} />
+          <img src={cartIcon} alt="cart" />
         </CartButton>
         {images.length > 1 && (
           <ImageCounter>
@@ -67,7 +61,7 @@ const StoreInfo = ({
       </ImageContainer>
       <InfoContainer>
         <SubTitle>{category}</SubTitle>
-        <Title>{name}</Title>
+        <Title>={name}</Title>
         <Rating>
           <StarRatings>
             <StarRatingsFill
@@ -130,7 +124,6 @@ const HeaderImage = styled.img`
   height: auto;
   display: block;
   margin: 0;
-  height: 272px;
 `;
 
 const BackButton = styled.div`
@@ -145,14 +138,6 @@ const CartButton = styled.div`
   position: absolute;
   top: 16px;
   right: 20px;
-  cursor: pointer;
-  padding: 8px;
-`;
-
-const HomeButton = styled.div`
-  position: absolute;
-  top: 16px;
-  right: calc(20px + 32px + 12px);
   cursor: pointer;
   padding: 8px;
 `;

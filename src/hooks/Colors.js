@@ -27,7 +27,7 @@ const useImageAnalysis = (imageSrc) => {
           count++;
         }
         const avgBrightness = totalBrightness / count;
-        setIsDarkImage(avgBrightness < 250);
+        setIsDarkImage(avgBrightness < 190);
       } catch (error) {
         console.error("Failed to get image data: ", error);
       }

@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { useParams, useNavigate } from "react-router-dom";
 import menuImage from "../../assets/images/gimbap1.png";
 import { ReactComponent as BackIcon } from "assets/images/back.svg";
-import cartIcon from "../../assets/images/marketbag.svg";
-import HomeIcon from "../../assets/images/newhome.svg";
+import cartIcon from "assets/images/marketbag.svg";
+import { ReactComponent as HomeIcon } from "assets/images/newhome.svg";
 import useSyluvAxios from "hooks/useSyluvAxios";
 
 const Container = styled.div`
@@ -15,7 +15,7 @@ const Container = styled.div`
 
 const ImageContainer = styled.div`
   width: 100%;
-  height: 272px;
+  height: 182px;
   overflow: hidden;
   margin-bottom: 14px;
   position: relative;
@@ -35,20 +35,20 @@ const BackButton = styled.div`
   padding: 8px;
 `;
 
+const HomeButton = styled.div`
+  position: absolute;
+  top: 16px;
+  right: calc(20+12+32) px;
+  cursor: pointer;
+  padding: 8px;
+`;
+
 const CartButton = styled.div`
   position: absolute;
   top: 16px;
   right: 20px;
   cursor: pointer;
   padding: 8px;
-`;
-
-const HomeButton = styled.div`
-  position: absolute;
-  top: 16px;
-  right: calc(20px + 32px + 12px);
-  padding: 8px;
-  cursor: pointer;
 `;
 
 const Title = styled.h1`
@@ -150,12 +150,12 @@ const MenuItemDetail = ({ menu, onClick = () => {} }) => {
         <BackButton onClick={() => navigate(-1)}>
           <BackIcon />
         </BackButton>
+        <HomeButton onClick={() => navigate(-1)}>
+          <HomeIcon />
+        </HomeButton>
         <CartButton>
           <img src={cartIcon} alt="cart" />
         </CartButton>
-        <HomeButton>
-          <img src={HomeIcon} alt="home" />
-        </HomeButton>
         <Image src={menu.menuImage} alt={menu.name} />
       </ImageContainer>
       <Title>{menu.name}</Title>
