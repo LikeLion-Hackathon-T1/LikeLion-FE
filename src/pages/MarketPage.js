@@ -12,7 +12,7 @@ import styled from "styled-components";
 const MarketPage = () => {
     const items = ["홈", "방문"];
     const [selectedNav, setSelectedNav] = useState(items[0]);
-    const [visitList, setVisitList] = useState(null);
+    const [visitList, setVisitList] = useState([]);
     const { marketId } = useParams();
     const [visitNum, setVisitNum] = useState(0);
 
@@ -48,11 +48,16 @@ const MarketPage = () => {
         syluvAxios
             .get("/market/visitlist/today")
             .then((res) => {
-                const dates = Object.keys(res.data.payload);
-                setVisitList(res.data.payload[dates[0]]);
-                const num = res.data.payload[dates[0]].length;
-                setVisitNum(num);
-                console.log(res.data.payload[dates[0]]);
+                if (res.data.payload.length === undefined) {
+                    setVisitNum(0);
+                    return;
+                } else {
+                    const dates = Object.keys(res.data.payload);
+                    setVisitList(res.data.payload[dates[0]]);
+                    const num = res.data.payload[dates[0]].length;
+                    setVisitNum(num);
+                    console.log(res.data.payload[dates[0]]);
+                }
             })
             .catch((error) => {
                 console.error(
@@ -98,5 +103,5 @@ const MarketPage = () => {
 export default MarketPage;
 
 const Wrapper = styled.div`
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 `;
