@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 const TabBar = ({ activeTab }) => {
     const navigate = useNavigate();
     const handleTabClick = (tab) => {
-        navigate(`/${tab}`);
+        navigate(`/${tab}`, { replace: true });
     };
     return (
         <>

@@ -24,7 +24,7 @@ const OrderListPage = () => {
         </>
     ) : (
         <>
-            <Header title="주문내역" />
+            <Header title="주문내역" back={false} />
             <OrderList>
                 <OrderItem />
                 <OrderItem />
