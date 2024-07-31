@@ -20,6 +20,8 @@ import ReviewPage from "pages/ReviewPage";
 import VisitListPage from "pages/VisitListPage";
 import OrderSuccess from "pages/OrderSuccess";
 import MyPage from "pages/MyPage";
+import OwnerPage from "owner/pages/OwnerPage";
+import OwnerDetailPage from "owner/pages/OwnerDetailPage";
 const App = () => {
     useEffect(() => {
         if (window.location.host === "syluv.store") {
@@ -81,6 +83,14 @@ const App = () => {
                                 <Route
                                     path="/oauth/kakao/callback"
                                     element={<OauthCallback />}
+                                />
+                                <Route
+                                    path="/owner/:storeId"
+                                    element={<OwnerPage />}
+                                />
+                                <Route
+                                    path="/owner/:storeId/:orderId"
+                                    element={<OwnerDetailPage />}
                                 />
                             </Routes>
                         </BrowserRouter>
