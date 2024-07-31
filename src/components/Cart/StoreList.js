@@ -1,14 +1,17 @@
 import styled from "styled-components";
 import Store from "./Store";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import useSyluvAxios from "hooks/useSyluvAxios";
 import { useNavigate } from "react-router-dom";
 import noItem from "assets/images/no-cart.png";
 import Splash from "components/Common/Splash";
+import Toast from "components/Common/Toast";
 
 const StoreList = ({ cartList, setCartList, isLoading }) => {
     const syluvAxios = useSyluvAxios();
     const navigate = useNavigate();
+    const [selectedStore, setSelectedStore] = useState(null);
+    const [toastMessage, setToastMessage] = useState("");
 
     const toggleStoreCheck = useCallback(
         (storeName, isChecked) => {
@@ -39,6 +42,9 @@ const StoreList = ({ cartList, setCartList, isLoading }) => {
                     return item;
                 });
             });
+
+            // 체크된 스토어 업데이트
+            setSelectedStore(isChecked ? storeName : null);
         },
         [setCartList]
     );
@@ -77,10 +83,26 @@ const StoreList = ({ cartList, setCartList, isLoading }) => {
         return acc;
     }, {});
 
-    const totalAmount = cartList.reduce(
+    const selectedItems = cartList.filter((item) => item.isChecked);
+    const totalAmount = selectedItems.reduce(
         (acc, item) => acc + item.price * item.quantity,
         0
     );
+
+    const handleOrder = () => {
+        const selectedStores = [
+            ...new Set(selectedItems.map((item) => item.storeName)),
+        ];
+        if (selectedStores.length > 1) {
+            setToastMessage("한 번에 한 가게만 주문할 수 있어요");
+        } else {
+            navigate("/order");
+        }
+    };
+
+    const closeToast = () => {
+        setToastMessage("");
+    };
 
     return (
         <CartList>
@@ -106,10 +128,7 @@ const StoreList = ({ cartList, setCartList, isLoading }) => {
                 </NoItemContainer>
             )}
             <ButtonContainer>
-                <OrderButton
-                    onClick={() => navigate("/order")}
-                    disabled={totalAmount === 0}
-                >
+                <OrderButton onClick={handleOrder} disabled={totalAmount === 0}>
                     {totalAmount > 0
                         ? `${new Intl.NumberFormat("ko-KR").format(
                               totalAmount
@@ -118,6 +137,13 @@ const StoreList = ({ cartList, setCartList, isLoading }) => {
                     주문하기
                 </OrderButton>
             </ButtonContainer>
+            {toastMessage && (
+                <Toast
+                    message={toastMessage}
+                    message2="먼저 주문할 가게만 선택해주세요"
+                    onClose={closeToast}
+                />
+            )}
         </CartList>
     );
 };
@@ -143,7 +169,7 @@ const OrderButton = styled.button`
     cursor: pointer;
 
     @media (max-width: 480px) {
-        width: calc(100% - 40px);
+        width: calc(100dvw - 40px);
     }
 
     &:disabled {
@@ -157,7 +183,7 @@ const CartList = styled.div`
     display: flex;
     flex-direction: column;
     position: relative;
-    margin-bottom: 72px;
+    margin-bottom: 88px;
 `;
 
 const NoItemContainer = styled.div`
