@@ -205,7 +205,7 @@ const ResponseText = styled.div`
   color: ${({ theme }) => theme.color.gray800};
 `;
 
-const ReviewItem = ({ review, onDelete }) => {
+const ReviewItem = ({ review, onDelete, userId }) => {
   const [helpfulness, setHelpfulness] = useState(review.likeCount);
   const [isHelpfulClicked, setIsHelpfulClicked] = useState(
     review.isHelpfulClicked || false
@@ -218,7 +218,8 @@ const ReviewItem = ({ review, onDelete }) => {
   });
 
   const handleHelpfulnessClick = async () => {
-    if (!isHelpfulClicked) {
+    if (!isHelpfulClicked && userId !== review.userId) {
+      console.log("Attempting to like the review..."); // console.log 추가
       try {
         const response = await fetch(`/review/${review.reviewId}/like`, {
           method: "POST",
@@ -227,6 +228,7 @@ const ReviewItem = ({ review, onDelete }) => {
           },
         });
         const result = await response.json();
+        console.log("API response:", result); // console.log 추가
         if (result.result.code === 0) {
           setHelpfulness(
             (prevHelpfulness) => parseInt(prevHelpfulness, 10) + 1
@@ -277,7 +279,9 @@ const ReviewItem = ({ review, onDelete }) => {
             </StarsAndTime>
           </div>
         </UserInfo>
-        <DeleteButton onClick={handleDelete}>삭제하기</DeleteButton>
+        {userId === review.userId && (
+          <DeleteButton onClick={handleDelete}>삭제하기</DeleteButton>
+        )}
       </Header>
       {Array.isArray(review.image) && review.image.length === 1 ? (
         <ReviewImageContainerSingle>
