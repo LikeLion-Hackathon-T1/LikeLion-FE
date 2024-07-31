@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { ReactComponent as BackIcon } from "assets/images/back.svg";
 import { ReactComponent as CallIcon } from "assets/images/call.svg";
 import { ReactComponent as AddressIcon } from "assets/images/address.svg";
 import { ReactComponent as TimeIcon } from "assets/images/time.svg";
-import cartIcon from "assets/images/marketbag.svg";
+import { ReactComponent as BackIcon } from "assets/images/back.svg";
+import { ReactComponent as CartIcon } from "assets/images/marketbag.svg";
+import { ReactComponent as HomeIcon } from "assets/images/newhome.svg";
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -50,8 +51,11 @@ const StoreInfo = ({
         <BackButton onClick={() => navigate(-1)}>
           <BackIcon />
         </BackButton>
-        <CartButton>
-          <img src={cartIcon} alt="cart" />
+        <HomeButton onClick={() => navigate("/")}>
+          <HomeIcon />
+        </HomeButton>
+        <CartButton onClick={() => navigate("/")}>
+          <CartIcon />
         </CartButton>
         {images.length > 1 && (
           <ImageCounter>
@@ -61,7 +65,7 @@ const StoreInfo = ({
       </ImageContainer>
       <InfoContainer>
         <SubTitle>{category}</SubTitle>
-        <Title>={name}</Title>
+        <Title>{name}</Title>
         <Rating>
           <StarRatings>
             <StarRatingsFill
@@ -104,7 +108,7 @@ const StoreInfo = ({
 };
 
 const Container = styled.div`
-  padding: 0 0px;
+  padding: 0;
   display: flex;
   flex-direction: column;
   background-color: white;
@@ -130,6 +134,14 @@ const BackButton = styled.div`
   position: absolute;
   top: 16px;
   left: 16px;
+  cursor: pointer;
+  padding: 8px;
+`;
+
+const HomeButton = styled.div`
+  position: absolute;
+  top: 16px;
+  right: calc(20px + 32px + 12px);
   cursor: pointer;
   padding: 8px;
 `;

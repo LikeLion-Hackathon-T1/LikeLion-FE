@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { useParams, useNavigate } from "react-router-dom";
-import menuImage from "../../assets/images/gimbap1.png";
+import { useNavigate } from "react-router-dom";
 import { ReactComponent as BackIcon } from "assets/images/back.svg";
-import cartIcon from "assets/images/marketbag.svg";
+import { ReactComponent as CartIcon } from "assets/images/marketbag.svg";
 import { ReactComponent as HomeIcon } from "assets/images/newhome.svg";
-import useSyluvAxios from "hooks/useSyluvAxios";
+import CartItem from "components/Cart/CartItem";
 
 const Container = styled.div`
   font-family: "Pretendard", sans-serif;
@@ -38,7 +37,7 @@ const BackButton = styled.div`
 const HomeButton = styled.div`
   position: absolute;
   top: 16px;
-  right: calc(20+12+32) px;
+  right: calc(20px + 32px + 12px);
   cursor: pointer;
   padding: 8px;
 `;
@@ -127,7 +126,6 @@ const AddToCartButton = styled.button`
 
 const MenuItemDetail = ({ menu, onClick = () => {} }) => {
   const navigate = useNavigate();
-  const [menuItem, setMenuItem] = useState(null);
   const [quantity, setQuantity] = useState(1);
 
   const handleIncrease = () => {
@@ -140,9 +138,9 @@ const MenuItemDetail = ({ menu, onClick = () => {} }) => {
     }
   };
 
-  const onPutClick = () => {
-    onClick(null);
-  };
+  if (!menu) {
+    return <div>Loading...</div>; // Handle loading state or return null
+  }
 
   return (
     <Container>
@@ -150,11 +148,11 @@ const MenuItemDetail = ({ menu, onClick = () => {} }) => {
         <BackButton onClick={() => navigate(-1)}>
           <BackIcon />
         </BackButton>
-        <HomeButton onClick={() => navigate(-1)}>
+        <HomeButton onClick={() => navigate("/")}>
           <HomeIcon />
         </HomeButton>
-        <CartButton>
-          <img src={cartIcon} alt="cart" />
+        <CartButton onClick={() => navigate("/")}>
+          <CartIcon />
         </CartButton>
         <Image src={menu.menuImage} alt={menu.name} />
       </ImageContainer>
