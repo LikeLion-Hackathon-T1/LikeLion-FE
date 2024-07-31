@@ -1,9 +1,16 @@
 import styled from "styled-components";
 import star from "assets/images/star-fill.png";
+import { useNavigate } from "react-router-dom";
 
 const HotMarket = ({ market }) => {
+    const navigate = useNavigate();
     return (
-        <Wrapper className="body">
+        <Wrapper
+            className="body"
+            onClick={() => {
+                navigate(`/market/${market.marketId}`);
+            }}
+        >
             <img
                 className="market-image"
                 src="https://via.placeholder.com/150"

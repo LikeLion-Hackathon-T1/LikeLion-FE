@@ -40,7 +40,7 @@ const HomePage = () => {
                 <Search marketList={allMarkets} />
                 <NearbyMarket username={username} />
                 <HotMarketList hotMarkets={hotMarkets} />
-                {latestMarkets.length < 0 ? (
+                {latestMarkets.length > 0 ? (
                     <LatestMarketList latestMarkets={latestMarkets} />
                 ) : (
                     <NoItem>

@@ -105,31 +105,32 @@ const StoreList = ({ cartList, setCartList, isLoading }) => {
                     </span>
                 </NoItemContainer>
             )}
-
-            <OrderButton
-                onClick={() => navigate("/order")}
-                disabled={totalAmount === 0}
-            >
-                {totalAmount > 0
-                    ? `${new Intl.NumberFormat("ko-KR").format(totalAmount)}원 `
-                    : null}
-                주문하기
-            </OrderButton>
+            <ButtonContainer>
+                <OrderButton
+                    onClick={() => navigate("/order")}
+                    disabled={totalAmount === 0}
+                >
+                    {totalAmount > 0
+                        ? `${new Intl.NumberFormat("ko-KR").format(
+                              totalAmount
+                          )}원 `
+                        : null}
+                    주문하기
+                </OrderButton>
+            </ButtonContainer>
         </CartList>
     );
 };
 
-const CartList = styled.div`
-    margin-top: 7px;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    margin-bottom: 72px;
+const ButtonContainer = styled.div`
+    position: fixed;
+    bottom: 0px;
+    padding: 20px 0px;
+    background-color: white;
+    border-top: 1px solid ${({ theme }) => theme.color.gray100};
 `;
 
 const OrderButton = styled.button`
-    position: fixed;
-    bottom: 20px;
     width: 440px;
     height: 48px;
     margin: 0px 20px;
@@ -149,6 +150,14 @@ const OrderButton = styled.button`
         background-color: ${({ theme }) => theme.color.gray300};
         cursor: default;
     }
+`;
+
+const CartList = styled.div`
+    margin-top: 7px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin-bottom: 72px;
 `;
 
 const NoItemContainer = styled.div`
