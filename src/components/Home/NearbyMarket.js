@@ -35,7 +35,7 @@ const NearbyMarket = ({ username }) => {
         if (location) {
             getLocation();
         }
-    }, [location, getLocation]);
+    }, [location]);
 
     return (
         <Container>
