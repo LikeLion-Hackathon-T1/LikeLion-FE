@@ -16,7 +16,7 @@ const NearbyMarket = ({ username }) => {
     const navigate = useNavigate();
     const syluvAxios = useSyluvAxios();
     const { location, error } = useGeoLocation(geolocationOptions);
-    const [nearMarket, setNearMarket] = useState("...");
+    const [nearMarket, setNearMarket] = useState("");
 
     const getLocation = useCallback(() => {
         syluvAxios
@@ -37,6 +37,10 @@ const NearbyMarket = ({ username }) => {
         }
     }, [location]);
 
+    if (nearMarket === "") {
+        return <Splash />;
+    }
+
     return (
         <Container>
             <span className="title">
@@ -46,7 +50,7 @@ const NearbyMarket = ({ username }) => {
             </span>
             <div
                 className="location"
-                onClick={() => navigate(`/market/${nearMarket.marketId}`)}
+                onClick={() => navigate(`/market/${nearMarket?.marketId}`)}
             >
                 <Location />
                 <span>{nearMarket.marketName}</span>
