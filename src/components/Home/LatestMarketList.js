@@ -7,7 +7,7 @@ import "swiper/css/navigation";
 const LatestMarketList = ({ latestMarkets }) => {
     return (
         <MarketWrapper>
-            <span className="text-title">최근 방문한 시장</span>
+            <span className="text-title mt">최근 방문한 시장</span>
             <StyledSwiper slidesPerView={2} spaceBetween={20}>
                 {latestMarkets.map((market, index) => (
                     <SwiperSlide key={index}>
