@@ -2,30 +2,30 @@ import { ReactComponent as SearchIcon } from "assets/images/search.svg";
 import { useCallback, useState } from "react";
 import styled from "styled-components";
 import Hangul from "hangul-js";
+import { useNavigate } from "react-router-dom";
 
-const Search = () => {
+const Search = ({ marketList }) => {
+    const navigate = useNavigate();
     const [searchInput, setSearchInput] = useState("");
-    const marketList = [
-        "광동시장",
-        "광명시장",
-        "광장시장",
-        "광안리시장",
-        "광교시장",
-        // 추가할 시장 목록
-    ];
 
     const filteredMarkets = marketList.filter(
-        (market) => Hangul.search(market, searchInput) >= 0
+        (market) => Hangul.search(market.marketName, searchInput) >= 0
     );
 
     const handleChange = useCallback((e) => {
         setSearchInput(e.target.value);
     }, []);
 
-    const handleKeyDown = useCallback((event) => {
-        if (event.key === "Enter") {
-        }
-    }, []);
+    const handleKeyDown = useCallback(
+        (event) => {
+            if (event.key === "Enter") {
+                if (filteredMarkets.length > 0) {
+                    navigate(`/market/${filteredMarkets[0].marketId}`);
+                }
+            }
+        },
+        [filteredMarkets]
+    );
 
     return (
         <Container>
@@ -41,7 +41,14 @@ const Search = () => {
                     <div>
                         {filteredMarkets.length > 0 ? (
                             filteredMarkets.map((market, index) => (
-                                <span key={index}>{market}</span>
+                                <span
+                                    key={index}
+                                    onClick={() => {
+                                        navigate(`/market/${market.marketId}`);
+                                    }}
+                                >
+                                    {market.marketName}
+                                </span>
                             ))
                         ) : (
                             <NoResults>검색 결과가 없습니다.</NoResults>

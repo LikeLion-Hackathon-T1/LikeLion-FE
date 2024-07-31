@@ -7,7 +7,7 @@ const EditVisitItem = ({ item, handleSelect = () => {} }) => {
 
     const handleClick = () => {
         setIsChecked(!isChecked);
-        handleSelect(item.id);
+        handleSelect(item.visitListId);
     };
 
     return (
