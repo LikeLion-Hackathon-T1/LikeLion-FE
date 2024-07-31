@@ -17,14 +17,17 @@ const HomePage = () => {
     const [allMarkets, setAllMarkets] = useState([]);
     const [latestMarkets, setLatestMarkets] = useState([]);
     const [hotMarkets, setHotMarkets] = useState([]);
+    const { getAccessToken } = useTokenStore();
 
     useEffect(() => {
-        syluvAxios.get("/home").then((res) => {
-            if (res) {
-                setLatestMarkets(res.data?.payload.visitListHomeList);
-                setHotMarkets(res.data?.payload.hotListHomeList);
-            }
-        });
+        if (getAccessToken()) {
+            syluvAxios.get("/home").then((res) => {
+                if (res.data) {
+                    setLatestMarkets(res.data.payload.visitListHomeList);
+                    setHotMarkets(res.data.payload.hotListHomeList);
+                }
+            });
+        }
     }, []);
 
     useEffect(() => {
