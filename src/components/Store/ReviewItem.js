@@ -3,6 +3,18 @@ import styled from "styled-components";
 import goodIcon from "../../assets/images/good.png";
 import badIcon from "../../assets/images/bad.png";
 
+const formatTime = ({ beforeHours, beforeDay, beforeWeek }) => {
+  if (beforeWeek > 0) {
+    return `${beforeWeek}주 전`;
+  } else if (beforeDay > 0) {
+    return `${beforeDay}일 전`;
+  } else if (beforeHours > 0) {
+    return `${beforeHours}시간 전`;
+  } else {
+    return `방금 전`;
+  }
+};
+
 const ReviewContainer = styled.div`
   margin-bottom: 44px;
   &:first-child {
@@ -198,10 +210,16 @@ const ReviewItem = ({ review, onDelete }) => {
     review.isHelpfulClicked || false
   );
 
+  const formattedTime = formatTime({
+    beforeHours: review.beforeHours,
+    beforeDay: review.beforeDay,
+    beforeWeek: review.beforeWeek,
+  });
+
   const handleHelpfulnessClick = async () => {
     if (!isHelpfulClicked) {
       try {
-        const response = await fetch(`/review/${review.id}/like`, {
+        const response = await fetch(`/review/${review.reviewId}/like`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -222,7 +240,7 @@ const ReviewItem = ({ review, onDelete }) => {
 
   const handleDelete = async () => {
     try {
-      const response = await fetch(`/review/${review.id}/delete`, {
+      const response = await fetch(`/review/${review.reviewId}/delete`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -230,7 +248,7 @@ const ReviewItem = ({ review, onDelete }) => {
       });
       const result = await response.json();
       if (result.result.code === 0) {
-        onDelete(review.id);
+        onDelete(review.reviewId);
       } else {
         console.error("Error deleting the review:", result);
       }
@@ -254,7 +272,7 @@ const ReviewItem = ({ review, onDelete }) => {
                   </Star>
                 ))}
               </StarContainer>
-              <Time>{review.beforeHours}시간 전</Time>
+              <Time>{formattedTime}</Time>
             </StarsAndTime>
           </div>
         </UserInfo>

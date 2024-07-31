@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import menuImage from "../../assets/images/gimbap1.png";
 import { ReactComponent as BackIcon } from "assets/images/back.svg";
 import cartIcon from "assets/images/marketbag.svg";
+import { ReactComponent as HomeIcon } from "assets/images/newhome.svg";
 import useSyluvAxios from "hooks/useSyluvAxios";
 
 const Container = styled.div`
@@ -30,6 +31,14 @@ const BackButton = styled.div`
   position: absolute;
   top: 16px;
   left: 16px;
+  cursor: pointer;
+  padding: 8px;
+`;
+
+const HomeButton = styled.div`
+  position: absolute;
+  top: 16px;
+  right: calc(20+12+32) px;
   cursor: pointer;
   padding: 8px;
 `;
@@ -141,6 +150,9 @@ const MenuItemDetail = ({ menu, onClick = () => {} }) => {
         <BackButton onClick={() => navigate(-1)}>
           <BackIcon />
         </BackButton>
+        <HomeButton onClick={() => navigate(-1)}>
+          <HomeIcon />
+        </HomeButton>
         <CartButton>
           <img src={cartIcon} alt="cart" />
         </CartButton>
