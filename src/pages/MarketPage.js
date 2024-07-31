@@ -46,11 +46,13 @@ const MarketPage = () => {
 
     useEffect(() => {
         syluvAxios
-            .get("/market/visitlist")
+            .get("/market/visitlist/today")
             .then((res) => {
-                setVisitList(res.data.payload);
-                const num = res.data.payload.length;
+                const dates = Object.keys(res.data.payload);
+                setVisitList(res.data.payload[dates[0]]);
+                const num = res.data.payload[dates[0]].length;
                 setVisitNum(num);
+                console.log(res.data.payload[dates[0]]);
             })
             .catch((error) => {
                 console.error(
