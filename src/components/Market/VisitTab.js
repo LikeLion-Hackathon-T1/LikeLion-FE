@@ -3,16 +3,35 @@ import VisitList from "./VisitList";
 import { Map } from "react-kakao-maps-sdk";
 import { useState } from "react";
 import EditList from "./EditList";
+import useSyluvAxios from "hooks/useSyluvAxios";
 
-const VisitTab = ({ visitList }) => {
+const VisitTab = ({ visitList, onChange = () => {} }) => {
     const [isEdit, setIsEdit] = useState(false);
     const [selectedList, setSelectedList] = useState([]);
+    const syluvAxios = useSyluvAxios();
 
     const handleSelect = (id) => {
         if (selectedList.includes(id)) {
             setSelectedList(selectedList.filter((item) => item !== id));
         } else {
             setSelectedList([...selectedList, id]);
+        }
+    };
+
+    const handleDelete = async () => {
+        try {
+            await Promise.all(
+                selectedList.map((id) =>
+                    syluvAxios.delete(`/market/${id}/visitlist/delete`)
+                )
+            );
+            console.log("방문 리스트 삭제 성공");
+
+            setSelectedList([]);
+            onChange(selectedList);
+            setIsEdit(!isEdit);
+        } catch (error) {
+            console.error("방문 리스트 삭제 중 에러가 발생했습니다:", error);
         }
     };
 
@@ -32,16 +51,25 @@ const VisitTab = ({ visitList }) => {
             <NavBar>
                 <span className="text-title">오늘의 방문 리스트</span>
                 {isEdit ? (
-                    <span
-                        className={`delete ${
-                            selectedList.length === 0 && "disabled"
-                        }`}
-                        onClick={() => {
-                            setIsEdit(!isEdit);
-                        }}
-                    >
-                        삭제
-                    </span>
+                    selectedList.length > 0 ? (
+                        <span
+                            className="delete"
+                            onClick={() => {
+                                handleDelete();
+                            }}
+                        >
+                            삭제
+                        </span>
+                    ) : (
+                        <span
+                            className="disabled"
+                            onClick={() => {
+                                setIsEdit(!isEdit);
+                            }}
+                        >
+                            취소
+                        </span>
+                    )
                 ) : (
                     <span
                         className="edit"
@@ -83,10 +111,11 @@ const NavBar = styled.div`
     }
     .delete {
         color: ${({ theme }) => theme.color.primary};
+        cursor: pointer;
     }
     .disabled {
         color: ${({ theme }) => theme.color.gray300};
-        cursor: default;
+        cursor: pointer;
     }
 `;
 

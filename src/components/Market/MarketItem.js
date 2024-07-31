@@ -14,6 +14,7 @@ const MarketItem = ({
     imgSrc = "https://via.placeholder.com/150",
     marketId = 0,
     visitList,
+    onChange = () => {},
 }) => {
     const navigate = useNavigate();
     const syluvAxios = useSyluvAxios();
@@ -32,9 +33,13 @@ const MarketItem = ({
     }, [visitList, storeId]);
 
     const handleVisit = () => {
-        syluvAxios.post(`/market/${storeId}/visitlist`, {
-            storeId: storeId,
-        });
+        syluvAxios
+            .post(`/market/${storeId}/visitlist`, {
+                storeId: storeId,
+            })
+            .finally(() => {
+                onChange();
+            });
         setIsVisitClicked(false);
         setIsSelected(true);
     };
@@ -59,6 +64,9 @@ const MarketItem = ({
                             .delete(`/market/${visitListId}/visitlist/delete`)
                             .then((response) => {
                                 setIsSelected(false);
+                            })
+                            .finally(() => {
+                                onChange();
                             });
                     } else {
                         handleVisit();

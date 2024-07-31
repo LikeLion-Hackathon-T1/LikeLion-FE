@@ -3,7 +3,12 @@ import MarketItem from "./MarketItem";
 import useSyluvAxios from "hooks/useSyluvAxios";
 import { useEffect, useState } from "react";
 
-const MarketList = ({ searchInfo, marketId = 0, visitList }) => {
+const MarketList = ({
+    searchInfo,
+    marketId = 0,
+    visitList,
+    onChange = () => {},
+}) => {
     const syluvAxios = useSyluvAxios();
     const [storeList, setStoreList] = useState(null);
 
@@ -39,6 +44,7 @@ const MarketList = ({ searchInfo, marketId = 0, visitList }) => {
                     desc={store.description}
                     imgSrc={store.image}
                     visitList={visitList}
+                    onChange={onChange}
                 />
             ))}
         </Container>

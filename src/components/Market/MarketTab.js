@@ -20,7 +20,12 @@ const categories = [
     "기타",
 ];
 
-const MarketTab = ({ marketInfo, marketHours, visitList }) => {
+const MarketTab = ({
+    marketInfo,
+    marketHours,
+    visitList,
+    onChange = () => {},
+}) => {
     const [searchInfo, setSearchInfo] = useState({
         search: "",
         category: "",
@@ -70,6 +75,7 @@ const MarketTab = ({ marketInfo, marketHours, visitList }) => {
                     searchInfo={searchInfo}
                     marketId={marketInfo?.marketId}
                     visitList={visitList}
+                    onChange={onChange}
                 />
             </Container>
         </div>

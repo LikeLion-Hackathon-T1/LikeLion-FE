@@ -19,6 +19,12 @@ const MarketPage = () => {
     const [marketInfo, setMarketInfo] = useState(null);
     const [marketHours, setMarketHours] = useState(null);
 
+    const [listChanged, setListChanged] = useState(false);
+
+    const onListChange = () => {
+        setListChanged(!listChanged);
+    };
+
     const { isLoading, data, isError, error } = useQuery({
         queryKey: ["get-markets"],
         queryFn: () => syluvAxios.get(`/market/${marketId}/info`),
@@ -51,7 +57,7 @@ const MarketPage = () => {
                     error
                 );
             });
-    }, []);
+    }, [listChanged]);
 
     if (isLoading) return <Splash />;
     if (isError) return <div>Error: {error.message}</div>;
@@ -73,9 +79,14 @@ const MarketPage = () => {
                     marketInfo={marketInfo}
                     marketHours={marketHours}
                     visitList={visitList}
+                    onChange={onListChange}
                 />
             ) : (
-                <VisitTab marketId={marketId} visitList={visitList} />
+                <VisitTab
+                    marketId={marketId}
+                    visitList={visitList}
+                    onChange={onListChange}
+                />
             )}
         </>
     );
