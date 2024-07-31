@@ -22,7 +22,6 @@ const HomePage = () => {
             if (res) {
                 setLatestMarkets(res.data?.payload.visitListHomeList);
                 setHotMarkets(res.data?.payload.hotListHomeList);
-                console.log(res.data.payload);
             }
         });
     }, []);
@@ -30,7 +29,6 @@ const HomePage = () => {
     useEffect(() => {
         syluvAxios.get("/home/search").then((res) => {
             setAllMarkets(res.data.payload);
-            console.log(res.data.payload);
         });
     }, []);
 

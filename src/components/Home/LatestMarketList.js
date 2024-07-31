@@ -5,7 +5,6 @@ import "swiper/css";
 import "swiper/css/navigation";
 
 const LatestMarketList = ({ latestMarkets }) => {
-    console.log(latestMarkets);
     return (
         <MarketWrapper>
             <span className="text-title">최근 방문한 시장</span>

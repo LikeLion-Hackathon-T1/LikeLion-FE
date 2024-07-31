@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { ReactComponent as Time } from "assets/images/visit_time.svg";
 import { ReactComponent as Time2 } from "assets/images/visit_time2.svg";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Button from "components/Common/Button";
 
 const VisitItem = ({
@@ -13,13 +13,12 @@ const VisitItem = ({
 }) => {
     const [status, setStatus] = useState(null);
     const [style, setStyle] = useState(true);
-    console.log(item);
-    const onCompleteClick = () => {
+    const onCompleteClick = useCallback(() => {
         handleOpenModal(null);
-    };
-    const onCancelClick = () => {
+    }, [handleOpenModal]);
+    const onCancelClick = useCallback(() => {
         handleOpenModal(null);
-    };
+    }, [handleOpenModal]);
     useEffect(() => {
         switch (item.status) {
             case "BEFORE":
@@ -79,7 +78,7 @@ const VisitItem = ({
                     </div>
                 </Wrapper>
             </ListItem>
-            {openId === index && (
+            {openId === item.visitListId && (
                 <ModalContainer>
                     <VisitModal>
                         <span>이 가게에 방문 완료하셨나요?</span>

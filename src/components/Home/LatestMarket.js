@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const LatestMarket = ({ market }) => {
-    console.log(market);
     const navigate = useNavigate();
     return (
         <Wrapper

@@ -2,7 +2,6 @@ import styled from "styled-components";
 import star from "assets/images/star-fill.png";
 
 const HotMarket = ({ market }) => {
-    console.log(market);
     return (
         <Wrapper className="body">
             <img
