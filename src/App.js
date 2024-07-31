@@ -19,6 +19,7 @@ import OrderPage from "pages/OrderPage";
 import ReviewPage from "pages/ReviewPage";
 import VisitListPage from "pages/VisitListPage";
 import OrderSuccess from "pages/OrderSuccess";
+import MyPage from "pages/MyPage";
 const App = () => {
     useEffect(() => {
         if (window.location.host === "syluv.store") {
@@ -74,6 +75,7 @@ const App = () => {
                                     path="/visit"
                                     element={<VisitListPage />}
                                 />
+                                <Route path="/mypage" element={<MyPage />} />
                                 <Route path="/qr" element={<QrPage />} />
                                 <Route path="/qrgen" element={<QrGenPage />} />
                                 <Route

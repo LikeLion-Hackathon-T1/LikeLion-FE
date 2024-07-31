@@ -9,7 +9,7 @@ import TabBar from "components/Common/TabBar";
 const OrderListPage = () => {
     const navigate = useNavigate();
     const orderList = null;
-    return orderList === null ? (
+    return orderList !== null ? (
         <>
             <Header title="주문내역" />
             <NoItemContainer>
