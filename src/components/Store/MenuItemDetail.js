@@ -15,7 +15,7 @@ const Container = styled.div`
 
 const ImageContainer = styled.div`
   width: 100%;
-  height: 182px;
+  height: 272px;
   overflow: hidden;
   margin-bottom: 14px;
   position: relative;
