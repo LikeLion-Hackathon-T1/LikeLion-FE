@@ -13,7 +13,7 @@ const LatestMarket = ({ market }) => {
         >
             <img
                 className="market-image"
-                src="https://via.placeholder.com/150"
+                src={market.marketImage}
                 alt="최근 방문한 시장"
             />
             <div className="body-info">
