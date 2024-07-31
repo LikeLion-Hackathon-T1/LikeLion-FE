@@ -26,13 +26,14 @@ export default EditList;
 const Wrapper = styled.div`
     position: relative;
     height: 58dvh;
+    padding-bottom: 90px;
 `;
 
 const Infomation = styled.div`
-    position: absolute;
-    width: calc(100% - 40px);
+    position: fixed;
+    width: 440px;
     margin-bottom: 20px;
-    left: 20px;
+    margin-left: 20px;
     height: 43px;
     border-radius: 4px;
     background-color: ${({ theme }) => theme.color.gray400};
@@ -45,6 +46,10 @@ const Infomation = styled.div`
     font-size: 14px;
     color: white;
     font-weight: ${({ theme }) => theme.fontWeight.medium};
+
+    @media (max-width: 480px) {
+        width: calc(100vw - 40px);
+    }
 `;
 
 const ListContainer = styled.div`

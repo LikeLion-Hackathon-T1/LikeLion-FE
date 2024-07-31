@@ -5,10 +5,11 @@ import starFilled from "assets/images/star-fill.png";
 import add from "assets/images/add-button.png";
 import { useEffect, useState } from "react";
 import Button from "components/Common/Button";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
+import useSyluvAxios from "hooks/useSyluvAxios";
 
 const ReviewPage = () => {
     const [review, setReview] = useState("");
@@ -17,6 +18,8 @@ const ReviewPage = () => {
     const [ratingText, setRatingText] = useState("");
     const [photos, setPhotos] = useState([]);
     const { orderId } = useParams();
+    const syluvAxios = useSyluvAxios();
+    const navigate = useNavigate();
 
     useEffect(() => {
         setCurrentCount(review.length);
@@ -41,6 +44,39 @@ const ReviewPage = () => {
     const handlePhotoChange = (e) => {
         const files = Array.from(e.target.files);
         setPhotos([...photos, ...files]);
+    };
+
+    const handleSubmit = () => {
+        const formData = new FormData();
+
+        const dto = {
+            menuId: orderId,
+            rate: rating,
+            content: ratingText,
+        };
+
+        formData.append(
+            "dto",
+            new Blob([JSON.stringify(dto)], { type: "application/json" })
+        );
+
+        if (photos.length > 0) {
+            photos.forEach((photo) => {
+                formData.append("file", photo);
+            });
+        }
+        syluvAxios
+            .post("review", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            })
+            .then((response) => {
+                console.log(response);
+            })
+            .finally(() => {
+                navigate(-1, { replace: true });
+            });
     };
 
     return (
@@ -125,7 +161,11 @@ const ReviewPage = () => {
                 </Review>
             </div>
             <BottomBar>
-                <Button text="등록하기" type="2" />
+                <Button
+                    text="등록하기"
+                    type="2"
+                    onClick={() => handleSubmit()}
+                />
             </BottomBar>
         </Wrapper>
     );
@@ -148,6 +188,7 @@ const Wrapper = styled.div`
 `;
 
 const Review = styled.div`
+    margin-bottom: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -231,13 +272,17 @@ const Review = styled.div`
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        width: calc(100% - 40px);
+        width: 394px;
         height: 154px;
         background-color: ${({ theme }) => theme.color.gray50};
         gap: 11px;
         border-radius: 8px;
         border: 1px solid ${({ theme }) => theme.color.gray100};
         padding: 20px;
+
+        @media (max-width: 480px) {
+            width: calc(77dvw);
+        }
 
         span {
             font-size: 18px;
