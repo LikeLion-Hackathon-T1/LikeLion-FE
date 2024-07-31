@@ -4,19 +4,12 @@ import { ReactComponent as NoItem } from "assets/images/no-item.svg";
 import Button from "components/Common/Button";
 import { useNavigate } from "react-router-dom";
 import OrderItem from "components/OrderList/OrderItem";
+import TabBar from "components/Common/TabBar";
 
 const OrderListPage = () => {
     const navigate = useNavigate();
     const orderList = null;
     return orderList === null ? (
-        <>
-            <Header title="주문내역" />
-            <OrderList>
-                <OrderItem />
-                <OrderItem />
-            </OrderList>
-        </>
-    ) : (
         <>
             <Header title="주문내역" />
             <NoItemContainer>
@@ -27,6 +20,16 @@ const OrderListPage = () => {
                     text="유도문구 뭐하지"
                 />
             </NoItemContainer>
+            <TabBar activeTab={"orderlist"} />
+        </>
+    ) : (
+        <>
+            <Header title="주문내역" />
+            <OrderList>
+                <OrderItem />
+                <OrderItem />
+            </OrderList>
+            <TabBar activeTab={"orderlist"} />
         </>
     );
 };

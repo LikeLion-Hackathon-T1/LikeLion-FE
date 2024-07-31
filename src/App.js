@@ -18,6 +18,7 @@ import OrderDetailPage from "pages/OrderDetailPage";
 import OrderPage from "pages/OrderPage";
 import ReviewPage from "pages/ReviewPage";
 import VisitListPage from "pages/VisitListPage";
+import OrderSuccess from "pages/OrderSuccess";
 const App = () => {
     useEffect(() => {
         if (window.location.host === "syluv.store") {
@@ -41,6 +42,10 @@ const App = () => {
                                 />
                                 <Route path="/cart" element={<CartPage />} />
                                 <Route path="/order" element={<OrderPage />} />
+                                <Route
+                                    path="/ordersuccess"
+                                    element={<OrderSuccess />}
+                                />
                                 <Route
                                     path="/menuTest"
                                     element={<MenuTestPage />}
