@@ -25,7 +25,7 @@ const VisitItem = ({
                 }}
             >
                 <Container>
-                    <Number>{index}</Number>
+                    <Number>{index + 1}</Number>
                     {!isLast && <div className="line" />} {/* 수정된 부분 */}
                 </Container>
 

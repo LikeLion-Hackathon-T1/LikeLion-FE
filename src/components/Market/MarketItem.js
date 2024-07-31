@@ -39,9 +39,9 @@ const MarketItem = ({
             })
             .finally(() => {
                 onChange();
+                setIsVisitClicked(false);
+                setIsSelected(true);
             });
-        setIsVisitClicked(false);
-        setIsSelected(true);
     };
 
     const handleClick = () => {
@@ -69,7 +69,7 @@ const MarketItem = ({
                                 onChange();
                             });
                     } else {
-                        handleVisit();
+                        setIsVisitClicked(true);
                     }
                 }}
                 selected={isSelected}
