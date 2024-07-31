@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import useSyluvAxios from "hooks/useSyluvAxios";
 import { useQuery } from "@tanstack/react-query";
 import Splash from "components/Common/Splash";
+import styled from "styled-components";
 
 const MarketPage = () => {
     const items = ["홈", "방문"];
@@ -18,6 +19,12 @@ const MarketPage = () => {
     const syluvAxios = useSyluvAxios();
     const [marketInfo, setMarketInfo] = useState(null);
     const [marketHours, setMarketHours] = useState(null);
+
+    const [listChanged, setListChanged] = useState(false);
+
+    const onListChange = () => {
+        setListChanged(!listChanged);
+    };
 
     const { isLoading, data, isError, error } = useQuery({
         queryKey: ["get-markets"],
@@ -51,7 +58,7 @@ const MarketPage = () => {
                     error
                 );
             });
-    }, []);
+    }, [listChanged]);
 
     if (isLoading) return <Splash />;
     if (isError) return <div>Error: {error.message}</div>;
@@ -60,7 +67,7 @@ const MarketPage = () => {
         setSelectedNav(navItem);
     };
     return (
-        <>
+        <Wrapper>
             <Header title={marketInfo?.name} />
             <NavBar
                 items={items}
@@ -73,12 +80,21 @@ const MarketPage = () => {
                     marketInfo={marketInfo}
                     marketHours={marketHours}
                     visitList={visitList}
+                    onChange={onListChange}
                 />
             ) : (
-                <VisitTab marketId={marketId} visitList={visitList} />
+                <VisitTab
+                    marketId={marketId}
+                    visitList={visitList}
+                    onChange={onListChange}
+                />
             )}
-        </>
+        </Wrapper>
     );
 };
 
 export default MarketPage;
+
+const Wrapper = styled.div`
+    margin-bottom: 20px;
+`;
