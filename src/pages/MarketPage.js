@@ -103,5 +103,5 @@ const MarketPage = () => {
 export default MarketPage;
 
 const Wrapper = styled.div`
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 `;
