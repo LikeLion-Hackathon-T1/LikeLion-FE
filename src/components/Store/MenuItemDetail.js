@@ -14,10 +14,10 @@ const Container = styled.div`
 
 const ImageContainer = styled.div`
   width: 100%;
-  height: 182px;
   overflow: hidden;
   margin-bottom: 14px;
   position: relative;
+  height: 272px;
 `;
 
 const Image = styled.img`

@@ -9,6 +9,7 @@ import NavBar from "../components/Common/NavBar.js";
 import useSyluvAxios from "hooks/useSyluvAxios";
 import MenuItemDetail from "components/Store/MenuItemDetail";
 import Splash from "components/Common/Splash";
+import EmptyReviewImage from "assets/images/image.svg";
 
 const PageWrapper = styled.div`
   font-family: "Pretendard", sans-serif;
@@ -172,7 +173,16 @@ const StorePage = () => {
                   />
                 ))
               ) : (
-                <div>리뷰가 없습니다</div>
+                <EmptyReviewContainer>
+                  <EmptyReviewImageStyled
+                    src={EmptyReviewImage}
+                    alt="리뷰가 없습니다"
+                  />
+                  <EmptyReviewText>리뷰가 아직 없어요</EmptyReviewText>
+                  <EmptyReviewText>
+                    첫 리뷰의 주인공이 돼주세요!
+                  </EmptyReviewText>
+                </EmptyReviewContainer>
               )}
             </Section>
           )}
@@ -181,5 +191,27 @@ const StorePage = () => {
     </PageWrapper>
   );
 };
+
+const EmptyReviewContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 20px;
+  text-align: center;
+  color: ${({ theme }) => theme.color.gray500};
+`;
+
+const EmptyReviewImageStyled = styled.img`
+  width: 100px; // 이미지 크기를 조정하세요.
+  height: 100px;
+  margin-bottom: 20px;
+`;
+
+const EmptyReviewText = styled.p`
+  font-size: 16px;
+  font-weight: ${({ theme }) => theme.fontWeight.medium};
+`;
 
 export default StorePage;

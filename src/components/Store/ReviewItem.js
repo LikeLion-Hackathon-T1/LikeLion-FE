@@ -60,7 +60,7 @@ const StarContainer = styled.div`
 
 const Star = styled.span`
   font-size: 14px; /* 별의 크기 */
-  color: ${({ filled }) => (filled ? "gold" : "#CCCCCC")};
+  color: ${({ filled }) => (filled === "true" ? "gold" : "#CCCCCC")};
   margin-top: 4px;
   gap: 1px;
 `;
@@ -157,9 +157,10 @@ const Helpfulness = styled.div`
 
 const HelpfulButton = styled.button`
   background: none;
-  border: 1px solid ${({ active }) => (active ? "#ff6b00" : "#9A9A9A")};
+  border: 1px solid
+    ${({ active }) => (active === "true" ? "#ff6b00" : "#9A9A9A")};
   border-radius: 54px;
-  color: ${({ active }) => (active ? "#ff6b00" : "#9A9A9A")};
+  color: ${({ active }) => (active === "true" ? "#ff6b00" : "#9A9A9A")};
   padding: 5px 10px;
   display: flex;
   align-items: center;
@@ -267,7 +268,7 @@ const ReviewItem = ({ review, onDelete }) => {
             <StarsAndTime>
               <StarContainer>
                 {[...Array(5)].map((_, index) => (
-                  <Star key={index} filled={index < review.rating}>
+                  <Star key={index} filled={(index < review.rating).toString()}>
                     ★
                   </Star>
                 ))}
@@ -303,7 +304,7 @@ const ReviewItem = ({ review, onDelete }) => {
         <div>{helpfulness}명에게 도움이 되었어요</div>
         <HelpfulButton
           onClick={handleHelpfulnessClick}
-          active={isHelpfulClicked}
+          active={isHelpfulClicked.toString()}
         >
           <Icon src={isHelpfulClicked ? goodIcon : badIcon} alt="thumbs up" />
           도움이 돼요

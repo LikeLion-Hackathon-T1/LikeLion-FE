@@ -128,6 +128,7 @@ const HeaderImage = styled.img`
   height: auto;
   display: block;
   margin: 0;
+  height: 272px;
 `;
 
 const BackButton = styled.div`
