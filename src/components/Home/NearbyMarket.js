@@ -35,12 +35,12 @@ const NearbyMarket = ({ username }) => {
         if (location) {
             getLocation();
         }
-    }, [location]);
+    }, [location, getLocation]);
 
     return (
         <Container>
             <span className="title">
-                {username}님과
+                {username ? username : "시럽"}님과
                 <br />
                 지금 가까운 시장은?
             </span>

@@ -3,14 +3,19 @@ import styled from "styled-components";
 import { ReactComponent as NoItem } from "assets/images/no-item.svg";
 import Button from "components/Common/Button";
 import { useNavigate } from "react-router-dom";
+import OrderItem from "components/OrderList/OrderItem";
 
 const OrderListPage = () => {
     const navigate = useNavigate();
     const orderList = null;
     return orderList === null ? (
-        <Container>
+        <>
             <Header title="주문내역" />
-        </Container>
+            <OrderList>
+                <OrderItem />
+                <OrderItem />
+            </OrderList>
+        </>
     ) : (
         <>
             <Header title="주문내역" />
@@ -26,17 +31,12 @@ const OrderListPage = () => {
     );
 };
 
-const Container = styled.div`
+const OrderList = styled.div`
     display: flex;
-    min-height: 100dvh;
     flex-direction: column;
-    align-items: center;
-    overflow-y: auto;
-    &::-webkit-scrollbar {
-        display: none;
-    }
-    -ms-overflow-style: none; // IE 및 Edge
-    scrollbar-width: none; // Firefox
+    gap: 6px;
+    width: 100%;
+    background-color: ${({ theme }) => theme.color.gray100};
 `;
 
 const NoItemContainer = styled.div`

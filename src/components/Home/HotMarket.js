@@ -31,6 +31,7 @@ const HotMarket = ({ market }) => {
 export default HotMarket;
 
 const Wrapper = styled.div`
+    cursor: pointer;
     .market-image {
         width: 218px;
         height: 162px;
