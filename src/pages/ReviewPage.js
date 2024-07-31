@@ -52,7 +52,7 @@ const ReviewPage = () => {
         const dto = {
             menuId: orderId,
             rate: rating,
-            content: ratingText,
+            content: review,
         };
 
         formData.append(
