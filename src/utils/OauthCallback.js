@@ -7,7 +7,7 @@ import Splash from "components/Common/Splash";
 
 const OauthCallback = () => {
     const [isLoading, setIsLoading] = useState(true);
-    const [isFIrstLogin, setIsFirstLogin] = useState(true);
+    const [isFIrstLogin, setIsFirstLogin] = useState(false);
     const [isError, setIsError] = useState(false);
     const [error, setError] = useState(null);
     const { setRefreshToken, setAccessToken, setName } = useTokenStore();
@@ -44,6 +44,7 @@ const OauthCallback = () => {
                     idToken: idToken,
                 }
             );
+            console.log(response.data.payload);
             return response.data.payload;
         } catch (error) {
             throw new Error("Failed to get Syluv token");
@@ -58,7 +59,7 @@ const OauthCallback = () => {
             setAccessToken(syluvData.accessToken);
             setRefreshToken(syluvData.refreshToken);
             setName(syluvData.nickname);
-            if (syluvData.existYn === true) {
+            if (syluvData.existYn === false) {
                 setIsFirstLogin(true);
             } else {
                 navigate("/", { replace: true });
