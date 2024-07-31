@@ -5,7 +5,6 @@ import { ReactComponent as MyPageIcon } from "assets/images/nav-my.svg";
 import { ReactComponent as QrIcon } from "assets/images/nav-qr.svg";
 
 import styled from "styled-components";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const TabBar = ({ activeTab }) => {
@@ -99,7 +98,7 @@ const TabBar = ({ activeTab }) => {
 export default TabBar;
 
 const Spacer = styled.div`
-    height: 80px;
+    height: 72px;
     width: 1px;
 `;
 
@@ -111,7 +110,6 @@ const Container = styled.div`
     height: 72px;
     background-color: white;
     box-shadow: 0px -2px 4px rgba(0, 0, 0, 0.05);
-    margin-bottom: 8px;
     .wrapper {
         position: relative;
         padding: 0 40px;
