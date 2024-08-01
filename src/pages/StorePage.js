@@ -23,7 +23,8 @@ const PageWrapper = styled.div`
 const Section = styled.section`
   flex: 1;
   overflow-y: auto;
-  padding: 0 20px;
+  padding: ${({ activeSection }) =>
+    activeSection === "리뷰" ? "0 20px 0px 20px" : "0px 20px 0 20px"};
   background-color: white;
   &::-webkit-scrollbar {
     display: none;
@@ -39,6 +40,7 @@ const StorePage = () => {
   const axiosInstance = useSyluvAxios();
   const queryClient = useQueryClient();
   const [selectedMenu, setSelectedMenu] = useState(null);
+  const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
     console.log("Selected Menu:", selectedMenu);
@@ -107,17 +109,57 @@ const StorePage = () => {
   } = useQuery({
     queryKey: ["reviewData", storeId],
     queryFn: fetchReviewData,
+    onSuccess: (data) => {
+      const myReview = data.filter((review) => review.isMine);
+      const otherReviews = data
+        .filter((review) => !review.isMine)
+        .sort((a, b) => b.likeCount - a.likeCount);
+
+      setReviews([...myReview, ...otherReviews]);
+    },
   });
 
-  const handleReviewDelete = (reviewId) => {
-    queryClient.setQueryData(["reviewData", storeId], (oldData) =>
-      oldData.filter((review) => review.reviewId !== reviewId)
-    );
+  const handleReviewDelete = (reviewId, review) => {
+    if (reviewId) {
+      setReviews((prevReviews) =>
+        prevReviews.filter((review) => review.reviewId !== reviewId)
+      );
+    } else {
+      setReviews((prevReviews) => [...prevReviews, review]);
+    }
+  };
+
+  const handleReviewHelpful = (reviewId) => {
+    setReviews((prevReviews) => {
+      const updatedReviews = prevReviews.map((review) => {
+        if (review.reviewId === reviewId) {
+          return {
+            ...review,
+            likeCount: review.likeCount + 1,
+            isHelpfulClicked: true,
+          };
+        }
+        return review;
+      });
+
+      const myReview = updatedReviews.filter((review) => review.isMine);
+      const otherReviews = updatedReviews
+        .filter((review) => !review.isMine)
+        .sort((a, b) => b.likeCount - a.likeCount);
+
+      return [...myReview, ...otherReviews];
+    });
   };
 
   useEffect(() => {
     if (reviewData) {
       console.log("Fetched Review Data:", reviewData);
+      const myReview = reviewData.filter((review) => review.isMine);
+      const otherReviews = reviewData
+        .filter((review) => !review.isMine)
+        .sort((a, b) => b.likeCount - a.likeCount);
+
+      setReviews([...myReview, ...otherReviews]);
     }
   }, [reviewData]);
 
@@ -156,20 +198,21 @@ const StorePage = () => {
             handleSelected={setActiveSection}
           />
           {activeSection === "메뉴" && (
-            <Section>
+            <Section activeSection={activeSection}>
               {storeData.menuDetails.map((item, index) => (
                 <MenuItem key={index} item={item} onClick={handleMenuClick} />
               ))}
             </Section>
           )}
           {activeSection === "리뷰" && (
-            <Section>
-              {Array.isArray(reviewData) && reviewData.length > 0 ? (
-                reviewData.map((review, index) => (
+            <Section activeSection={activeSection}>
+              {Array.isArray(reviews) && reviews.length > 0 ? (
+                reviews.map((review, index) => (
                   <ReviewItem
                     key={index}
                     review={review}
                     onDelete={handleReviewDelete}
+                    onHelpful={handleReviewHelpful}
                   />
                 ))
               ) : (
@@ -198,20 +241,23 @@ const EmptyReviewContainer = styled.div`
   align-items: center;
   justify-content: center;
   height: 100%;
-  padding: 20px;
+  padding: 100px;
   text-align: center;
-  color: ${({ theme }) => theme.color.gray500};
+  color: ${({ theme }) => theme.color.gray600};
+  font-size: 20px;
+  font-weight: ${({ theme }) => theme.fontWeight.semiBold};
 `;
 
 const EmptyReviewImageStyled = styled.img`
-  width: 100px;
-  height: 100px;
-  margin-bottom: 20px;
+  width: 144px;
+  height: 124px;
+  margin-bottom: 25px;
 `;
 
 const EmptyReviewText = styled.p`
-  font-size: 16px;
-  font-weight: ${({ theme }) => theme.fontWeight.medium};
+  color: ${({ theme }) => theme.color.gray600};
+  font-size: 20px;
+  font-weight: ${({ theme }) => theme.fontWeight.semiBold};
 `;
 
 export default StorePage;
