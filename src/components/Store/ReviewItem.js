@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import styled from "styled-components";
+import useSyluvAxios from "../../hooks/useSyluvAxios"; // syluvAxios를 임포트합니다
 import goodIcon from "../../assets/images/good.png";
 import badIcon from "../../assets/images/bad.png";
 
@@ -205,11 +206,13 @@ const ResponseText = styled.div`
   color: ${({ theme }) => theme.color.gray800};
 `;
 
-const ReviewItem = ({ review, onDelete, userId }) => {
+const ReviewItem = ({ review, onDelete }) => {
   const [helpfulness, setHelpfulness] = useState(review.likeCount);
   const [isHelpfulClicked, setIsHelpfulClicked] = useState(
     review.isHelpfulClicked || false
   );
+
+  const syluvAxios = useSyluvAxios(); // useSyluvAxios 훅을 사용하여 syluvAxios 인스턴스를 가져옵니다
 
   const formattedTime = formatTime({
     beforeHours: review.beforeHours,
@@ -218,17 +221,14 @@ const ReviewItem = ({ review, onDelete, userId }) => {
   });
 
   const handleHelpfulnessClick = async () => {
-    if (!isHelpfulClicked && userId !== review.userId) {
-      console.log("Attempting to like the review..."); // console.log 추가
+    if (!isHelpfulClicked && !review.isMine) {
+      console.log("Attempting to like the review...");
       try {
-        const response = await fetch(`/review/${review.reviewId}/like`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        const result = await response.json();
-        console.log("API response:", result); // console.log 추가
+        const response = await syluvAxios.post(
+          `/review/${review.reviewId}/like`
+        );
+        const result = response.data;
+        console.log("API response:", result);
         if (result.result.code === 0) {
           setHelpfulness(
             (prevHelpfulness) => parseInt(prevHelpfulness, 10) + 1
@@ -241,25 +241,22 @@ const ReviewItem = ({ review, onDelete, userId }) => {
     }
   };
 
-  const handleDelete = async () => {
-    try {
-      const response = await fetch(`/review/${review.reviewId}/delete`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
+  const handleDelete = useCallback(() => {
+    syluvAxios
+      .delete(`/review/${review.reviewId}/delete`)
+      .then((response) => {
+        const result = response.data;
+        if (result.result.code === 0) {
+          console.log("리뷰가 정상적으로 삭제되었습니다:", result.payload);
+          onDelete(review.reviewId);
+        } else {
+          console.error("리뷰 삭제 중 오류 발생:", result);
+        }
+      })
+      .catch((error) => {
+        console.error("리뷰 삭제 중 오류 발생:", error);
       });
-      const result = await response.json();
-      if (result.result.code === 0) {
-        onDelete(review.reviewId);
-      } else {
-        console.error("Error deleting the review:", result);
-      }
-    } catch (error) {
-      console.error("Error deleting the review:", error);
-    }
-  };
-
+  }, [review.reviewId, onDelete]);
   return (
     <ReviewContainer>
       <Header>
@@ -279,7 +276,7 @@ const ReviewItem = ({ review, onDelete, userId }) => {
             </StarsAndTime>
           </div>
         </UserInfo>
-        {userId === review.userId && (
+        {review.isMine && (
           <DeleteButton onClick={handleDelete}>삭제하기</DeleteButton>
         )}
       </Header>

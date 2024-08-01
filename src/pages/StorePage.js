@@ -198,20 +198,23 @@ const EmptyReviewContainer = styled.div`
   align-items: center;
   justify-content: center;
   height: 100%;
-  padding: 20px;
+  padding: 100px;
   text-align: center;
-  color: ${({ theme }) => theme.color.gray500};
+  color: ${({ theme }) => theme.color.gray600};
+  font-size: 20px;
+  font-weight: ${({ theme }) => theme.fontWeight.semiBold};
 `;
 
 const EmptyReviewImageStyled = styled.img`
-  width: 100px;
-  height: 100px;
-  margin-bottom: 20px;
+  width: 144px;
+  height: 124px;
+  margin-bottom: 25px;
 `;
 
 const EmptyReviewText = styled.p`
-  font-size: 16px;
-  font-weight: ${({ theme }) => theme.fontWeight.medium};
+  color: ${({ theme }) => theme.color.gray600};
+  font-size: 20px;
+  font-weight: ${({ theme }) => theme.fontWeight.semiBold};
 `;
 
 export default StorePage;
