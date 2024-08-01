@@ -12,6 +12,9 @@ const TabBar = ({ activeTab }) => {
     const handleTabClick = (tab) => {
         navigate(`/${tab}`, { replace: true });
     };
+    const handleQRClick = () => {
+        navigate("/qr");
+    };
     return (
         <>
             <Spacer />
@@ -47,10 +50,7 @@ const TabBar = ({ activeTab }) => {
                             방문
                         </span>
                     </div>
-                    <div
-                        className="qr-wrapper"
-                        onClick={() => handleTabClick("qr")}
-                    >
+                    <div className="qr-wrapper" onClick={() => handleQRClick()}>
                         <QR />
                     </div>
                     <div onClick={() => handleTabClick("orderlist")}>
@@ -98,7 +98,7 @@ const TabBar = ({ activeTab }) => {
 export default TabBar;
 
 const Spacer = styled.div`
-    height: 72px;
+    height: 92px;
     width: 1px;
 `;
 
@@ -107,7 +107,6 @@ const Container = styled.div`
     position: fixed;
     bottom: 0px;
     width: 480px;
-    height: 72px;
     background-color: white;
     box-shadow: 0px -2px 4px rgba(0, 0, 0, 0.05);
     .wrapper {
