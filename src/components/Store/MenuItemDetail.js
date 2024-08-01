@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { ReactComponent as BackIcon } from "assets/images/back.svg";
 import { ReactComponent as CartIcon } from "assets/images/marketbag.svg";
 import { ReactComponent as HomeIcon } from "assets/images/newhome.svg";
+import useSyluvAxios from "hooks/useSyluvAxios";
+import Splash from "components/Common/Splash";
 
 const Container = styled.div`
   font-family: "Pretendard", sans-serif;
@@ -157,6 +159,7 @@ const AddToCartButton = styled.button`
 
 const MenuItemDetail = ({ menu, onClick = () => {} }) => {
   const navigate = useNavigate();
+  const syluvAxios = useSyluvAxios();
   const [quantity, setQuantity] = useState(1);
 
   const handleIncrease = () => {
@@ -169,9 +172,39 @@ const MenuItemDetail = ({ menu, onClick = () => {} }) => {
     }
   };
 
+  const handleAddToCart = async () => {
+    const menuId = menu?.menuId;
+    if (!menuId) {
+      console.error("Menu ID가 정의안됨");
+      return;
+    }
+
+    console.log("Adding to cart...");
+    console.log("Menu ID: ", menuId);
+    console.log("Quantity: ", quantity);
+    try {
+      const response = await syluvAxios.post("/cart", {
+        menuId: menuId,
+        quantity: quantity,
+      });
+      if (response && response.data) {
+        console.log("굿", response.data);
+      } else {
+        console.error("데이터 없음");
+      }
+    } catch (err) {
+      console.error("에러 발생:", err);
+      if (err.response) {
+        console.error("Response error:", err.response.data);
+      }
+    }
+  };
+
   if (!menu) {
-    return <div>로딩 중...</div>;
+    return <Splash />;
   }
+
+  console.log("Rendered menu:", menu);
 
   return (
     <Container>
@@ -202,7 +235,7 @@ const MenuItemDetail = ({ menu, onClick = () => {} }) => {
           </QuantityButton2>
         </QuantityWrapper>
       </QuantityContainer>
-      <AddToCartButton onClick={() => onClick(null)}>
+      <AddToCartButton onClick={handleAddToCart}>
         {menu.price}원 담기
       </AddToCartButton>
     </Container>

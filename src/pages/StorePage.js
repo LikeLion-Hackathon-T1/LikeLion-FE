@@ -41,7 +41,7 @@ const StorePage = () => {
   const [selectedMenu, setSelectedMenu] = useState(null);
 
   useEffect(() => {
-    console.log(selectedMenu);
+    console.log("Selected Menu:", selectedMenu);
   }, [selectedMenu]);
 
   const fetchStoreAndMenuData = async () => {

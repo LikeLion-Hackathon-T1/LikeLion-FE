@@ -54,7 +54,7 @@ const StoreInfo = ({
         <HomeButton onClick={() => navigate("/")}>
           <HomeIcon />
         </HomeButton>
-        <CartButton onClick={() => navigate("/")}>
+        <CartButton onClick={() => navigate("/cart")}>
           <CartIcon />
         </CartButton>
         {images.length > 1 && (
