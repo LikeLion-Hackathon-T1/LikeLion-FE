@@ -211,7 +211,7 @@ const OrderButton = styled.button`
     cursor: pointer;
 
     @media (max-width: 480px) {
-        width: calc(100% - 40px);
+        width: calc(100dvw - 40px);
     }
 `;
 export default OrderPage;
