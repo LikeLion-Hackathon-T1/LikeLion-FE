@@ -188,7 +188,7 @@ const MenuItemDetail = ({ menu, onClick = () => {} }) => {
         quantity: quantity,
       });
       if (response && response.data) {
-        console.log("굿", response.data);
+        console.log("굿잡", response.data);
       } else {
         console.error("데이터 없음");
       }
