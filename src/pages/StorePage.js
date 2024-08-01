@@ -204,7 +204,7 @@ const EmptyReviewContainer = styled.div`
 `;
 
 const EmptyReviewImageStyled = styled.img`
-  width: 100px; // 이미지 크기를 조정하세요.
+  width: 100px;
   height: 100px;
   margin-bottom: 20px;
 `;

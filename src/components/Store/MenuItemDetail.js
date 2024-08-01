@@ -69,14 +69,11 @@ const Description = styled.p`
 `;
 
 const Line = styled.div`
-  width: 80%;
+  width: 480px;
   align-content: center;
   height: 1px;
-  background-color: #cccccc;
-  margin-top: 16px;
-  position: fixed;
-  bottom: 136px;
-  left: 0;
+  background-color: ${({ theme }) => theme.color.gray100};
+  margin-top: 200px;
 `;
 
 const QuantityContainer = styled.div`
@@ -91,6 +88,9 @@ const QuantityContainer = styled.div`
   padding: 0 20px;
   background-color: white;
   border-radius: 8px;
+  @media (max-width: 480px) {
+    width: calc(100% - 40px);
+  }
 `;
 
 const QuantityLabel = styled.span`
@@ -138,6 +138,7 @@ const Quantity = styled.span`
 `;
 
 const AddToCartButton = styled.button`
+  position: fixed;
   width: 440px;
   height: 48px;
   background-color: #ff6b00;
@@ -146,10 +147,12 @@ const AddToCartButton = styled.button`
   font-weight: ${({ theme }) => theme.fontWeight.bold};
   border: none;
   border-radius: 8px;
-  position: fixed;
   bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
+  @media (max-width: 480px) {
+    width: calc(100% - 40px);
+  }
 `;
 
 const MenuItemDetail = ({ menu, onClick = () => {} }) => {
