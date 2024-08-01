@@ -74,7 +74,7 @@ const Line = styled.div`
   width: 480px;
   align-content: center;
   height: 1px;
-  background-color: ${({ theme }) => theme.color.gray100};
+  border-bottom: 1px solid ${({ theme }) => theme.color.gray100};
   margin-top: 200px;
 `;
 
