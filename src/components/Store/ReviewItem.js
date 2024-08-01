@@ -60,7 +60,7 @@ const StarContainer = styled.div`
 
 const Star = styled.span`
   font-size: 14px; /* 별의 크기 */
-  color: ${({ filled }) => (filled ? "gold" : "#CCCCCC")};
+  color: ${({ filled }) => (filled === "true" ? "gold" : "#CCCCCC")};
   margin-top: 4px;
   gap: 1px;
 `;
@@ -157,9 +157,10 @@ const Helpfulness = styled.div`
 
 const HelpfulButton = styled.button`
   background: none;
-  border: 1px solid ${({ active }) => (active ? "#ff6b00" : "#9A9A9A")};
+  border: 1px solid
+    ${({ active }) => (active === "true" ? "#ff6b00" : "#9A9A9A")};
   border-radius: 54px;
-  color: ${({ active }) => (active ? "#ff6b00" : "#9A9A9A")};
+  color: ${({ active }) => (active === "true" ? "#ff6b00" : "#9A9A9A")};
   padding: 5px 10px;
   display: flex;
   align-items: center;
@@ -204,7 +205,7 @@ const ResponseText = styled.div`
   color: ${({ theme }) => theme.color.gray800};
 `;
 
-const ReviewItem = ({ review, onDelete }) => {
+const ReviewItem = ({ review, onDelete, userId }) => {
   const [helpfulness, setHelpfulness] = useState(review.likeCount);
   const [isHelpfulClicked, setIsHelpfulClicked] = useState(
     review.isHelpfulClicked || false
@@ -217,7 +218,8 @@ const ReviewItem = ({ review, onDelete }) => {
   });
 
   const handleHelpfulnessClick = async () => {
-    if (!isHelpfulClicked) {
+    if (!isHelpfulClicked && userId !== review.userId) {
+      console.log("Attempting to like the review..."); // console.log 추가
       try {
         const response = await fetch(`/review/${review.reviewId}/like`, {
           method: "POST",
@@ -226,6 +228,7 @@ const ReviewItem = ({ review, onDelete }) => {
           },
         });
         const result = await response.json();
+        console.log("API response:", result); // console.log 추가
         if (result.result.code === 0) {
           setHelpfulness(
             (prevHelpfulness) => parseInt(prevHelpfulness, 10) + 1
@@ -267,7 +270,7 @@ const ReviewItem = ({ review, onDelete }) => {
             <StarsAndTime>
               <StarContainer>
                 {[...Array(5)].map((_, index) => (
-                  <Star key={index} filled={index < review.rating}>
+                  <Star key={index} filled={(index < review.rating).toString()}>
                     ★
                   </Star>
                 ))}
@@ -276,7 +279,9 @@ const ReviewItem = ({ review, onDelete }) => {
             </StarsAndTime>
           </div>
         </UserInfo>
-        <DeleteButton onClick={handleDelete}>삭제하기</DeleteButton>
+        {userId === review.userId && (
+          <DeleteButton onClick={handleDelete}>삭제하기</DeleteButton>
+        )}
       </Header>
       {Array.isArray(review.image) && review.image.length === 1 ? (
         <ReviewImageContainerSingle>
@@ -303,7 +308,7 @@ const ReviewItem = ({ review, onDelete }) => {
         <div>{helpfulness}명에게 도움이 되었어요</div>
         <HelpfulButton
           onClick={handleHelpfulnessClick}
-          active={isHelpfulClicked}
+          active={isHelpfulClicked.toString()}
         >
           <Icon src={isHelpfulClicked ? goodIcon : badIcon} alt="thumbs up" />
           도움이 돼요
