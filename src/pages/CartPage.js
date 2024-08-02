@@ -2,12 +2,14 @@ import Header from "components/Common/Header";
 import StoreList from "components/Cart/StoreList";
 import useSyluvAxios from "hooks/useSyluvAxios";
 import { useEffect, useState, useCallback } from "react";
+import Toast from "components/Common/Toast";
 
 const CartPage = () => {
     const syluvAxios = useSyluvAxios();
     const [cartList, setCartList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [rightDisabled, setRightDisabled] = useState(true);
+    const [toastMessage, setToastMessage] = useState("");
 
     useEffect(() => {
         const getCartList = async () => {
@@ -42,12 +44,17 @@ const CartPage = () => {
                             (cartItem) => cartItem.cartid !== item.cartid
                         )
                     );
+                    setToastMessage("장바구니에서 메뉴가 삭제되었습니다.");
                 })
                 .catch((err) => {
                     console.log(err);
                 });
         });
     }, [cartList, syluvAxios]);
+
+    const closeToast = useCallback(() => {
+        setToastMessage("");
+    }, []);
 
     return (
         <>
@@ -63,6 +70,9 @@ const CartPage = () => {
                 setCartList={setCartList}
                 isLoading={isLoading}
             />
+            {toastMessage && (
+                <Toast message={toastMessage} onClose={closeToast} />
+            )}
         </>
     );
 };

@@ -2,13 +2,14 @@ import styled from "styled-components";
 import TotalVisitItem from "./TotalVisitItem";
 
 const TotalVisitList = ({ date, visitList }) => {
+    console.log(visitList);
     return (
         <Wrapper>
             <div className="date">{date}</div>
             <div className="store">광장시장</div>
             {visitList.map((visit) => (
                 <TotalVisitItem
-                    key={visit.id}
+                    key={visit.visitListId}
                     item={visit}
                     isLast={visitList.indexOf(visit) === visitList.length - 1}
                     index={visitList.indexOf(visit)}

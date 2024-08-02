@@ -25,9 +25,9 @@ const VisitListPage = () => {
         <>
             <Header title="방문 리스트" back={false} />
             <Wrapper>
-                {Object.keys(visitList).map((date) => (
+                {Object.keys(visitList).map((date, index) => (
                     <TotalVisitList
-                        key={date}
+                        key={visitList[date][0].visitListId}
                         date={date}
                         visitList={visitList[date]}
                     />

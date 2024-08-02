@@ -26,9 +26,20 @@ export const MyReviewText = styled.span`
   font-weight: ${({ theme }) => theme.fontWeight.semiBold};
   color: ${({ theme }) => theme.color.gray900};
   font-size: 18px;
-  margin-bottom: 20px; /* UserInfo와의 간격을 위해 위쪽 패딩 추가 */
-`;
+  margin-bottom: 20px;
+  position: relative;
 
+  &::before {
+    content: "";
+    display: block;
+    width: calc(100% + 40px); /* 양쪽 가장자리를 덮도록 너비를 설정 */
+    height: 20px; /* margin-top 크기와 동일하게 설정 */
+    background-color: rgba(255, 107, 0, 0.04);
+    position: absolute;
+    top: -20px; /* margin-top 크기와 동일하게 설정 */
+    left: -20px; /* 양쪽 가장자리를 덮도록 왼쪽 위치를 설정 */
+  }
+`;
 export const Header = styled.div`
   display: flex;
   justify-content: space-between;

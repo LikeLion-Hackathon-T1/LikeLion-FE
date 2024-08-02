@@ -7,7 +7,7 @@ const MenuItem = ({ item }) => {
 
     return (
         <Container>
-            <img src="https://via.placeholder.com/150" alt="menu" />
+            <img src={item.menuImg} alt="menu" />
             <div className="menu">
                 <div className="menu-header">
                     <span className="title-text">{item.menuName}</span>

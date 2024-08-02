@@ -22,7 +22,6 @@ const Toast = ({ message, message2, onClose }) => {
 
 const ToastMessage = styled.div`
     position: fixed;
-    height: 72px;
     background-color: rgba(0, 0, 0, 0.4);
     bottom: 110px;
 
@@ -45,6 +44,7 @@ const ToastMessage = styled.div`
     }
 
     div {
+        padding: 12px 0;
         color: white;
         font-size: 16px;
         font-weight: ${({ theme }) => theme.fontWeight.medium};

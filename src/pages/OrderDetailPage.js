@@ -5,15 +5,17 @@ import MenuList from "components/OrderList/OrderDetail/MenuList";
 import SimpleReceipt from "components/OrderList/OrderDetail/SimpleReceipt";
 import useSyluvAxios from "hooks/useSyluvAxios";
 import { useCallback, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import ReviewPage from "./ReviewPage";
 
 const OrderDetailPage = () => {
     const syluvAxios = useSyluvAxios();
     const { orderId } = useParams();
+    const { state } = useParams();
     const [orderDetail, setOrderDetail] = useState(null);
     const [isClicked, setIsClicked] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const getOrderDetail = async () => {
@@ -28,7 +30,14 @@ const OrderDetailPage = () => {
     }, [orderId]);
 
     const deleteOrder = async () => {
-        alert("api안나옴");
+        syluvAxios
+            .delete(`/order/${orderId}/delete`)
+            .then(() => {
+                navigate("/orderlist");
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     };
 
     const handleClick = useCallback(() => {
@@ -48,6 +57,10 @@ const OrderDetailPage = () => {
         return `${year}.${month}.${day} ${ampm} ${hour12}:${minute}`;
     }, []);
 
+    const handlePrice = useCallback((price) => {
+        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }, []);
+
     if (!orderDetail) return <Splash />;
 
     return !isClicked ? (
@@ -62,17 +75,19 @@ const OrderDetailPage = () => {
                 date={handleDate(orderDetail.orderDate)}
                 orderNum={orderDetail.orderNum}
                 name={orderDetail.storeName}
-                state={"상태주세요"}
+                state={state}
             />
             <MenuList order={orderDetail} />
             <BillContainer>
                 <div>
                     <p className="left">결제금액</p>
-                    <p className="right">63,000원</p>
+                    <p className="right">
+                        {handlePrice(orderDetail.totalPrice)}원
+                    </p>
                 </div>
                 <div>
                     <p className="left">결제방법</p>
-                    <p className="right">토스페이</p>
+                    <p className="right">{orderDetail.paymentTool}</p>
                 </div>
             </BillContainer>
             <ButtonContainer>
@@ -80,8 +95,10 @@ const OrderDetailPage = () => {
                     text="리뷰 남기기"
                     type="2"
                     onClick={() => {
+                        if (orderDetail.reviewYn) return;
                         handleClick();
                     }}
+                    disabled={orderDetail.reviewYn}
                 />
             </ButtonContainer>
         </Container>
@@ -89,6 +106,7 @@ const OrderDetailPage = () => {
         <ReviewPage
             name={orderDetail.storeName}
             date={handleDate(orderDetail.orderDate)}
+            image={orderDetail.storeImg}
             handleClick={handleClick}
             orderId={orderId}
         />

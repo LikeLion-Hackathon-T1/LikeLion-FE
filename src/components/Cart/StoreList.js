@@ -6,12 +6,18 @@ import { useNavigate } from "react-router-dom";
 import noItem from "assets/images/no-cart.png";
 import Splash from "components/Common/Splash";
 import Toast from "components/Common/Toast";
+import OrderPage from "pages/OrderPage";
 
 const StoreList = ({ cartList, setCartList, isLoading }) => {
     const syluvAxios = useSyluvAxios();
     const navigate = useNavigate();
     const [selectedStore, setSelectedStore] = useState(null);
     const [toastMessage, setToastMessage] = useState("");
+    const [openBill, setOpenBill] = useState(false);
+
+    const handleBillClose = useCallback(() => {
+        setOpenBill(false);
+    }, []);
 
     const toggleStoreCheck = useCallback(
         (storeName, isChecked) => {
@@ -96,13 +102,17 @@ const StoreList = ({ cartList, setCartList, isLoading }) => {
         if (selectedStores.length > 1) {
             setToastMessage("한 번에 한 가게만 주문할 수 있어요");
         } else {
-            navigate("/order");
+            setOpenBill(true);
         }
     };
 
     const closeToast = () => {
         setToastMessage("");
     };
+
+    if (openBill) {
+        return <OrderPage item={selectedItems} onClick={handleBillClose} />;
+    }
 
     return (
         <CartList>
