@@ -24,7 +24,7 @@ const Section = styled.section`
   flex: 1;
   overflow-y: auto;
   padding: ${({ activeSection }) =>
-    activeSection === "리뷰" ? "0 20px 0px 20px" : "0px 20px 0 20px"};
+    activeSection === "리뷰" ? "0 20px 0px 20px" : "20px"};
   background-color: white;
   &::-webkit-scrollbar {
     display: none;
@@ -36,11 +36,12 @@ const Section = styled.section`
 const StorePage = () => {
   const [activeSection, setActiveSection] = useState("메뉴");
   const navigate = useNavigate();
-  const { storeId } = useParams();
+  const { storeId } = useParams(); // menuId는 직접 사용하지 않습니다
   const axiosInstance = useSyluvAxios();
   const queryClient = useQueryClient();
   const [selectedMenu, setSelectedMenu] = useState(null);
   const [reviews, setReviews] = useState([]);
+  const [menuId, setMenuId] = useState(null); // menuId 상태를 추가합니다
 
   useEffect(() => {
     console.log("Selected Menu:", selectedMenu);
@@ -56,6 +57,10 @@ const StorePage = () => {
         );
         if (store) {
           console.log("Store Data:", store);
+          // 메뉴의 첫 번째 항목의 menuId를 설정합니다 (필요에 따라 변경 가능)
+          if (store.menuDetails && store.menuDetails.length > 0) {
+            setMenuId(store.menuDetails[0].menuId);
+          }
           return store;
         } else {
           console.error("Store not found");
@@ -73,7 +78,10 @@ const StorePage = () => {
 
   const fetchReviewData = async () => {
     try {
-      const response = await axiosInstance.get(`/review`, {
+      if (!menuId) {
+        throw new Error("Menu ID is not defined");
+      }
+      const response = await axiosInstance.get(`/review/${menuId}`, {
         params: { storeId },
       });
       console.log("Fetching reviews for store ID:", storeId);
@@ -86,7 +94,13 @@ const StorePage = () => {
         throw new Error("Invalid review data response");
       }
     } catch (error) {
-      console.error("Error fetching review data:", error);
+      if (error.response) {
+        console.error("Response error:", error.response);
+      } else if (error.request) {
+        console.error("Request error:", error.request);
+      } else {
+        console.error("Error:", error.message);
+      }
       throw error;
     }
   };
@@ -107,15 +121,18 @@ const StorePage = () => {
     isError: isReviewError,
     isLoading: isReviewLoading,
   } = useQuery({
-    queryKey: ["reviewData", storeId],
+    queryKey: ["reviewData", storeId, menuId],
     queryFn: fetchReviewData,
+    enabled: !!menuId, // menuId가 있을 때만 실행
     onSuccess: (data) => {
-      const myReview = data.filter((review) => review.isMine);
-      const otherReviews = data
-        .filter((review) => !review.isMine)
-        .sort((a, b) => b.likeCount - a.likeCount);
+      if (data) {
+        const myReview = data.filter((review) => review.isMine);
+        const otherReviews = data
+          .filter((review) => !review.isMine)
+          .sort((a, b) => b.likeCount - a.likeCount);
 
-      setReviews([...myReview, ...otherReviews]);
+        setReviews([...myReview, ...otherReviews]);
+      }
     },
   });
 
@@ -174,6 +191,7 @@ const StorePage = () => {
 
   const handleMenuClick = (menu) => {
     setSelectedMenu(menu);
+    setMenuId(menu.menuId); // 메뉴 클릭 시 menuId를 설정합니다
   };
 
   return selectedMenu ? (
@@ -246,6 +264,8 @@ const EmptyReviewContainer = styled.div`
   color: ${({ theme }) => theme.color.gray600};
   font-size: 20px;
   font-weight: ${({ theme }) => theme.fontWeight.semiBold};
+  margin-top: 80px;
+  margin-bottom: 80px;
 `;
 
 const EmptyReviewImageStyled = styled.img`
