@@ -14,7 +14,6 @@ const VisitItem = ({
     openId,
     handleOpenModal = () => {},
 }) => {
-    console.log(item);
     const [status, setStatus] = useState(null);
     const [style, setStyle] = useState(false);
     const syluvAxios = useSyluvAxios();

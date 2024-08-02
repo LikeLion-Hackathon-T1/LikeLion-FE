@@ -68,9 +68,7 @@ const ReviewPage = ({ image, name, date, handleClick = () => {}, orderId }) => {
                     "Content-Type": "multipart/form-data",
                 },
             })
-            .then((response) => {
-                console.log(response);
-            })
+            .then((response) => {})
             .finally(() => {
                 handleClick();
             });

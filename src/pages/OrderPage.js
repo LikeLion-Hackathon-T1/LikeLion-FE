@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import { ReactComponent as Warn } from "assets/images/warning.svg";
 
 const OrderPage = ({ item, onClick = () => {} }) => {
-    console.log(item);
     const navigate = useNavigate();
 
     const [hour, setHour] = useState("");

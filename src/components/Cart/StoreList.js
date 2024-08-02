@@ -99,7 +99,6 @@ const StoreList = ({ cartList, setCartList, isLoading }) => {
         const selectedStores = [
             ...new Set(selectedItems.map((item) => item.storeName)),
         ];
-        console.log(selectedStores);
         if (selectedStores.length > 1) {
             setToastMessage("한 번에 한 가게만 주문할 수 있어요");
         } else {
