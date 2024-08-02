@@ -1,8 +1,11 @@
 import styled from "styled-components";
 import { ReactComponent as Time } from "assets/images/visit_time.svg";
 import { ReactComponent as Time2 } from "assets/images/visit_time2.svg";
+import { ReactComponent as Gom } from "assets/images/foot_check.svg";
+import { ReactComponent as Gom2 } from "assets/images/foot_check2.svg";
 import { useCallback, useEffect, useState } from "react";
 import Button from "components/Common/Button";
+import useSyluvAxios from "hooks/useSyluvAxios";
 
 const VisitItem = ({
     index,
@@ -12,7 +15,8 @@ const VisitItem = ({
     handleOpenModal = () => {},
 }) => {
     const [status, setStatus] = useState(null);
-    const [style, setStyle] = useState(true);
+    const [style, setStyle] = useState(false);
+    const syluvAxios = useSyluvAxios();
     const onCompleteClick = useCallback(() => {
         handleOpenModal(null);
     }, [handleOpenModal]);
@@ -40,13 +44,20 @@ const VisitItem = ({
                 break;
         }
     }, []);
+
+    const handleVisitComplete = useCallback(() => {
+        syluvAxios
+            .patch(`/market/${item.visitListId}/visitlist/visited`)
+            .then((res) => {
+                setStatus("방문 완료");
+                setStyle(false);
+                onCompleteClick();
+            });
+    }, [item.visitListId]);
+
     return (
         <>
-            <ListItem
-                onClick={() => {
-                    handleOpenModal(index);
-                }}
-            >
+            <ListItem>
                 <Container>
                     <Number>{index + 1}</Number>
                     {!isLast && <div className="line" />} {/* 수정된 부분 */}
@@ -54,27 +65,41 @@ const VisitItem = ({
 
                 <Wrapper>
                     <div className="store">
-                        <img
-                            src="https://via.placeholder.com/100"
-                            alt="store"
-                        />
+                        <img src={item.imageUrl} alt="store" />
                         <div className="store-info">
                             <div>
                                 <div className="store-header">
-                                    <span>분식</span>
+                                    <span>카테고리주세요</span>
                                     <span className="store-name">
                                         {item.store}
                                     </span>
                                 </div>
                             </div>
-                            <div className={`status ${style ? "color" : ""}`}>
-                                {status}
-                            </div>
+                            {
+                                <div
+                                    className={`status ${style ? "color" : ""}`}
+                                >
+                                    {status}
+                                </div>
+                            }
                         </div>
                     </div>
+                    <Foot able={style}>
+                        {style ? (
+                            <Gom2
+                                onClick={() =>
+                                    handleOpenModal(item.visitListId)
+                                }
+                            />
+                        ) : (
+                            <Gom />
+                        )}
+                    </Foot>
                     <div className="time">
                         {style ? <Time2 /> : <Time />}
-                        <span className={`${style ? "color" : ""}`}>11:21</span>
+                        <span className={`${style ? "color" : ""}`}>
+                            {item.visitedTime}
+                        </span>
                     </div>
                 </Wrapper>
             </ListItem>
@@ -90,7 +115,7 @@ const VisitItem = ({
                             <Button
                                 text="완료했어요"
                                 onClick={() => {
-                                    onCompleteClick();
+                                    handleVisitComplete();
                                 }}
                             />
                             <Button
@@ -109,6 +134,18 @@ const VisitItem = ({
 };
 
 export default VisitItem;
+
+const Foot = styled.div`
+    position: absolute;
+    right: 0;
+    top: 0;
+    cursor: pointer;
+
+    ${(props) =>
+        !props.able &&
+        `cursor: default;
+        `}
+`;
 
 const ModalContainer = styled.div`
     z-index: 1000;
@@ -189,7 +226,6 @@ const Number = styled.div`
 `;
 
 const ListItem = styled.div`
-    cursor: pointer;
     display: flex;
     justify-content: space-between;
 

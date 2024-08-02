@@ -1,16 +1,16 @@
 import { ListContainer } from "pages/OrderDetailPage";
 import styled from "styled-components";
 
-const SimpleReceipt = () => {
+const SimpleReceipt = ({ date, orderNum, name, state }) => {
     return (
         <Container>
             <div className="container order">
-                <span>2024년 7월 17일 오후 08:12 주문</span>
-                <span>주문번호 B1UD01004L</span>
-            </div>
-            <div className="container">
-                <span className="title-text">세미수산</span>
-                <span className="sub-text">픽업이 완료되었어요</span>
+                <div className="container">
+                    <span className="sub-text">{state}</span>
+                    <span className="title-text">{name}</span>
+                </div>
+                <span>{date} 주문</span>
+                <span>주문번호 {orderNum}</span>
             </div>
         </Container>
     );
@@ -20,15 +20,13 @@ export default SimpleReceipt;
 
 const Container = styled.div`
     margin-top: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
     width: calc(100% - 40px);
 
     .container {
         display: flex;
         flex-direction: column;
         gap: 12px;
+        margin-bottom: 20px;
     }
 
     .order {

@@ -39,19 +39,16 @@ const TotalVisitItem = ({ item, isLast, index }) => {
             >
                 <Container>
                     <Number>{index + 1}</Number>
-                    {!isLast && <div className="line" />} {/* 수정된 부분 */}
+                    {!isLast && <div className="line" />}
                 </Container>
 
                 <Wrapper>
                     <div className="store">
-                        <img
-                            src="https://via.placeholder.com/100"
-                            alt="store"
-                        />
+                        <img src={item.imageUrl} alt="store" />
                         <div className="store-info">
                             <div>
                                 <div className="store-header">
-                                    <span>분식</span>
+                                    <span>타입안줌백엔드</span>
                                     <span className="store-name">
                                         {item.store}
                                     </span>
@@ -64,7 +61,9 @@ const TotalVisitItem = ({ item, isLast, index }) => {
                     </div>
                     <div className="time">
                         {style ? <Time2 /> : <Time />}
-                        <span className={`${style ? "color" : ""}`}>11:21</span>
+                        <span className={`${style ? "color" : ""}`}>
+                            {item.visitedTime}
+                        </span>
                     </div>
                 </Wrapper>
             </ListItem>

@@ -18,7 +18,7 @@ const CategoryBar = ({ categories, onClick }) => {
 
     return (
         <CategoryContainer>
-            <Swiper slidesPerView={7} spaceBetween={8}>
+            <Swiper slidesPerView={6} spaceBetween={8}>
                 {categories.map((categories) => (
                     <SwiperSlide key={categories}>
                         <Category
