@@ -1,18 +1,22 @@
 import Button from "components/Common/Button";
 import Header from "components/Common/Header";
 import OrderItem from "owner/components/OrderItem";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-const OwnerDetailPage = () => {
-    const navigate = useNavigate();
+const OwnerDetailPage = ({
+    item,
+    handleItem = () => {},
+    handleCancel = () => {},
+    handleSuccess = () => {},
+}) => {
+    console.log(item);
     return (
         <>
             <Header title="주문상세" cart={false} />
             <Wrapper>
                 <div className="info">
-                    <span>주문일시: 2024년 7월 17일 오후 08:12</span>
-                    <span>주문번호: B1UD01004L</span>
+                    <span>주문일시: 2024년 7월 17일 오후 {item.orderTime}</span>
+                    <span>주문번호: {item.orderNumber}</span>
                     <span>고객번호: 010-8634-0405</span>
                 </div>
                 <OrderItem />
@@ -32,14 +36,16 @@ const OwnerDetailPage = () => {
                     <Button
                         text="접수 취소"
                         onClick={() => {
-                            navigate(-1, { replace: true });
+                            handleCancel(item.id);
+                            handleItem(null);
                         }}
                     />
                     <Button
                         text="접수하기"
                         type="2"
                         onClick={() => {
-                            navigate(-1, { replace: true });
+                            handleSuccess(item.id);
+                            handleItem(null);
                         }}
                     />
                 </ButtonContainer>
@@ -51,7 +57,7 @@ const OwnerDetailPage = () => {
 export default OwnerDetailPage;
 
 const ButtonContainer = styled.div`
-    position: absolute;
+    position: fixed;
     bottom: 20px;
     padding: 0 20px;
     display: flex;
@@ -90,6 +96,8 @@ const BillContainer = styled.div`
 `;
 
 const Wrapper = styled.div`
+    margin-top: 70px;
+    margin-bottom: 80px;
     .info {
         display: flex;
         flex-direction: column;
