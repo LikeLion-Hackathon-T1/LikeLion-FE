@@ -264,6 +264,8 @@ const EmptyReviewContainer = styled.div`
   color: ${({ theme }) => theme.color.gray600};
   font-size: 20px;
   font-weight: ${({ theme }) => theme.fontWeight.semiBold};
+  margin-top: 80px;
+  margin-bottom: 80px;
 `;
 
 const EmptyReviewImageStyled = styled.img`
