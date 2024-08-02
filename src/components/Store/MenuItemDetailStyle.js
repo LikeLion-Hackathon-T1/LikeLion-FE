@@ -99,6 +99,7 @@ export const QuantityContainer = styled.div`
   padding: 0 20px;
   background-color: white;
   border-radius: 8px;
+  margin-left: 8.5px;
   @media (max-width: 480px) {
     width: calc(100% - 40px);
   }
@@ -161,6 +162,7 @@ export const AddToCartButton = styled.button`
   bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
+  margin-left: 8.5px;
   @media (max-width: 480px) {
     width: calc(100% - 40px);
   }
