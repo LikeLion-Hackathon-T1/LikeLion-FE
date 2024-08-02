@@ -1,166 +1,40 @@
 import React, { useState } from "react";
-import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { ReactComponent as BackIcon } from "assets/images/back.svg";
 import { ReactComponent as CartIcon } from "assets/images/marketbag.svg";
 import { ReactComponent as HomeIcon } from "assets/images/newhome.svg";
 import useSyluvAxios from "hooks/useSyluvAxios";
 import Splash from "components/Common/Splash";
-
-const Container = styled.div`
-  font-family: "Pretendard", sans-serif;
-  background-color: white;
-  padding-bottom: 120px;
-  position: relative;
-  overflow: hidden;
-  height: 100%;
-`;
-
-const ImageContainer = styled.div`
-  width: 100%;
-  overflow: hidden;
-  margin-bottom: 14px;
-  position: relative;
-  height: 272px;
-`;
-
-const Image = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-`;
-
-const BackButton = styled.div`
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  cursor: pointer;
-  padding: 8px;
-`;
-
-const HomeButton = styled.div`
-  position: absolute;
-  top: 16px;
-  right: calc(20px + 32px + 12px);
-  cursor: pointer;
-  padding: 8px;
-`;
-
-const CartButton = styled.div`
-  position: absolute;
-  top: 16px;
-  right: 20px;
-  cursor: pointer;
-  padding: 8px;
-`;
-
-const Title = styled.h1`
-  font-size: 20px;
-  font-weight: ${({ theme }) => theme.fontWeight.bold};
-  color: ${({ theme }) => theme.color.gray900};
-  margin-bottom: 12px;
-  margin-left: 20px;
-  margin-top: 20px;
-`;
-
-const Description = styled.p`
-  font-size: 14px;
-  color: ${({ theme }) => theme.color.gray500};
-  font-weight: ${({ theme }) => theme.fontWeight.regular};
-  margin-left: 20px;
-`;
-
-const Line = styled.div`
-  width: 480px;
-  align-content: center;
-  height: 1px;
-  border-bottom: 1px solid ${({ theme }) => theme.color.gray100};
-  margin-top: 280px;
-`;
-
-const QuantityContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: fixed;
-  bottom: 70px;
-  width: 440px;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 0 20px;
-  background-color: white;
-  border-radius: 8px;
-  @media (max-width: 480px) {
-    width: calc(100% - 40px);
-  }
-`;
-
-const QuantityLabel = styled.span`
-  font-size: 18px;
-  font-weight: ${({ theme }) => theme.fontWeight.bold};
-`;
-
-const QuantityWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  border: 1px solid ${({ theme }) => theme.color.gray200};
-  border-radius: 4px;
-  padding: 5px 5px;
-  width: 110px;
-  height: 28px;
-`;
-
-const QuantityButton1 = styled.button`
-  width: 40px;
-  height: 100%;
-  border: none;
-  background-color: white;
-  font-size: 16px;
-  cursor: pointer;
-  font-weight: ${({ theme }) => theme.fontWeight.regular};
-  color: #cccccc;
-`;
-
-const QuantityButton2 = styled.button`
-  width: 40px;
-  height: 100%;
-  border: none;
-  background-color: white;
-  font-size: 16px;
-  cursor: pointer;
-  font-weight: ${({ theme }) => theme.fontWeight.regular};
-`;
-
-const Quantity = styled.span`
-  font-size: 16px;
-  font-weight: ${({ theme }) => theme.fontWeight.medium};
-  width: 40px;
-  text-align: center;
-  color: ${({ theme }) => theme.color.gray800};
-`;
-
-const AddToCartButton = styled.button`
-  position: fixed;
-  width: 440px;
-  height: 48px;
-  background-color: #ff6b00;
-  color: white;
-  font-size: 16px;
-  font-weight: ${({ theme }) => theme.fontWeight.bold};
-  border: none;
-  border-radius: 8px;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  @media (max-width: 480px) {
-    width: calc(100% - 40px);
-  }
-`;
+import {
+  Container,
+  ImageContainer,
+  Image,
+  BackButton,
+  HomeButton,
+  CartButton,
+  Title,
+  Description,
+  Line,
+  QuantityContainer,
+  QuantityLabel,
+  QuantityWrapper,
+  QuantityButton1,
+  QuantityButton2,
+  Quantity,
+  AddToCartButton,
+  ModalBackground,
+  ModalContent,
+  ModalTitle,
+  VisitModal,
+  ModalButton,
+  CartBadge,
+} from "./MenuItemDetailStyle"; // 스타일 컴포넌트 경로에 맞게 수정
 
 const MenuItemDetail = ({ menu, onClick = () => {} }) => {
   const navigate = useNavigate();
   const syluvAxios = useSyluvAxios();
   const [quantity, setQuantity] = useState(1);
+  const [showModal, setShowModal] = useState(false);
 
   const handleIncrease = () => {
     setQuantity(quantity + 1);
@@ -174,24 +48,73 @@ const MenuItemDetail = ({ menu, onClick = () => {} }) => {
 
   const handleAddToCart = async () => {
     const menuId = menu?.menuId;
-    if (!menuId) {
-      console.error("Menu ID가 정의안됨");
+    const menuName = menu?.name;
+    if (!menuId || !menuName) {
+      console.error("Menu ID 또는 이름이 정의안됨");
       return;
     }
 
     console.log("Adding to cart...");
     console.log("Menu ID: ", menuId);
+    console.log("Menu Name: ", menuName);
     console.log("Quantity: ", quantity);
     try {
-      const response = await syluvAxios.post("/cart", {
-        menuId: menuId,
-        quantity: quantity,
-      });
-      if (response && response.data) {
-        console.log("굿잡", response.data);
+      // 현재 장바구니 아이템을 가져옴
+      const cartResponse = await syluvAxios.get("/cart");
+      const cartItems = cartResponse.data.payload || [];
+
+      console.log("Cart items: ", cartItems);
+
+      // 장바구니에 동일한 메뉴가 있는지 확인
+      const existingCartItem = cartItems.find(
+        (item) => item.menuName === menuName
+      );
+
+      if (existingCartItem) {
+        // 동일한 메뉴가 있으면 수량을 업데이트
+        const newQuantity = existingCartItem.quantity + quantity;
+        console.log("Updating quantity for existing cart item...");
+        console.log("Cart ID: ", existingCartItem.cartid);
+        console.log("New Quantity: ", newQuantity);
+        try {
+          const updateResponse = await syluvAxios.put("/cart", {
+            cartid: existingCartItem.cartid,
+            quantity: newQuantity,
+          });
+          console.log("Update Response: ", updateResponse.data);
+
+          // 장바구니 다시 불러오기
+          const updatedCartResponse = await syluvAxios.get("/cart");
+          console.log("Updated Cart items: ", updatedCartResponse.data.payload);
+        } catch (updateError) {
+          console.error(
+            "Update Error: ",
+            updateError.response ? updateError.response.data : updateError
+          );
+        }
       } else {
-        console.error("데이터 없음");
+        // 동일한 메뉴가 없으면 새로운 항목으로 추가
+        console.log("Adding new item to cart...");
+        try {
+          const addResponse = await syluvAxios.post("/cart", {
+            menuId: menuId,
+            quantity: quantity,
+          });
+          console.log("Add Response: ", addResponse.data);
+
+          // 장바구니 다시 불러오기
+          const updatedCartResponse = await syluvAxios.get("/cart");
+          console.log("Updated Cart items: ", updatedCartResponse.data.payload);
+        } catch (addError) {
+          console.error(
+            "Add Error: ",
+            addError.response ? addError.response.data : addError
+          );
+        }
       }
+
+      console.log("장바구니 업데이트 완료");
+      setShowModal(true); // 모달 표시
     } catch (err) {
       console.error("에러 발생:", err);
       if (err.response) {
@@ -200,11 +123,13 @@ const MenuItemDetail = ({ menu, onClick = () => {} }) => {
     }
   };
 
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
   if (!menu) {
     return <Splash />;
   }
-
-  console.log("Rendered menu:", menu);
 
   return (
     <Container>
@@ -217,6 +142,8 @@ const MenuItemDetail = ({ menu, onClick = () => {} }) => {
         </HomeButton>
         <CartButton onClick={() => navigate("/cart")} aria-label="장바구니로">
           <CartIcon />
+          {showModal && <CartBadge>{quantity}</CartBadge>}{" "}
+          {/* 수량 배지 추가 */}
         </CartButton>
         <Image src={menu.menuImage} alt={menu.name} />
       </ImageContainer>
@@ -238,6 +165,22 @@ const MenuItemDetail = ({ menu, onClick = () => {} }) => {
       <AddToCartButton onClick={handleAddToCart}>
         {menu.price}원 담기
       </AddToCartButton>
+      {showModal && (
+        <ModalBackground show={showModal}>
+          <VisitModal>
+            <div className="title-text">메뉴가 장바구니에 담겼어요!</div>
+            <div className="sub-text">{menu.name}</div>
+            <div className="buttons">
+              <ModalButton onClick={() => navigate("/cart")}>
+                주문하러 가기
+              </ModalButton>
+              <ModalButton onClick={handleCloseModal}>
+                계속 둘러보기
+              </ModalButton>
+            </div>
+          </VisitModal>
+        </ModalBackground>
+      )}
     </Container>
   );
 };
