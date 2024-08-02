@@ -66,21 +66,21 @@ const MenuItemDetail = ({ menu, onClick = () => {} }) => {
       console.log("Cart items: ", cartItems);
 
       // 장바구니에 동일한 메뉴가 있는지 확인
-      const existingCartItem = cartItems.find(
-        (item) => item.menuName === menuName
-      );
+      const existingCartItem = cartItems.find((item) => item.menuId === menuId);
 
       if (existingCartItem) {
         // 동일한 메뉴가 있으면 수량을 업데이트
         const newQuantity = existingCartItem.quantity + quantity;
         console.log("Updating quantity for existing cart item...");
-        console.log("Cart ID: ", existingCartItem.cartid);
+        console.log("Cart ID: ", existingCartItem.cartId);
         console.log("New Quantity: ", newQuantity);
         try {
-          const updateResponse = await syluvAxios.put("/cart", {
-            cartid: existingCartItem.cartid,
-            quantity: newQuantity,
-          });
+          const updateResponse = await syluvAxios.put("/cart", [
+            {
+              cartId: existingCartItem.cartId,
+              quantity: newQuantity,
+            },
+          ]);
           console.log("Update Response: ", updateResponse.data);
 
           // 장바구니 다시 불러오기

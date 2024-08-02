@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   ReviewContainer,
   Header,
@@ -45,19 +45,20 @@ const formatTime = ({ beforeHours, beforeDay, beforeWeek }) => {
 
 const ReviewItem = ({ review, onDelete, onHelpful }) => {
   const [helpfulness, setHelpfulness] = useState(Number(review.likeCount));
-  const [isHelpfulClicked, setIsHelpfulClicked] = useState(false);
-
-  useEffect(() => {
-    setIsHelpfulClicked(review.isHelpfulClicked);
-  }, [review.isHelpfulClicked]);
+  const [isHelpfulClicked, setIsHelpfulClicked] = useState(
+    review.isHelpfulClicked
+  );
 
   const syluvAxios = useSyluvAxios();
 
+  useEffect(() => {
+    setHelpfulness(Number(review.likeCount));
+    setIsHelpfulClicked(review.isHelpfulClicked);
+  }, [review.likeCount, review.isHelpfulClicked]);
+
   const handleHelpfulnessClick = async () => {
-    if (review.isMine || isHelpfulClicked) {
-      console.log(
-        "자신의 리뷰에는 도움이 돼요를 누를 수 없거나 이미 누른 리뷰입니다."
-      );
+    if (isHelpfulClicked) {
+      console.log("이미 누른 리뷰입니다.");
       return;
     }
 
@@ -162,7 +163,7 @@ const ReviewItem = ({ review, onDelete, onHelpful }) => {
         <HelpfulButton
           onClick={handleHelpfulnessClick}
           $active={isHelpfulClicked}
-          disabled={review.isMine || isHelpfulClicked}
+          disabled={isHelpfulClicked}
         >
           <Icon src={goodIcon} alt="thumbs up" />
           도움이 돼요
