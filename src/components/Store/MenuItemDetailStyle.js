@@ -203,14 +203,14 @@ export const VisitModal = styled.div`
     font-size: 18px;
     font-weight: ${({ theme }) => theme.fontWeight.bold};
     color: ${({ theme }) => theme.color.gray900};
-    margin-bottom: 20px; /* 하단 여백 20px */
+    margin-bottom: 20px;
   }
 
   .sub-text {
     font-size: 20px;
     color: ${({ theme }) => theme.color.primary};
     font-weight: ${({ theme }) => theme.fontWeight.bold};
-    margin-bottom: 20px; /* 하단 여백 20px */
+    margin-bottom: 20px;
   }
 `;
 

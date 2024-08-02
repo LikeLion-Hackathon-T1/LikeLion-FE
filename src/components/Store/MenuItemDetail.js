@@ -143,7 +143,6 @@ const MenuItemDetail = ({ menu, onClick = () => {} }) => {
         <CartButton onClick={() => navigate("/cart")} aria-label="장바구니로">
           <CartIcon />
           {showModal && <CartBadge>{quantity}</CartBadge>}{" "}
-          {/* 수량 배지 추가 */}
         </CartButton>
         <Image src={menu.menuImage} alt={menu.name} />
       </ImageContainer>
