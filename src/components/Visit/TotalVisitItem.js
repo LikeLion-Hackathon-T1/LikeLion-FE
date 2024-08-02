@@ -30,6 +30,7 @@ const TotalVisitItem = ({ item, isLast, index }) => {
                 break;
         }
     }, []);
+
     return (
         <>
             <ListItem
@@ -48,7 +49,7 @@ const TotalVisitItem = ({ item, isLast, index }) => {
                         <div className="store-info">
                             <div>
                                 <div className="store-header">
-                                    <span>타입안줌백엔드</span>
+                                    <span>{item.category}</span>
                                     <span className="store-name">
                                         {item.store}
                                     </span>

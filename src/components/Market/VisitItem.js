@@ -14,6 +14,7 @@ const VisitItem = ({
     openId,
     handleOpenModal = () => {},
 }) => {
+    console.log(item);
     const [status, setStatus] = useState(null);
     const [style, setStyle] = useState(false);
     const syluvAxios = useSyluvAxios();
@@ -69,7 +70,7 @@ const VisitItem = ({
                         <div className="store-info">
                             <div>
                                 <div className="store-header">
-                                    <span>카테고리주세요</span>
+                                    <span>{item.category}</span>
                                     <span className="store-name">
                                         {item.store}
                                     </span>
