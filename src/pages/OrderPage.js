@@ -1,8 +1,9 @@
 import Header from "components/Common/Header";
 import styled from "styled-components";
 import { ReactComponent as Toss } from "assets/images/toss.svg";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ReactComponent as Warn } from "assets/images/warning.svg";
 
 const OrderPage = () => {
     const navigate = useNavigate();
@@ -11,7 +12,7 @@ const OrderPage = () => {
     const [minute, setMinute] = useState("");
     const [phone, setPhone] = useState("");
 
-    const handlePhoneChange = (e) => {
+    const handlePhoneChange = useCallback((e) => {
         const value = e.target.value.replace(/\D/g, "");
         let formattedValue = "";
 
@@ -27,7 +28,15 @@ const OrderPage = () => {
         }
 
         setPhone(formattedValue);
-    };
+    }, []);
+
+    const handleTimeChange = useCallback((e) => {
+        //최대 2자리 숫자만 입력 가능
+        const value = e.target.value.replace(/\D/g, "");
+        if (value.length <= 2) {
+            setHour(value);
+        }
+    }, []);
 
     return (
         <>
@@ -42,11 +51,11 @@ const OrderPage = () => {
                 </div>
                 <div className="section">
                     <span className="title-text">방문할 시각</span>
-                    <div className="time">
+                    <div className="time error">
                         <input
                             placeholder="00"
                             value={hour}
-                            onChange={(e) => setHour(e.target.value)}
+                            onChange={(e) => handleTimeChange(e)}
                         />
                         <span>시</span>
                         <input
@@ -55,6 +64,10 @@ const OrderPage = () => {
                             onChange={(e) => setMinute(e.target.value)}
                         />
                         <span>분</span>
+                    </div>
+                    <div className="error-message">
+                        <Warn />
+                        <span>에러메세지 뭐라해요</span>
                     </div>
                 </div>
                 <div className="section">
@@ -80,6 +93,7 @@ const OrderPage = () => {
                     onClick={() => {
                         navigate("/ordersuccess");
                     }}
+                    error={true}
                 >
                     {new Intl.NumberFormat("ko-KR").format(51000)}원 결제하기
                 </OrderButton>
@@ -91,6 +105,7 @@ const OrderPage = () => {
 const Container = styled.div`
     margin-top: -12px;
     width: 100%;
+    margin-bottom: 80px;
 
     .section {
         display: flex;
@@ -98,6 +113,15 @@ const Container = styled.div`
         gap: 16px;
         padding: 28px 20px;
         border-bottom: 1px solid ${({ theme }) => theme.color.gray100};
+
+        .error-message {
+            display: flex;
+            gap: 4px;
+            color: #ff3b30;
+            font-size: 14px;
+            font-weight: ${({ theme }) => theme.fontWeight.regular};
+            align-items: center;
+        }
 
         .call {
             height: 48px;
@@ -164,6 +188,13 @@ const Container = styled.div`
             }
         }
 
+        .error {
+            input {
+                border: 1px solid #ff3b30;
+                color: #ff3b30;
+            }
+        }
+
         button {
             height: 154px;
             border: 1px solid ${({ theme }) => theme.color.gray200};
@@ -209,6 +240,13 @@ const OrderButton = styled.button`
     border: none;
     border-radius: 8px;
     cursor: pointer;
+
+    ${({ error }) =>
+        error &&
+        `
+        background-color: #b3b3b3;
+        cursor: not-allowed;
+    `}
 
     @media (max-width: 480px) {
         width: calc(100dvw - 40px);
