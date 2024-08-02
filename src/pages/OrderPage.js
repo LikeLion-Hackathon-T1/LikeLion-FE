@@ -4,6 +4,7 @@ import { ReactComponent as Toss } from "assets/images/toss.svg";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ReactComponent as Warn } from "assets/images/warning.svg";
+import Payments from "components/Order/Payment";
 
 const OrderPage = ({ item, onClick = () => {} }) => {
     const navigate = useNavigate();
@@ -162,14 +163,7 @@ const OrderPage = ({ item, onClick = () => {} }) => {
                 </div>
             </Container>
             <ButtonContainer>
-                <OrderButton
-                    onClick={() => {
-                        navigate("/ordersuccess");
-                    }}
-                    error={!isReady}
-                >
-                    {new Intl.NumberFormat("ko-KR").format(51000)}원 결제하기
-                </OrderButton>
+                <Payments isReady={isReady} />
             </ButtonContainer>
         </>
     );
@@ -302,27 +296,4 @@ const ButtonContainer = styled.div`
     border-top: 1px solid ${({ theme }) => theme.color.gray100};
 `;
 
-const OrderButton = styled.button`
-    width: 440px;
-    height: 48px;
-    margin: 0px 20px;
-    background-color: ${({ theme }) => theme.color.primary};
-    color: white;
-    font-size: 16px;
-    font-weight: ${({ theme }) => theme.fontWeight.semiBold};
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-
-    ${({ error }) =>
-        error &&
-        `
-        background-color: #b3b3b3;
-        cursor: not-allowed;
-    `}
-
-    @media (max-width: 480px) {
-        width: calc(100dvw - 40px);
-    }
-`;
 export default OrderPage;

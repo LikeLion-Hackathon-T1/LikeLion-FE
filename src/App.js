@@ -22,6 +22,7 @@ import MyPage from "pages/MyPage";
 import OwnerPage from "owner/pages/OwnerPage";
 import OwnerDetailPage from "owner/pages/OwnerDetailPage";
 import useSyluvAxios from "hooks/useSyluvAxios";
+import Toss from "components/Payment/Toss/TossPay";
 const App = () => {
     useEffect(() => {
         if (window.location.host === "syluv.store") {
@@ -88,6 +89,7 @@ const App = () => {
                                     path="/owner/:storeId/:orderId"
                                     element={<OwnerDetailPage />}
                                 />
+                                <Route path="/toss" element={<Toss />} />
                             </Routes>
                         </BrowserRouter>
                     </MobileContainer>

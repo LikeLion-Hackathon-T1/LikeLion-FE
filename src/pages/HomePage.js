@@ -28,6 +28,16 @@ const HomePage = () => {
                 }
             });
         }
+
+        syluvAxios
+            .post("/order/toss", {
+                menuIds: ["1"],
+                paymentKey: "test",
+                amount: 1000,
+            })
+            .then((res) => {
+                console.log(res);
+            });
     }, []);
 
     useEffect(() => {
