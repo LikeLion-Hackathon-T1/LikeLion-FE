@@ -20,14 +20,6 @@ const VisitList = ({ visitList }) => {
                         openId={openedModal}
                         handleOpenModal={handleOpenModal}
                     />
-                    <div
-                        className="visit-complete"
-                        onClick={() => {
-                            handleOpenModal(item.visitListId);
-                        }}
-                    >
-                        방문 완료
-                    </div>
                 </Container>
             ))}
         </ListContainer>
