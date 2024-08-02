@@ -22,6 +22,10 @@ const MarketPage = () => {
 
     const [listChanged, setListChanged] = useState(false);
 
+    const handleVisitList = ({ changedList }) => {
+        setVisitList(changedList);
+    };
+
     const isEmptyObject = (obj) => {
         return Object.keys(obj).length === 0;
     };
@@ -97,6 +101,7 @@ const MarketPage = () => {
                     marketId={marketId}
                     visitList={visitList}
                     onChange={onListChange}
+                    handleVisitList={handleVisitList}
                 />
             )}
         </Wrapper>

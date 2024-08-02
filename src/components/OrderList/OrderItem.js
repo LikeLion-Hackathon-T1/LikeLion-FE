@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 const OrderItem = ({ order }) => {
     const navigate = useNavigate();
-    console.log(order);
 
     const handleDate = (date) => {
         // "2024-08-01T01:54:46" -> "2024.08.01 오후 1:54"
