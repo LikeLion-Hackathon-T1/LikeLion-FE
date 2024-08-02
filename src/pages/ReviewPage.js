@@ -5,21 +5,18 @@ import starFilled from "assets/images/star-fill.png";
 import add from "assets/images/add-button.png";
 import { useEffect, useState } from "react";
 import Button from "components/Common/Button";
-import { useNavigate, useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import useSyluvAxios from "hooks/useSyluvAxios";
 
-const ReviewPage = () => {
+const ReviewPage = ({ name, date, handleClick = () => {}, orderId }) => {
     const [review, setReview] = useState("");
     const [currentCount, setCurrentCount] = useState(0);
     const [rating, setRating] = useState(0);
     const [ratingText, setRatingText] = useState("");
     const [photos, setPhotos] = useState([]);
-    const { orderId } = useParams();
     const syluvAxios = useSyluvAxios();
-    const navigate = useNavigate();
 
     useEffect(() => {
         setCurrentCount(review.length);
@@ -75,7 +72,7 @@ const ReviewPage = () => {
                 console.log(response);
             })
             .finally(() => {
-                navigate(-1, { replace: true });
+                handleClick();
             });
     };
 
@@ -87,10 +84,12 @@ const ReviewPage = () => {
                     <img src="https://via.placeholder.com/375x375" alt="menu" />
                     <div className="store-info">
                         <div>
-                            <span className="store-name">진아 수산</span>
-                            <span className="menu-name">연어 회</span>
+                            <span className="store-name">{name}</span>
+                            <span className="menu-name">
+                                이거 뭘로표시함 메뉴별로 리뷰?
+                            </span>
                         </div>
-                        <span>2024년 7월 17일 오후 08:12</span>
+                        <span>{date}</span>
                     </div>
                 </Menu>
                 <Review>

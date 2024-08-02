@@ -5,7 +5,11 @@ import { useState } from "react";
 import EditList from "./EditList";
 import useSyluvAxios from "hooks/useSyluvAxios";
 
-const VisitTab = ({ visitList, onChange = () => {} }) => {
+const VisitTab = ({
+    visitList,
+    handleVisitList = () => {},
+    onChange = () => {},
+}) => {
     const [isEdit, setIsEdit] = useState(false);
     const [selectedList, setSelectedList] = useState([]);
     const syluvAxios = useSyluvAxios();
@@ -21,13 +25,20 @@ const VisitTab = ({ visitList, onChange = () => {} }) => {
     const handleDelete = async () => {
         try {
             await Promise.all(
-                selectedList.map((id) =>
-                    syluvAxios.delete(`/market/${id}/visitlist/delete`)
+                selectedList.map((visitListId) =>
+                    syluvAxios.delete(`/market/${visitListId}/visitlist/delete`)
                 )
             );
 
+            onChange();
+
+            handleVisitList({
+                changedList: visitList.filter(
+                    (item) => !selectedList.includes(item.visitListId)
+                ),
+            });
+
             setSelectedList([]);
-            onChange(selectedList);
             setIsEdit(!isEdit);
         } catch (error) {
             console.error("방문 리스트 삭제 중 에러가 발생했습니다:", error);

@@ -22,6 +22,10 @@ const MarketPage = () => {
 
     const [listChanged, setListChanged] = useState(false);
 
+    const handleVisitList = ({ changedList }) => {
+        setVisitList(changedList);
+    };
+
     const isEmptyObject = (obj) => {
         return Object.keys(obj).length === 0;
     };
@@ -60,7 +64,6 @@ const MarketPage = () => {
                     setVisitList(res.data.payload[dates[0]]);
                     const num = res.data.payload[dates[0]].length;
                     setVisitNum(num);
-                    console.log(res.data.payload[dates[0]]);
                 }
             })
             .catch((error) => {
@@ -98,6 +101,7 @@ const MarketPage = () => {
                     marketId={marketId}
                     visitList={visitList}
                     onChange={onListChange}
+                    handleVisitList={handleVisitList}
                 />
             )}
         </Wrapper>
