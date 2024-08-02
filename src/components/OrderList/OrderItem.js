@@ -24,7 +24,7 @@ const OrderItem = ({ order }) => {
     return (
         <Container
             onClick={() => {
-                navigate("/order/1");
+                navigate("/order/" + order.orderId);
             }}
         >
             <div className="order">
@@ -41,7 +41,7 @@ const OrderItem = ({ order }) => {
                             {handlePrice(order.totalPrice)}원
                         </span>
                     </div>
-                    <span className="success">상태랑 orderId주세요</span>
+                    <span className="success">상태 주세요</span>
                 </div>
             </div>
         </Container>
