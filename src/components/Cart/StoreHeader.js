@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import CheckButton from "./CheckButton";
 import { useEffect, useState } from "react";
 
-const StoreHeader = ({ name, storeSrc = "/", isChecked, onCheck }) => {
+const StoreHeader = ({ name, isChecked, onCheck }) => {
     const navigate = useNavigate();
     const [checked, setChecked] = useState(isChecked);
 
@@ -21,7 +21,7 @@ const StoreHeader = ({ name, storeSrc = "/", isChecked, onCheck }) => {
         <Header>
             <Container>
                 <CheckButton isChecked={checked} onClick={handleClick} />
-                <StoreName onClick={() => navigate(storeSrc)}>{name}</StoreName>
+                <StoreName>{name}</StoreName>
             </Container>
         </Header>
     );
@@ -45,7 +45,6 @@ const StoreName = styled.span`
     font-size: 16px;
     color: ${({ theme }) => theme.color.gray900};
     font-weight: ${({ theme }) => theme.fontWeight.semiBold};
-    cursor: pointer;
 `;
 
 export default StoreHeader;
