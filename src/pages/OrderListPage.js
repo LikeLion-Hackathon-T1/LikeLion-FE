@@ -7,23 +7,31 @@ import OrderItem from "components/OrderList/OrderItem";
 import TabBar from "components/Common/TabBar";
 import useSyluvAxios from "hooks/useSyluvAxios";
 import { useEffect, useState } from "react";
+import Splash from "components/Common/Splash";
 
 const OrderListPage = () => {
     const navigate = useNavigate();
     const syluvAxios = useSyluvAxios();
     const [orderList, setOrderList] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const getOrderList = async () => {
             try {
                 const res = await syluvAxios.get("/order");
                 setOrderList(res.data.payload);
+                setIsLoading(false);
             } catch (error) {
                 console.error(error);
             }
         };
         getOrderList();
     }, []);
+
+    if (isLoading) {
+        return <Splash />;
+    }
+
     return orderList === null ? (
         <>
             <Header title="주문내역" />

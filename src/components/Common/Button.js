@@ -1,12 +1,16 @@
 import styled from "styled-components";
 
-const Button = ({ text, type = "1", onClick = () => {} }) => {
+const Button = ({ text, type = "1", onClick = () => {}, disabled = false }) => {
     return (
         <>
             {type === "1" ? (
-                <ButtonStyle1 onClick={onClick}>{text}</ButtonStyle1>
+                <ButtonStyle1 onClick={onClick} disabled={disabled}>
+                    {text}
+                </ButtonStyle1>
             ) : (
-                <ButtonStyle2 onClick={onClick}>{text}</ButtonStyle2>
+                <ButtonStyle2 onClick={onClick} disabled={disabled}>
+                    {text}
+                </ButtonStyle2>
             )}
         </>
     );
@@ -31,6 +35,16 @@ const ButtonStyle1 = styled.button`
         transition: transform 0.2s;
 
         filter: brightness(1.02);
+    }
+
+    &:disabled {
+        background-color: ${({ theme }) => theme.color.gray200};
+        border: none;
+        cursor: default;
+        &:hover {
+            transform: none;
+            filter: none;
+        }
     }
 `;
 

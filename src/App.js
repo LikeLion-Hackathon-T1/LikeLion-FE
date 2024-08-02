@@ -16,12 +16,13 @@ import MenuItemDetail from "./components/Store/MenuItemDetail";
 import OrderListPage from "pages/OrderListPage";
 import OrderDetailPage from "pages/OrderDetailPage";
 import OrderPage from "pages/OrderPage";
-import ReviewPage from "pages/ReviewPage";
 import VisitListPage from "pages/VisitListPage";
 import OrderSuccess from "pages/OrderSuccess";
 import MyPage from "pages/MyPage";
 import OwnerPage from "owner/pages/OwnerPage";
 import OwnerDetailPage from "owner/pages/OwnerDetailPage";
+import useSyluvAxios from "hooks/useSyluvAxios";
+import Toss from "components/Payment/Toss/TossPay";
 const App = () => {
     useEffect(() => {
         if (window.location.host === "syluv.store") {
@@ -62,7 +63,7 @@ const App = () => {
                                     element={<OrderListPage />}
                                 />
                                 <Route
-                                    path="/order/:orderId"
+                                    path="/order/:orderId/:state"
                                     element={<OrderDetailPage />}
                                 />
                                 <Route
@@ -88,6 +89,7 @@ const App = () => {
                                     path="/owner/:storeId/:orderId"
                                     element={<OwnerDetailPage />}
                                 />
+                                <Route path="/toss" element={<Toss />} />
                             </Routes>
                         </BrowserRouter>
                     </MobileContainer>

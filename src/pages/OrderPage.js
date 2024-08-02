@@ -1,16 +1,21 @@
 import Header from "components/Common/Header";
 import styled from "styled-components";
 import { ReactComponent as Toss } from "assets/images/toss.svg";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ReactComponent as Warn } from "assets/images/warning.svg";
+import Payments from "components/Order/Payment";
 
-const OrderPage = () => {
+const OrderPage = ({ item, onClick = () => {} }) => {
     const navigate = useNavigate();
 
     const [hour, setHour] = useState("");
     const [minute, setMinute] = useState("");
     const [phone, setPhone] = useState("");
+    const [error, setError] = useState(false);
+    const [message, setMessage] = useState("");
+    const [isDelivery, setIsDelivery] = useState(false);
+    const [isReady, setIsReady] = useState(false);
 
     const handlePhoneChange = useCallback((e) => {
         const value = e.target.value.replace(/\D/g, "");
@@ -30,13 +35,66 @@ const OrderPage = () => {
         setPhone(formattedValue);
     }, []);
 
-    const handleTimeChange = useCallback((e) => {
-        //최대 2자리 숫자만 입력 가능
-        const value = e.target.value.replace(/\D/g, "");
-        if (value.length <= 2) {
+    const handleHourChange = useCallback((e) => {
+        // 최대 2자리 숫자만 입력 가능, 24시 이상 입력 불가
+        let value = e.target.value.replace(/\D/g, "");
+        if (value === "") {
+            setHour("");
+            setError(false);
+        } else if (value.length <= 2 && parseInt(value) < 24) {
             setHour(value);
+            setError(false);
+        } else {
+            setError(true);
+            setMessage("24시 이상 입력할 수 없습니다.");
         }
     }, []);
+
+    const handleMinuteChange = useCallback((e) => {
+        // 최대 2자리 숫자만 입력 가능, 60분 이상 입력 불가
+        let value = e.target.value.replace(/\D/g, "");
+        if (value === "") {
+            setMinute("");
+            setError(false);
+        } else if (value.length <= 2 && parseInt(value) < 60) {
+            setMinute(value);
+            setError(false);
+        } else {
+            setError(true);
+            setMessage("60분 이상 입력할 수 없습니다.");
+        }
+    }, []);
+
+    useEffect(() => {
+        //hour, minute이 한 자리 이상이고 현재 시간보다 전인 경우
+        if (hour.length > 0 && minute.length > 0) {
+            const now = new Date();
+            const nowHour = now.getHours();
+            const nowMinute = now.getMinutes();
+            const selectedHour = parseInt(hour);
+            const selectedMinute = parseInt(minute);
+
+            if (
+                selectedHour < nowHour ||
+                (selectedHour === nowHour && selectedMinute < nowMinute)
+            ) {
+                setError(true);
+                setMessage("현재 시간 이후로 선택해주세요.");
+            } else {
+                setError(false);
+            }
+        }
+    }, [hour, minute]);
+
+    useEffect(() => {
+        //hour, minute이 한 자리 이상
+        //phone이 10자리 이상 = > isReady = true
+        if (hour.length > 0 && minute.length > 0 && phone.length >= 13) {
+            setIsReady(true);
+        } else {
+            setIsReady(false);
+        }
+    }, [hour, minute, phone]);
 
     return (
         <>
@@ -45,30 +103,46 @@ const OrderPage = () => {
                 <div className="section">
                     <span className="title-text">수령 방식</span>
                     <div className="buttons">
-                        <button className="click">바로 이용하기</button>
-                        <button>픽업하기</button>
+                        <button
+                            className={`${isDelivery ? "" : "click"}`}
+                            onClick={() => {
+                                setIsDelivery(false);
+                            }}
+                        >
+                            바로 이용하기
+                        </button>
+                        <button
+                            className={`${!isDelivery ? "" : "click"}`}
+                            onClick={() => {
+                                setIsDelivery(true);
+                            }}
+                        >
+                            픽업하기
+                        </button>
                     </div>
                 </div>
                 <div className="section">
                     <span className="title-text">방문할 시각</span>
-                    <div className="time error">
+                    <div className={`time ${error ? "error" : ""}`}>
                         <input
                             placeholder="00"
                             value={hour}
-                            onChange={(e) => handleTimeChange(e)}
+                            onChange={(e) => handleHourChange(e)}
                         />
                         <span>시</span>
                         <input
                             placeholder="00"
                             value={minute}
-                            onChange={(e) => setMinute(e.target.value)}
+                            onChange={(e) => handleMinuteChange(e)}
                         />
                         <span>분</span>
                     </div>
-                    <div className="error-message">
-                        <Warn />
-                        <span>에러메세지 뭐라해요</span>
-                    </div>
+                    {error && (
+                        <div className="error-message">
+                            <Warn />
+                            <span>{message}</span>
+                        </div>
+                    )}
                 </div>
                 <div className="section">
                     <span className="title-text">연락처</span>
@@ -89,21 +163,14 @@ const OrderPage = () => {
                 </div>
             </Container>
             <ButtonContainer>
-                <OrderButton
-                    onClick={() => {
-                        navigate("/ordersuccess");
-                    }}
-                    error={true}
-                >
-                    {new Intl.NumberFormat("ko-KR").format(51000)}원 결제하기
-                </OrderButton>
+                <Payments isReady={isReady} />
             </ButtonContainer>
         </>
     );
 };
 
 const Container = styled.div`
-    margin-top: -12px;
+    margin-top: -60px;
     width: 100%;
     margin-bottom: 80px;
 
@@ -229,27 +296,4 @@ const ButtonContainer = styled.div`
     border-top: 1px solid ${({ theme }) => theme.color.gray100};
 `;
 
-const OrderButton = styled.button`
-    width: 440px;
-    height: 48px;
-    margin: 0px 20px;
-    background-color: ${({ theme }) => theme.color.primary};
-    color: white;
-    font-size: 16px;
-    font-weight: ${({ theme }) => theme.fontWeight.semiBold};
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-
-    ${({ error }) =>
-        error &&
-        `
-        background-color: #b3b3b3;
-        cursor: not-allowed;
-    `}
-
-    @media (max-width: 480px) {
-        width: calc(100dvw - 40px);
-    }
-`;
 export default OrderPage;

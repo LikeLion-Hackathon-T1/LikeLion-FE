@@ -27,6 +27,7 @@ const Store = ({
                 name={name}
                 isChecked={allChecked}
                 onCheck={handleStoreCheck}
+                storeSrc=""
             />
             <CartItemContainer>
                 {items.map((item, index) => (

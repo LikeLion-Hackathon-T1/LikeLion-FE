@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import VisitList from "./VisitList";
-import { Map } from "react-kakao-maps-sdk";
-import { useState } from "react";
+import { Map, MapMarker, Polyline } from "react-kakao-maps-sdk";
+import { useEffect, useState } from "react";
 import EditList from "./EditList";
 import useSyluvAxios from "hooks/useSyluvAxios";
 
@@ -10,9 +10,21 @@ const VisitTab = ({
     handleVisitList = () => {},
     onChange = () => {},
 }) => {
+    console.log(visitList);
     const [isEdit, setIsEdit] = useState(false);
     const [selectedList, setSelectedList] = useState([]);
     const syluvAxios = useSyluvAxios();
+    const [firstPosition, setFirstPosition] = useState({
+        latitude: visitList[0]?.latitude,
+        longitude: visitList[0]?.longitude,
+    });
+
+    useEffect(() => {
+        setFirstPosition({
+            latitude: visitList[0]?.latitude,
+            longitude: visitList[0]?.longitude,
+        });
+    }, [visitList]);
 
     const handleSelect = (id) => {
         if (selectedList.includes(id)) {
@@ -45,6 +57,22 @@ const VisitTab = ({
         }
     };
 
+    const createMarkerSvg = (number) => {
+        const svg = `
+          <svg width="28" height="32" viewBox="0 0 28 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M14.0004 6.10574e-05C14.0004 2.73363e-05 14.0004 -1.53905e-10 14.0004 0C10.497 1.59895e-05 1.85211 1.44229 0.203032 11.0187C-1.50849 20.9578 8.00339 27.7301 13.614 31.7248C13.7446 31.8178 13.8731 31.9093 13.9993 31.9993C13.9994 31.9994 13.9994 31.9995 13.9994 31.9996V31.9997C13.9994 31.9999 13.9997 32.0001 13.9998 31.9999C13.9999 31.9999 13.9999 31.9999 13.9999 31.9999C14 31.9998 14.0001 31.9998 14.0001 31.9999C14.0002 32 14.0004 31.9999 14.0004 31.9997V31.9996C14.0004 31.9996 14.0005 31.9995 14.0005 31.9994C14.1267 31.9095 14.2552 31.818 14.3858 31.725C19.9965 27.7303 29.5083 20.9579 27.7968 11.0188C26.1479 1.44334 17.5045 0.000415547 14.0005 0.000122115C14.0005 0.000122112 14.0004 9.47767e-05 14.0004 6.10574e-05Z" fill="#FF6B00"/>
+            <rect x="4" y="3" width="20" height="20" rx="10" fill="white"/>
+            <text x="14" y="15" text-anchor="middle" fill="#FF6B00" font-size="15" font-family="Pretendard" font-weight="900" dy=".3em">${number}</text>
+          </svg>
+        `;
+        return `data:image/svg+xml;base64,${btoa(svg)}`;
+    };
+
+    const polylinePath = visitList.map((item) => ({
+        lat: item.latitude,
+        lng: item.longitude,
+    }));
+
     return (
         <Container>
             <Map
@@ -53,11 +81,33 @@ const VisitTab = ({
                     height: "224px",
                 }}
                 center={{
-                    lat: 37.5665,
-                    lng: 126.978,
+                    lat: firstPosition.latitude,
+                    lng: firstPosition.longitude,
                 }}
-                level={3}
-            />
+                level={1}
+            >
+                {visitList.map((item) => (
+                    <MapMarker
+                        key={item.visitListId}
+                        position={{
+                            lat: item.latitude,
+                            lng: item.longitude,
+                        }}
+                        image={{
+                            src: createMarkerSvg(visitList.indexOf(item) + 1),
+                            size: { width: 28, height: 32 },
+                            alt: "마커 이미지",
+                        }}
+                    />
+                ))}
+                <Polyline
+                    path={polylinePath}
+                    strokeWeight={5}
+                    strokeColor="#FF6B00"
+                    strokeOpacity={0.7}
+                    strokeStyle="dashed"
+                />
+            </Map>
             <NavBar>
                 <span className="text-title">오늘의 방문 리스트</span>
                 {isEdit ? (
