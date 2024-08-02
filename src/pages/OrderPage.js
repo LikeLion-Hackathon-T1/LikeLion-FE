@@ -17,6 +17,24 @@ const OrderPage = ({ item, onClick = () => {} }) => {
     const [isDelivery, setIsDelivery] = useState(false);
     const [isReady, setIsReady] = useState(false);
 
+    useEffect(() => {
+        //시, 분을 현재 시간 + 10분으로 설정
+        const now = new Date();
+        const nowHour = now.getHours();
+        const nowMinute = now.getMinutes();
+
+        let selectedHour = nowHour;
+        let selectedMinute = nowMinute + 10;
+
+        if (selectedMinute >= 60) {
+            selectedHour += 1;
+            selectedMinute -= 60;
+        }
+
+        setHour(selectedHour.toString().padStart(2, "0"));
+        setMinute(selectedMinute.toString().padStart(2, "0"));
+    }, []);
+
     const handlePhoneChange = useCallback((e) => {
         const value = e.target.value.replace(/\D/g, "");
         let formattedValue = "";
@@ -40,13 +58,8 @@ const OrderPage = ({ item, onClick = () => {} }) => {
         let value = e.target.value.replace(/\D/g, "");
         if (value === "") {
             setHour("");
-            setError(false);
         } else if (value.length <= 2 && parseInt(value) < 24) {
             setHour(value);
-            setError(false);
-        } else {
-            setError(true);
-            setMessage("24시 이상 입력할 수 없습니다.");
         }
     }, []);
 
@@ -55,13 +68,8 @@ const OrderPage = ({ item, onClick = () => {} }) => {
         let value = e.target.value.replace(/\D/g, "");
         if (value === "") {
             setMinute("");
-            setError(false);
         } else if (value.length <= 2 && parseInt(value) < 60) {
             setMinute(value);
-            setError(false);
-        } else {
-            setError(true);
-            setMessage("60분 이상 입력할 수 없습니다.");
         }
     }, []);
 

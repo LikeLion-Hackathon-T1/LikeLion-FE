@@ -20,13 +20,13 @@ const EditVisitItem = ({ item, handleSelect = () => {} }) => {
             />
             <Wrapper>
                 <div className="store">
-                    <img src="https://via.placeholder.com/100" alt="store" />
+                    <img src={item.imageUrl} alt="store" />
                     <div className="store-info">
                         <di className="store-header">
-                            <span>분식</span>
+                            <span>{item.category}</span>
                             <span className="store-name">{item.store}</span>
                         </di>
-                        <div className="status">{item.status}</div>
+                        <div className="status">방문 전</div>
                     </div>
                 </div>
             </Wrapper>
