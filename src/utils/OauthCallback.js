@@ -44,7 +44,6 @@ const OauthCallback = () => {
                     idToken: idToken,
                 }
             );
-            console.log(response.data.payload);
             return response.data.payload;
         } catch (error) {
             throw new Error("Failed to get Syluv token");

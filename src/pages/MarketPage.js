@@ -60,7 +60,6 @@ const MarketPage = () => {
                     setVisitList(res.data.payload[dates[0]]);
                     const num = res.data.payload[dates[0]].length;
                     setVisitNum(num);
-                    console.log(res.data.payload[dates[0]]);
                 }
             })
             .catch((error) => {

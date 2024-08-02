@@ -14,7 +14,6 @@ const VisitListPage = () => {
             try {
                 const res = await syluvAxios.get("market/visitlist");
                 setVisitList(res.data.payload);
-                console.log(res.data.payload);
             } catch (error) {
                 console.error(error);
             }
