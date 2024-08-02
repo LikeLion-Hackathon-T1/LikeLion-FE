@@ -5,11 +5,13 @@ import { ReactComponent as Kakao } from "assets/images/kakao-small.svg";
 import useTokenStore from "hooks/useTokenStore";
 import { useNavigate } from "react-router-dom";
 import useSyluvAxios from "hooks/useSyluvAxios";
+import { useEffect, useState } from "react";
 
 const MyPage = () => {
     const navigate = useNavigate();
     const syluvAxios = useSyluvAxios();
     const { setAccessToken, setRefreshToken, getName } = useTokenStore();
+    const [userInfo, setUserInfo] = useState({});
     const handleLogout = () => {
         setAccessToken("");
         setRefreshToken("");
@@ -29,20 +31,29 @@ const MyPage = () => {
             });
     };
 
+    useEffect(() => {
+        const getUserInfo = async () => {
+            try {
+                const res = await syluvAxios.get("/users/mypage");
+                setUserInfo(res.data.payload);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        getUserInfo();
+    }, []);
+
     return (
         <>
             <Header title="마이페이지" back={false} cart={false} />
             <Wrapper>
                 <div className="profile">
-                    <img
-                        src="https://via.placeholder.com/375x211"
-                        alt="profile"
-                    />
+                    <img src={userInfo.picture} alt="profile" />
                     <div className="profile-body">
-                        <span>박진아</span>
+                        <span>{userInfo.name}</span>
                         <div className="email">
                             <Kakao />
-                            <span>ahpja@naver.com</span>
+                            <span>{userInfo.email}</span>
                         </div>
                     </div>
                 </div>
