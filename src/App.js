@@ -62,6 +62,10 @@ const App = () => {
                                     element={<OrderListPage />}
                                 />
                                 <Route
+                                    path="/order/:orderId/:state"
+                                    element={<OrderDetailPage />}
+                                />
+                                <Route
                                     path="/menu/:menuItemId"
                                     element={<MenuItemDetail />}
                                 />

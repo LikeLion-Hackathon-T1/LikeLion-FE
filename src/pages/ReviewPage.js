@@ -10,7 +10,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import useSyluvAxios from "hooks/useSyluvAxios";
 
-const ReviewPage = ({ name, date, handleClick = () => {}, orderId }) => {
+const ReviewPage = ({ image, name, date, handleClick = () => {}, orderId }) => {
     const [review, setReview] = useState("");
     const [currentCount, setCurrentCount] = useState(0);
     const [rating, setRating] = useState(0);
@@ -81,7 +81,7 @@ const ReviewPage = ({ name, date, handleClick = () => {}, orderId }) => {
             <div>
                 <Header title="후기 작성하기" cart={false} />
                 <Menu>
-                    <img src="https://via.placeholder.com/375x375" alt="menu" />
+                    <img src={image} alt="menu" />
                     <div className="store-info">
                         <div>
                             <span className="store-name">{name}</span>

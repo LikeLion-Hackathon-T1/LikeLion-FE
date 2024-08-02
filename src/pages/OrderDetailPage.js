@@ -12,6 +12,7 @@ import ReviewPage from "./ReviewPage";
 const OrderDetailPage = () => {
     const syluvAxios = useSyluvAxios();
     const { orderId } = useParams();
+    const { state } = useParams();
     const [orderDetail, setOrderDetail] = useState(null);
     const [isClicked, setIsClicked] = useState(false);
     const navigate = useNavigate();
@@ -75,7 +76,7 @@ const OrderDetailPage = () => {
                 date={handleDate(orderDetail.orderDate)}
                 orderNum={orderDetail.orderNum}
                 name={orderDetail.storeName}
-                state={"상태주세요"}
+                state={state}
             />
             <MenuList order={orderDetail} />
             <BillContainer>
@@ -95,8 +96,10 @@ const OrderDetailPage = () => {
                     text="리뷰 남기기"
                     type="2"
                     onClick={() => {
+                        if (orderDetail.reviewYn) return;
                         handleClick();
                     }}
+                    disabled={orderDetail.reviewYn}
                 />
             </ButtonContainer>
         </Container>
@@ -104,6 +107,7 @@ const OrderDetailPage = () => {
         <ReviewPage
             name={orderDetail.storeName}
             date={handleDate(orderDetail.orderDate)}
+            image={orderDetail.storeImg}
             handleClick={handleClick}
             orderId={orderId}
         />

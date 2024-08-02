@@ -24,7 +24,7 @@ const OrderItem = ({ order }) => {
     return (
         <Container
             onClick={() => {
-                navigate("/order/" + order.orderId);
+                navigate("/order/" + order.orderId + "/" + order.paymentStatus);
             }}
         >
             <div className="order">
