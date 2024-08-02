@@ -41,7 +41,7 @@ const OrderItem = ({ order }) => {
                             {handlePrice(order.totalPrice)}원
                         </span>
                     </div>
-                    <span className="success">상태 주세요</span>
+                    <span className="success">{order.paymentStatus}</span>
                 </div>
             </div>
         </Container>

@@ -16,12 +16,12 @@ import MenuItemDetail from "./components/Store/MenuItemDetail";
 import OrderListPage from "pages/OrderListPage";
 import OrderDetailPage from "pages/OrderDetailPage";
 import OrderPage from "pages/OrderPage";
-import ReviewPage from "pages/ReviewPage";
 import VisitListPage from "pages/VisitListPage";
 import OrderSuccess from "pages/OrderSuccess";
 import MyPage from "pages/MyPage";
 import OwnerPage from "owner/pages/OwnerPage";
 import OwnerDetailPage from "owner/pages/OwnerDetailPage";
+import useSyluvAxios from "hooks/useSyluvAxios";
 const App = () => {
     useEffect(() => {
         if (window.location.host === "syluv.store") {
