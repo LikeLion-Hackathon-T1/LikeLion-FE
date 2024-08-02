@@ -1,8 +1,27 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-const OrderItem = () => {
+const OrderItem = ({ order }) => {
     const navigate = useNavigate();
+    console.log(order);
+
+    const handleDate = (date) => {
+        // "2024-08-01T01:54:46" -> "2024.08.01 오후 1:54"
+        const dateObj = new Date(date);
+        const year = dateObj.getFullYear();
+        const month = dateObj.getMonth() + 1;
+        const day = dateObj.getDate();
+        const hour = dateObj.getHours();
+        const minute = dateObj.getMinutes();
+        const ampm = hour >= 12 ? "오후" : "오전";
+        const hour12 = hour % 12;
+        return `${year}.${month}.${day} ${ampm} ${hour12}:${minute}`;
+    };
+
+    const handlePrice = (price) => {
+        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
+
     return (
         <Container
             onClick={() => {
@@ -11,15 +30,19 @@ const OrderItem = () => {
         >
             <div className="order">
                 <div className="order-header">
-                    <span className="title-text">광장시장</span>
-                    <span className="main-text">2022.05.24 오후 8:30</span>
+                    <span className="title-text">{order.marketName}</span>
+                    <span className="main-text">
+                        {handleDate(order.createdTime)}
+                    </span>
                 </div>
                 <div className="order-body">
                     <div className="left-section">
-                        <span className="title-text">진아한복</span>
-                        <span className="main-text">61,000원</span>
+                        <span className="title-text">{order.storeName}</span>
+                        <span className="main-text">
+                            {handlePrice(order.totalPrice)}원
+                        </span>
                     </div>
-                    <span className="success">결제 확인 대기</span>
+                    <span className="success">상태랑 orderId주세요</span>
                 </div>
             </div>
         </Container>

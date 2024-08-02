@@ -5,11 +5,26 @@ import Button from "components/Common/Button";
 import { useNavigate } from "react-router-dom";
 import OrderItem from "components/OrderList/OrderItem";
 import TabBar from "components/Common/TabBar";
+import useSyluvAxios from "hooks/useSyluvAxios";
+import { useEffect, useState } from "react";
 
 const OrderListPage = () => {
     const navigate = useNavigate();
-    const orderList = null;
-    return orderList !== null ? (
+    const syluvAxios = useSyluvAxios();
+    const [orderList, setOrderList] = useState(null);
+
+    useEffect(() => {
+        const getOrderList = async () => {
+            try {
+                const res = await syluvAxios.get("/order");
+                setOrderList(res.data.payload);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        getOrderList();
+    }, []);
+    return orderList === null ? (
         <>
             <Header title="주문내역" />
             <NoItemContainer>
@@ -26,8 +41,11 @@ const OrderListPage = () => {
         <>
             <Header title="주문내역" back={false} />
             <OrderList>
-                <OrderItem />
-                <OrderItem />
+                {Object.keys(orderList).map((key) =>
+                    orderList[key].map((order) => (
+                        <OrderItem key={order.createdTime} order={order} />
+                    ))
+                )}
             </OrderList>
             <TabBar activeTab={"orderlist"} />
         </>
