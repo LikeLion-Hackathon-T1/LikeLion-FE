@@ -47,7 +47,7 @@ const ReviewPage = ({ name, date, handleClick = () => {}, orderId }) => {
         const formData = new FormData();
 
         const dto = {
-            menuId: orderId,
+            orderId: orderId,
             rate: rating,
             content: review,
         };
