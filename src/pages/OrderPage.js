@@ -197,6 +197,7 @@ const OrderPage = ({ item, onClick = () => {} }) => {
                     phone={phone}
                     hour={hour}
                     min={minute}
+                    pickUpRoute={isDelivery ? "배달" : "픽업"}
                 />
             </ButtonContainer>
         </>

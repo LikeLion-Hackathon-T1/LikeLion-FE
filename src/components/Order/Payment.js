@@ -2,10 +2,20 @@ import { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import { loadTossPayments } from "@tosspayments/payment-sdk";
 import useSyluvAxios from "hooks/useSyluvAxios";
+import useOrderStore from "hooks/useOrderStore";
 
 const clientKey = process.env.REACT_APP_TOSS_CLIENT_KEY;
 
-const Payments = ({ isReady, data, onClick = () => {}, phone, hour, min }) => {
+const Payments = ({
+    isReady,
+    data,
+    onClick = () => {},
+    phone,
+    hour,
+    min,
+    pickUpRoute,
+}) => {
+    const { setGlobalOrderData } = useOrderStore();
     const axiosInstance = useSyluvAxios();
     const [tossPayments, setTossPayments] = useState(null);
     const [orderData, setOrderData] = useState({
@@ -16,6 +26,7 @@ const Payments = ({ isReady, data, onClick = () => {}, phone, hour, min }) => {
         hour,
         min,
         amount: 0,
+        pickUpRoute,
     });
 
     console.log(data);
@@ -30,6 +41,8 @@ const Payments = ({ isReady, data, onClick = () => {}, phone, hour, min }) => {
             ...prev,
             phone: formattedPhone,
             amount: totalAmount,
+            hour: hour,
+            min: min,
         }));
     }, [data, phone, hour, min]);
 
@@ -63,6 +76,8 @@ const Payments = ({ isReady, data, onClick = () => {}, phone, hour, min }) => {
                 orderNum: orderNumberData.payload,
                 userData: userData.payload,
             };
+
+            setGlobalOrderData(newOrderData);
 
             await tossPayments.requestPayment("CARD", {
                 amount: newOrderData.amount,
