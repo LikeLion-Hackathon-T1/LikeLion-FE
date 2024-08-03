@@ -32,7 +32,7 @@ import {
 
 import useSyluvAxios from "../../hooks/useSyluvAxios";
 import goodIcon from "../../assets/images/good.png";
-import badIcon from "../../assets/images/bad.png"; // badIcon 이미지 추가
+import badIcon from "../../assets/images/bad.png";
 
 const formatTime = ({ beforeHours, beforeDay, beforeWeek }) => {
   if (beforeWeek > 0) {
@@ -82,7 +82,6 @@ const ReviewItem = ({
       const result = response.data;
       console.log("서버 응답:", result);
       if (result.result.code !== 0) {
-        // 서버 응답이 실패한 경우 상태 되돌립니다
         console.log("서버 응답 실패:", result);
         setHelpfulness((prevHelpfulness) => prevHelpfulness - 1);
         setIsHelpfulClicked(false);
@@ -92,7 +91,6 @@ const ReviewItem = ({
       }
     } catch (error) {
       console.error("도움이 돼요 요청 중 오류 발생:", error);
-      // 서버 요청 중 오류 발생 시 상태 되돌립니다
       setHelpfulness((prevHelpfulness) => prevHelpfulness - 1);
       setIsHelpfulClicked(false);
     }
@@ -180,7 +178,10 @@ const ReviewItem = ({
       <Helpfulness>
         <div>{helpfulness}명에게 도움이 되었어요</div>
         <HelpfulButton
-          onClick={handleHelpfulnessClick}
+          onClick={() => {
+            console.log("HelpfulButton clicked");
+            handleHelpfulnessClick();
+          }}
           $active={isHelpfulClicked}
           disabled={isHelpfulClicked}
           style={{ cursor: isHelpfulClicked ? "default" : "pointer" }}

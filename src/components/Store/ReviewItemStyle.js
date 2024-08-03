@@ -1,6 +1,12 @@
 import styled from "styled-components";
 
-export const ReviewContainer = styled.div`
+export const ReviewContainer = styled.div.attrs(
+  ({ isLastMyReview, isFirstOtherReview, isMine }) => ({
+    isLastMyReview: undefined,
+    isFirstOtherReview: undefined,
+    isMine: undefined,
+  })
+)`
   margin-bottom: 44px;
   background-color: ${({ isMine }) =>
     isMine ? "rgba(255, 107, 0, 0.04)" : "transparent"};
@@ -26,7 +32,6 @@ export const ReviewContainer = styled.div`
       isMine ? "0" : isLastMyReview ? "20px" : "20px"};
   }
 `;
-
 export const MyReviewContainer = styled.div`
   margin: 0;
   padding: 0;
@@ -190,7 +195,7 @@ export const HelpfulButton = styled.button`
   padding: 5px 10px;
   display: flex;
   align-items: center;
-  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+  cursor: pointer; // 일단 포인터로 바꿈
   outline: none;
 `;
 
