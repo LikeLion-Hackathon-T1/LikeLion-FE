@@ -84,7 +84,7 @@ export const Line = styled.div`
   align-content: center;
   height: 1px;
   border-bottom: 1px solid ${({ theme }) => theme.color.gray100};
-  margin-top: 280px;
+  margin-top: 330px;
 `;
 
 export const QuantityContainer = styled.div`
@@ -99,7 +99,7 @@ export const QuantityContainer = styled.div`
   padding: 0 20px;
   background-color: white;
   border-radius: 8px;
-  margin-left: 8.5px;
+  margin-left: 0px;
   @media (max-width: 480px) {
     width: calc(100% - 40px);
   }
@@ -162,7 +162,7 @@ export const AddToCartButton = styled.button`
   bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
-  margin-left: 8.5px;
+  margin-left: 0px;
   @media (max-width: 480px) {
     width: calc(100% - 40px);
   }

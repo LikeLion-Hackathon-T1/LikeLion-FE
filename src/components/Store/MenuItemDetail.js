@@ -5,6 +5,7 @@ import { ReactComponent as CartIcon } from "assets/images/marketbag.svg";
 import { ReactComponent as HomeIcon } from "assets/images/newhome.svg";
 import useSyluvAxios from "hooks/useSyluvAxios";
 import Splash from "components/Common/Splash";
+import styled from "styled-components";
 import {
   Container,
   ImageContainer,
@@ -30,7 +31,7 @@ import {
   CartBadge,
 } from "./MenuItemDetailStyle";
 
-const MenuItemDetail = ({ menu, onClick = () => {} }) => {
+const MenuItemDetail = ({ menu }) => {
   const navigate = useNavigate();
   const syluvAxios = useSyluvAxios();
   const [quantity, setQuantity] = useState(1);
@@ -142,7 +143,7 @@ const MenuItemDetail = ({ menu, onClick = () => {} }) => {
         </HomeButton>
         <CartButton onClick={() => navigate("/cart")} aria-label="장바구니로">
           <CartIcon />
-          {showModal && <CartBadge>{quantity}</CartBadge>}{" "}
+          {showModal && <CartBadge>{quantity}</CartBadge>}
         </CartButton>
         <Image src={menu.menuImage} alt={menu.name} />
       </ImageContainer>
@@ -185,4 +186,3 @@ const MenuItemDetail = ({ menu, onClick = () => {} }) => {
 };
 
 export default MenuItemDetail;
-//커밋용
