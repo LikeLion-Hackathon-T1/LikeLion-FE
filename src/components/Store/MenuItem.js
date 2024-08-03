@@ -6,6 +6,7 @@ const MenuItemWrapper = styled.div`
     display: flex;
     align-items: center;
     margin-bottom: 28px;
+    cursor: pointer; // 클릭 가능한 커서 추가
 `;
 
 const MenuItemImage = styled.img`
@@ -41,9 +42,15 @@ const MenuItemDescription = styled.p`
     margin-top: 40px;
 `;
 
-const MenuItem = ({ item }) => {
+const MenuItem = ({ item, onClick }) => {
     return (
-        <MenuItemWrapper>
+        <MenuItemWrapper
+            onClick={() => {
+                if (onClick) {
+                    onClick(item);
+                }
+            }}
+        >
             <MenuItemImage src={item.menuImage} alt={item.name} />
             <MenuItemInfo>
                 <MenuItemName>{item.name}</MenuItemName>

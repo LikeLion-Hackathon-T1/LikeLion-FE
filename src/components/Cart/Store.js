@@ -21,6 +21,8 @@ const Store = ({
         }
     };
 
+    console.log(items);
+
     return (
         <Container>
             <StoreHeader

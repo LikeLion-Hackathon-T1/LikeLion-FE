@@ -40,7 +40,7 @@ const OrderListPage = () => {
                 <Button
                     onClick={() => navigate("/")}
                     type="2"
-                    text="유도문구 뭐하지"
+                    text="시장 둘러보기"
                 />
             </NoItemContainer>
             <TabBar activeTab={"orderlist"} />
