@@ -23,7 +23,6 @@ const HomePage = () => {
         if (getAccessToken()) {
             syluvAxios.get("/home").then((res) => {
                 if (res.data) {
-                    console.log(res.data.payload);
                     setLatestMarkets(res.data.payload.visitListHomeList);
                     setHotMarkets(res.data.payload.hotListHomeList);
                 }
