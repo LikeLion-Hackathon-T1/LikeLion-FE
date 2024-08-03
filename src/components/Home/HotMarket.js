@@ -24,7 +24,7 @@ const HotMarket = ({ market }) => {
                         <div>4.2</div>
                         <span>
                             최근{" "}
-                            {market.totalQrvisit ? market.totalQrvisit : "0"}명
+                            {market.totalQrVisit ? market.totalQrVisit : "0"}명
                             방문
                         </span>
                     </div>
