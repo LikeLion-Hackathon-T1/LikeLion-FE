@@ -43,6 +43,9 @@ const Store = ({
                         cartId={item.cartid}
                         handleCartList={changeCartList}
                         onCheckChange={handleItemCheckChange}
+                        ImgSrc={
+                            item.menuImg || "https://via.placeholder.com/100"
+                        }
                     />
                 ))}
             </CartItemContainer>
