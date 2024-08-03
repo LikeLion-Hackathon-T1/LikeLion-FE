@@ -32,6 +32,7 @@ import {
 
 import useSyluvAxios from "../../hooks/useSyluvAxios";
 import goodIcon from "../../assets/images/good.png";
+import badIcon from "../../assets/images/bad.png"; // badIcon 이미지 추가
 
 const formatTime = ({ beforeHours, beforeDay, beforeWeek }) => {
   if (beforeWeek > 0) {
@@ -53,37 +54,44 @@ const ReviewItem = ({
   onDelete,
   onHelpful,
 }) => {
-  const [helpfulness, setHelpfulness] = useState(Number(review.likeCount));
+  const [helpfulness, setHelpfulness] = useState(Number(review.helpfulCnt));
   const [isHelpfulClicked, setIsHelpfulClicked] = useState(review.helpfulYn);
 
   const syluvAxios = useSyluvAxios();
 
   useEffect(() => {
-    setHelpfulness(Number(review.likeCount));
+    setHelpfulness(Number(review.helpfulCnt));
     setIsHelpfulClicked(review.helpfulYn);
-  }, [review.likeCount, review.helpfulYn]);
+  }, [review.helpfulCnt, review.helpfulYn]);
 
   const handleHelpfulnessClick = async () => {
+    console.log("handleHelpfulnessClick called"); // 함수 호출 여부 확인
+
     if (isHelpfulClicked) {
       console.log("이미 누른 리뷰입니다.");
       return;
     }
 
+    console.log("도움이 돼요 클릭됨");
     setIsHelpfulClicked(true);
     setHelpfulness((prevHelpfulness) => prevHelpfulness + 1);
 
     try {
+      console.log("도움이 돼요 요청 시작");
       const response = await syluvAxios.post(`/review/${review.reviewId}/like`);
       const result = response.data;
+      console.log("서버 응답:", result);
       if (result.result.code !== 0) {
         // 서버 응답이 실패한 경우 상태 되돌립니다
+        console.log("서버 응답 실패:", result);
         setHelpfulness((prevHelpfulness) => prevHelpfulness - 1);
         setIsHelpfulClicked(false);
       } else {
+        console.log("서버 응답 성공:", result);
         onHelpful(review.reviewId);
       }
     } catch (error) {
-      console.error("Error liking the review:", error);
+      console.error("도움이 돼요 요청 중 오류 발생:", error);
       // 서버 요청 중 오류 발생 시 상태 되돌립니다
       setHelpfulness((prevHelpfulness) => prevHelpfulness - 1);
       setIsHelpfulClicked(false);
@@ -103,7 +111,7 @@ const ReviewItem = ({
         }
       })
       .catch((error) => {
-        console.error("Error deleting review:", error);
+        console.error("리뷰 삭제 요청 중 오류 발생:", error);
       });
   }, [review.reviewId, onDelete, syluvAxios]);
 
@@ -175,8 +183,9 @@ const ReviewItem = ({
           onClick={handleHelpfulnessClick}
           $active={isHelpfulClicked}
           disabled={isHelpfulClicked}
+          style={{ cursor: isHelpfulClicked ? "default" : "pointer" }}
         >
-          <Icon src={goodIcon} alt="thumbs up" />
+          <Icon src={isHelpfulClicked ? goodIcon : badIcon} alt="thumbs up" />
           도움이 돼요
         </HelpfulButton>
       </Helpfulness>
