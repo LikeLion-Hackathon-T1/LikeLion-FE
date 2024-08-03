@@ -175,7 +175,6 @@ const OrderManageTab = () => {
     };
 
     if (detailItem !== null) {
-        console.log(detailItem);
         return (
             <OwnerDetailPage
                 item={detailItem}

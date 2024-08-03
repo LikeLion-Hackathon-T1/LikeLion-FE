@@ -9,7 +9,6 @@ const OwnerDetailPage = ({
     handleCancel = () => {},
     handleSuccess = () => {},
 }) => {
-    console.log(item);
     return (
         <>
             <Header title="주문상세" cart={false} />

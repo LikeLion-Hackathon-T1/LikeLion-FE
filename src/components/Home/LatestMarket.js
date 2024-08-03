@@ -4,6 +4,11 @@ import styled from "styled-components";
 
 const LatestMarket = ({ market }) => {
     const navigate = useNavigate();
+    const dateConvert = (date) => {
+        //2024-07-28 => 2024.07.28
+        const dateArr = date.split("-");
+        return `${dateArr[0]}.${dateArr[1]}.${dateArr[2]}`;
+    };
     return (
         <Wrapper
             className="body"
@@ -20,9 +25,7 @@ const LatestMarket = ({ market }) => {
                 <span className="body-text">{market.marketName}</span>
                 <div>
                     <div className="body-content">
-                        <img src={star} alt="rating" width="14px" />
-                        <div>4.2</div>
-                        <span>{market.visitDate}</span>
+                        <span>{dateConvert(market.visitDate)} 방문</span>
                     </div>
                     <span>{market.location}</span>
                 </div>
