@@ -28,7 +28,7 @@ import {
   VisitModal,
   ModalButton,
   CartBadge,
-} from "./MenuItemDetailStyle"; // 스타일 컴포넌트 경로에 맞게 수정
+} from "./MenuItemDetailStyle";
 
 const MenuItemDetail = ({ menu, onClick = () => {} }) => {
   const navigate = useNavigate();
@@ -185,3 +185,4 @@ const MenuItemDetail = ({ menu, onClick = () => {} }) => {
 };
 
 export default MenuItemDetail;
+//커밋용

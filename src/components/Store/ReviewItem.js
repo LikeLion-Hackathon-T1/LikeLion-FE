@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
 import {
   ReviewContainer,
   Header,
@@ -26,7 +29,7 @@ import {
   ResponseText,
   MyReviewContainer,
   MyReviewText,
-} from "./ReviewItemStyle"; // 올바른 경로로 수정
+} from "./ReviewItemStyle";
 
 import useSyluvAxios from "../../hooks/useSyluvAxios";
 import goodIcon from "../../assets/images/good.png";
@@ -37,24 +40,29 @@ const formatTime = ({ beforeHours, beforeDay, beforeWeek }) => {
   } else if (beforeDay > 0) {
     return `${beforeDay}일 전`;
   } else if (beforeHours > 0) {
-    return `${beforeHours}시간 전}`;
+    return `${beforeHours}시간 전`;
   } else {
     return `방금 전`;
   }
 };
 
-const ReviewItem = ({ review, onDelete, onHelpful }) => {
+const ReviewItem = ({
+  review,
+  isFirst,
+  isLastMyReview,
+  isFirstOtherReview,
+  onDelete,
+  onHelpful,
+}) => {
   const [helpfulness, setHelpfulness] = useState(Number(review.likeCount));
-  const [isHelpfulClicked, setIsHelpfulClicked] = useState(
-    review.isHelpfulClicked
-  );
+  const [isHelpfulClicked, setIsHelpfulClicked] = useState(review.helpfulYn);
 
   const syluvAxios = useSyluvAxios();
 
   useEffect(() => {
     setHelpfulness(Number(review.likeCount));
-    setIsHelpfulClicked(review.isHelpfulClicked);
-  }, [review.likeCount, review.isHelpfulClicked]);
+    setIsHelpfulClicked(review.helpfulYn);
+  }, [review.likeCount, review.helpfulYn]);
 
   const handleHelpfulnessClick = async () => {
     if (isHelpfulClicked) {
@@ -98,11 +106,15 @@ const ReviewItem = ({ review, onDelete, onHelpful }) => {
       .catch((error) => {
         console.error("Error deleting review:", error);
       });
-  }, [review.reviewId, onDelete]);
+  }, [review.reviewId, onDelete, syluvAxios]);
 
   return (
-    <ReviewContainer isMine={review.isMine}>
-      {review.isMine && (
+    <ReviewContainer
+      isMine={review.isMine}
+      isLastMyReview={isLastMyReview}
+      isFirstOtherReview={isFirstOtherReview}
+    >
+      {isFirst && review.isMine && (
         <MyReviewContainer>
           <MyReviewText>내가 남긴 리뷰</MyReviewText>
         </MyReviewContainer>
@@ -143,13 +155,13 @@ const ReviewItem = ({ review, onDelete, onHelpful }) => {
         </ReviewImageContainerSingle>
       ) : Array.isArray(review.image) && review.image.length > 1 ? (
         <ReviewImageContainerMultiple>
-          {review.image.map((image, index) => (
-            <MultipleReviewImage
-              key={index}
-              src={image}
-              alt={`review-${index}`}
-            />
-          ))}
+          <Swiper slidesPerView={2} spaceBetween={20}>
+            {review.image.map((image, index) => (
+              <SwiperSlide key={index}>
+                <MultipleReviewImage src={image} alt={`review-${index}`} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
         </ReviewImageContainerMultiple>
       ) : review.image ? (
         <ReviewImageContainerSingle>

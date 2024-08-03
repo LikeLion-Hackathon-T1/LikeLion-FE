@@ -41,6 +41,7 @@ const StorePage = () => {
   const [selectedMenu, setSelectedMenu] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [menuId, setMenuId] = useState(null);
+  const [orderId, setOrderId] = useState();
 
   useEffect(() => {
     console.log("Selected Menu:", selectedMenu);
@@ -75,29 +76,86 @@ const StorePage = () => {
     }
   };
 
+  // 모의 리뷰 데이터
+  const mockReviewData = [
+    {
+      reviewId: 2,
+      name: "조채연",
+      picture: "https://via.placeholder.com/150",
+      rating: "5",
+      content: "굳!",
+      image: [
+        "https://via.placeholder.com/300",
+        "https://via.placeholder.com/300",
+      ],
+      likeCount: "10",
+      storeName: "스토어",
+      menuName: ["메뉴다"],
+      beforeHours: 5,
+      beforeDay: 0,
+      beforeWeek: 0,
+      isMine: true,
+      helpfulYn: false,
+    },
+    {
+      reviewId: 3,
+      name: "조채연",
+      picture: "https://via.placeholder.com/150",
+      rating: "5",
+      content: "굳!",
+      image: [
+        "https://via.placeholder.com/300",
+        "https://via.placeholder.com/300",
+      ],
+      likeCount: "10",
+      storeName: "스토어",
+      menuName: ["메뉴다"],
+      beforeHours: 5,
+      beforeDay: 0,
+      beforeWeek: 0,
+      isMine: true,
+      helpfulYn: false,
+    },
+    {
+      reviewId: 4,
+      name: "Jane Smith",
+      picture: "https://via.placeholder.com/150",
+      rating: "4",
+      content: "Good food!",
+      image: ["https://via.placeholder.com/300"],
+      likeCount: "8",
+      storeName: "Mock Store",
+      menuName: ["Mock Menu"],
+      beforeHours: 2,
+      beforeDay: 1,
+      beforeWeek: 0,
+      isMine: false,
+      helpfulYn: false,
+    },
+    {
+      reviewId: 6,
+      name: "Jane Smith",
+      picture: "https://via.placeholder.com/150",
+      rating: "4",
+      content: "Good food!",
+      image: ["https://via.placeholder.com/300"],
+      likeCount: "8",
+      storeName: "Mock Store",
+      menuName: ["Mock Menu"],
+      beforeHours: 2,
+      beforeDay: 1,
+      beforeWeek: 0,
+      isMine: false,
+      helpfulYn: false,
+    },
+  ];
+
   // 리뷰 데이터를 가져오는 함수
   const fetchReviewData = async () => {
     try {
-      const response = await axiosInstance.get("/review", {
-        params: { storeId },
-      });
-      console.log("리뷰 데이터를 가져오는 중, 가게 ID:", storeId);
-      console.log("전체 리뷰 데이터 응답:", response.data);
-
-      if (response.data && response.data.payload) {
-        console.log("리뷰 데이터 페이로드:", response.data.payload);
-
-        // 'likeCount'를 문자열에서 숫자로 변환
-        const updatedPayload = response.data.payload.map((review) => ({
-          ...review,
-          likeCount: parseInt(review.likeCount, 10), // 문자열을 숫자로 변환
-        }));
-
-        return updatedPayload;
-      } else {
-        console.error("잘못된 리뷰 데이터 응답", response);
-        throw new Error("잘못된 리뷰 데이터 응답");
-      }
+      // 실제 API 호출 대신 모의 데이터를 반환합니다.
+      console.log("모의 리뷰 데이터를 가져오는 중, 가게 ID:", storeId);
+      return mockReviewData;
     } catch (error) {
       console.error("리뷰 데이터 가져오기 오류:", error);
       throw error;
@@ -124,7 +182,7 @@ const StorePage = () => {
   } = useQuery({
     queryKey: ["reviewData", storeId],
     queryFn: fetchReviewData,
-    enabled: !!menuId, // menuId가 있을 때만 실행
+    enabled: !!storeId, // storeId가 있을 때만 실행
     onSuccess: (data) => {
       if (data) {
         const myReview = data.filter((review) => review.isMine);
@@ -152,7 +210,7 @@ const StorePage = () => {
           return {
             ...review,
             likeCount: review.likeCount + 1,
-            HelpfulYn: true,
+            helpfulYn: true,
           };
         }
         return review;
@@ -196,6 +254,8 @@ const StorePage = () => {
   };
 
   let isFirstMyReview = true; // 첫 번째 본인의 리뷰인지 확인하는 플래그
+  let myReviewCount = reviews.filter((review) => review.isMine).length;
+  let myReviewIndex = 0;
 
   return selectedMenu ? (
     <MenuItemDetail menu={selectedMenu} onClick={handleMenuClick} />
@@ -233,11 +293,22 @@ const StorePage = () => {
                   if (isFirst) {
                     isFirstMyReview = false;
                   }
+                  if (review.isMine) {
+                    myReviewIndex += 1;
+                  }
+                  const isLastMyReview =
+                    review.isMine && myReviewIndex === myReviewCount;
+                  const isFirstOtherReview =
+                    !review.isMine &&
+                    index === reviews.findIndex((r) => !r.isMine);
+
                   return (
                     <ReviewItem
                       key={index}
                       review={review}
                       isFirst={isFirst}
+                      isLastMyReview={isLastMyReview}
+                      isFirstOtherReview={isFirstOtherReview}
                       onDelete={handleReviewDelete}
                       onHelpful={handleReviewHelpful}
                     />
