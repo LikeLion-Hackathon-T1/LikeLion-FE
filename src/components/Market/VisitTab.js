@@ -4,13 +4,20 @@ import { Map, MapMarker, Polyline } from "react-kakao-maps-sdk";
 import { useEffect, useState } from "react";
 import EditList from "./EditList";
 import useSyluvAxios from "hooks/useSyluvAxios";
+import { useGeoLocation } from "hooks/useGeoLocation";
+import Splash from "components/Common/Splash";
+
+const geolocationOptions = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 1000 * 3600 * 24,
+};
 
 const VisitTab = ({
     visitList,
     handleVisitList = () => {},
     onChange = () => {},
 }) => {
-    console.log(visitList);
     const [isEdit, setIsEdit] = useState(false);
     const [selectedList, setSelectedList] = useState([]);
     const syluvAxios = useSyluvAxios();
@@ -18,13 +25,21 @@ const VisitTab = ({
         latitude: visitList[0]?.latitude,
         longitude: visitList[0]?.longitude,
     });
+    const { location, error } = useGeoLocation(geolocationOptions);
 
     useEffect(() => {
-        setFirstPosition({
-            latitude: visitList[0]?.latitude,
-            longitude: visitList[0]?.longitude,
-        });
-    }, [visitList]);
+        if (visitList.length > 0) {
+            setFirstPosition({
+                latitude: visitList[0]?.latitude,
+                longitude: visitList[0]?.longitude,
+            });
+        } else {
+            setFirstPosition({
+                latitude: location?.latitude,
+                longitude: location?.longitude,
+            });
+        }
+    }, [visitList, location]);
 
     const handleSelect = (id) => {
         if (selectedList.includes(id)) {
@@ -73,6 +88,13 @@ const VisitTab = ({
         lng: item.longitude,
     }));
 
+    if (
+        firstPosition.latitude === undefined ||
+        firstPosition.longitude === undefined
+    ) {
+        return <Splash />;
+    }
+
     return (
         <Container>
             <Map
@@ -86,6 +108,14 @@ const VisitTab = ({
                 }}
                 level={1}
             >
+                {/* 내 위치 마커 */}
+                {/* <MapMarker
+                    position={{
+                        lat: location?.latitude,
+                        lng: location?.longitude,
+                    }}
+                /> */}
+
                 {visitList.map((item) => (
                     <MapMarker
                         key={item.visitListId}
