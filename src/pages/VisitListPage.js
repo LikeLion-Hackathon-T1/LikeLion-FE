@@ -31,7 +31,7 @@ const VisitListPage = () => {
     return (
         <>
             <Header title="방문 리스트" back={false} />
-            {totalLength() < 0 ? (
+            {totalLength() > 0 ? (
                 <Wrapper>
                     {Object.keys(visitList).map((date, index) => (
                         <TotalVisitList

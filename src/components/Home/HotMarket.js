@@ -20,8 +20,6 @@ const HotMarket = ({ market }) => {
                 <span className="body-text">{market.marketName}</span>
                 <div>
                     <div className="body-content">
-                        <img src={star} alt="rating" width="14px" />
-                        <div>4.2</div>
                         <span>
                             최근{" "}
                             {market.totalQrVisit ? market.totalQrVisit : "0"}명
