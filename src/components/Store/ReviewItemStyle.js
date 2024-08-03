@@ -183,12 +183,11 @@ export const Helpfulness = styled.div`
   margin-top: 10px;
   height: 24px;
 `;
-
 export const HelpfulButton = styled.button`
   background: none;
-  border: 1px solid ${({ $active }) => ($active ? "#9A9A9A" : "#ff6b00")};
+  border: 1px solid ${({ $active }) => ($active ? "#ff6b00" : "#9A9A9A")};
   border-radius: 54px;
-  color: ${({ $active }) => ($active ? "#9A9A9A" : "#ff6b00")};
+  color: ${({ $active }) => ($active ? "#ff6b00" : "#9A9A9A")};
   padding: 5px 10px;
   display: flex;
   align-items: center;

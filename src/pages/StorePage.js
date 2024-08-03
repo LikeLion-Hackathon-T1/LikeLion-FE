@@ -133,7 +133,7 @@ const StorePage = () => {
       helpfulYn: false,
     },
     {
-      reviewId: 5,
+      reviewId: 6,
       name: "Jane Smith",
       picture: "https://via.placeholder.com/150",
       rating: "4",
