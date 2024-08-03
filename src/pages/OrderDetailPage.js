@@ -90,17 +90,23 @@ const OrderDetailPage = () => {
                     <p className="right">{orderDetail.paymentTool}</p>
                 </div>
             </BillContainer>
-            <ButtonContainer>
-                <Button
-                    text="리뷰 남기기"
-                    type="2"
-                    onClick={() => {
-                        if (orderDetail.reviewYn) return;
-                        handleClick();
-                    }}
-                    disabled={orderDetail.reviewYn}
-                />
-            </ButtonContainer>
+            {state !== "결제 확인 대기" && (
+                <ButtonContainer>
+                    <Button
+                        text={
+                            orderDetail.reviewYn
+                                ? "이미 리뷰를 작성했습니다"
+                                : "리뷰 남기기"
+                        }
+                        type="2"
+                        onClick={() => {
+                            if (orderDetail.reviewYn) return;
+                            handleClick();
+                        }}
+                        disabled={orderDetail.reviewYn}
+                    />
+                </ButtonContainer>
+            )}
         </Container>
     ) : (
         <ReviewPage
