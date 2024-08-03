@@ -1,70 +1,118 @@
-import { loadTossPayments } from "@tosspayments/payment-sdk";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
-import { nanoid } from "nanoid";
+import { loadTossPayments } from "@tosspayments/payment-sdk";
+import useSyluvAxios from "hooks/useSyluvAxios";
+import useOrderStore from "hooks/useOrderStore";
 
-const Payments = ({ isReady, data }) => {
-    const clientKey = process.env.REACT_APP_TOSS_CLIENT_KEY;
-    const customerKey = nanoid();
+const clientKey = process.env.REACT_APP_TOSS_CLIENT_KEY;
+
+const Payments = ({
+    isReady,
+    data,
+    onClick = () => {},
+    phone,
+    hour,
+    min,
+    pickUpRoute,
+}) => {
+    const { setGlobalOrderData } = useOrderStore();
+    const axiosInstance = useSyluvAxios();
     const [tossPayments, setTossPayments] = useState(null);
-    const [amount] = useState({
-        currency: "KRW",
-        value: 50000,
+    const [orderData, setOrderData] = useState({
+        orderNum: "",
+        userData: {},
+        items: data,
+        phone: "",
+        hour,
+        min,
+        amount: 0,
+        pickUpRoute,
     });
 
+    console.log(data);
+
     useEffect(() => {
-        async function fetchTossPayments() {
+        const formattedPhone = phone.split("-").join("");
+        const totalAmount = data.reduce(
+            (total, item) => total + item.price * item.quantity,
+            0
+        );
+        setOrderData((prev) => ({
+            ...prev,
+            phone: formattedPhone,
+            amount: totalAmount,
+            hour: hour,
+            min: min,
+        }));
+    }, [data, phone, hour, min]);
+
+    useEffect(() => {
+        async function initializePayment() {
             try {
-                const tossPaymentsInstance = await loadTossPayments(clientKey);
-                setTossPayments(tossPaymentsInstance);
+                const instance = await loadTossPayments(clientKey);
+                setTossPayments(instance);
             } catch (error) {
-                console.error("Error fetching tossPayments:", error);
+                console.error("Error initializing Toss Payments:", error);
             }
         }
-
-        fetchTossPayments();
+        initializePayment();
     }, []);
 
-    async function requestPayment() {
+    const handlePayment = async () => {
         if (!tossPayments) {
-            alert(
-                "결제 인스턴스를 초기화 중입니다. 잠시 후 다시 시도해주세요."
-            );
+            alert("Payment service is initializing. Please try again later.");
             return;
         }
 
         try {
+            const [{ data: orderNumberData }, { data: userData }] =
+                await Promise.all([
+                    axiosInstance.get("/order/generatenum"),
+                    axiosInstance.get("/users/mypage"),
+                ]);
+
+            const newOrderData = {
+                ...orderData,
+                orderNum: orderNumberData.payload,
+                userData: userData.payload,
+            };
+
+            setGlobalOrderData(newOrderData);
+
             await tossPayments.requestPayment("CARD", {
-                amount: amount.value,
-                orderId: "1eMySX7fCc5-p9ITEZz5d", // 고유 주문번호
-                orderName: "토스 티셔츠 외 2건",
-                successUrl: window.location.origin + "/success", // 결제 요청이 성공하면 리다이렉트되는 URL
-                failUrl: window.location.origin + "/fail", // 결제 요청이 실패하면 리다이렉트되는 URL
-                customerEmail: "customer123@gmail.com",
-                customerName: "김토스",
-                customerMobilePhone: "01012341234",
-                // 카드 결제에 필요한 정보
+                amount: newOrderData.amount,
+                orderId: newOrderData.orderNum,
+                orderName: `${data[0].menuName} 외 ${data.length - 1}개`,
+                successUrl: `${window.location.origin}/order/success`,
+                failUrl: `${window.location.origin}/order/fail`,
+                customerEmail: newOrderData.userData.email,
+                customerName: newOrderData.userData.name,
+                customerMobilePhone: newOrderData.phone,
                 card: {
                     useEscrow: false,
-                    flowMode: "DEFAULT", // 통합결제창 여는 옵션
+                    flowMode: "DEFAULT",
                     useCardPoint: false,
                     useAppCardOnly: false,
                 },
             });
         } catch (error) {
-            console.error("결제 요청 중 오류가 발생했습니다:", error);
+            console.error(
+                "An error occurred during the payment request:",
+                error
+            );
         }
-    }
+    };
+
+    const handleClick = () => {
+        const isTimeValid = onClick();
+        if (isReady && isTimeValid) {
+            handlePayment();
+        }
+    };
+
     return (
-        <OrderButton
-            error={!isReady}
-            onClick={() => {
-                if (isReady) {
-                    requestPayment();
-                }
-            }}
-        >
-            {new Intl.NumberFormat("ko-KR").format(51000)}원 결제하기
+        <OrderButton error={!isReady} onClick={handleClick}>
+            {new Intl.NumberFormat("ko-KR").format(orderData.amount)}원 결제하기
         </OrderButton>
     );
 };
@@ -74,7 +122,7 @@ export default Payments;
 const OrderButton = styled.button`
     width: 440px;
     height: 48px;
-    margin: 0px 20px;
+    margin: 20px;
     background-color: ${({ theme }) => theme.color.primary};
     color: white;
     font-size: 16px;
@@ -91,6 +139,6 @@ const OrderButton = styled.button`
     `}
 
     @media (max-width: 480px) {
-        width: calc(100dvw - 40px);
+        width: calc(100vw - 40px);
     }
 `;

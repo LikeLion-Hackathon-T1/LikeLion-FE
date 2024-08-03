@@ -55,9 +55,6 @@ const CartPage = () => {
     const closeToast = useCallback(() => {
         setToastMessage("");
     }, []);
-
-    console.log(cartList);
-
     return (
         <>
             <Header

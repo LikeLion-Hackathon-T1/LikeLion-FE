@@ -1,12 +1,18 @@
 import styled from "styled-components";
 
-export const ReviewContainer = styled.div`
+export const ReviewContainer = styled.div.attrs(
+  ({ isLastMyReview, isFirstOtherReview, isMine }) => ({
+    isLastMyReview: undefined,
+    isFirstOtherReview: undefined,
+    isMine: undefined,
+  })
+)`
   margin-bottom: 44px;
   background-color: ${({ isMine }) =>
     isMine ? "rgba(255, 107, 0, 0.04)" : "transparent"};
-  padding-bottom: 24px; /* 경계선과 도움이 돼요 버튼 사이의 간격 */
-  border-bottom: ${({ isMine }) =>
-    isMine ? "1px solid rgba(255, 107, 0, 0.3)" : "none"};
+  padding-bottom: 24px;
+  border-bottom: ${({ isLastMyReview }) =>
+    isLastMyReview ? "1px solid rgba(255, 107, 0, 0.3)" : "none"};
   &:first-child {
     margin-top: 0;
   }
@@ -14,11 +20,21 @@ export const ReviewContainer = styled.div`
   margin-right: ${({ isMine }) => (isMine ? "-20px" : "0")};
   padding-left: ${({ isMine }) => (isMine ? "20px" : "0")};
   padding-right: ${({ isMine }) => (isMine ? "20px" : "0")};
-`;
 
+  ${({ isFirstOtherReview }) =>
+    isFirstOtherReview &&
+    `
+    margin-top: 20px;
+  `}
+
+  &:not(:last-child) {
+    margin-bottom: ${({ isMine, isLastMyReview }) =>
+      isMine ? "0" : isLastMyReview ? "20px" : "20px"};
+  }
+`;
 export const MyReviewContainer = styled.div`
-  margin: 0; /* 좌우, 상하 마진 제거 */
-  padding: 0; /* 좌우, 상하 패딩 제거 */
+  margin: 0;
+  padding: 0;
 `;
 
 export const MyReviewText = styled.span`
@@ -32,12 +48,12 @@ export const MyReviewText = styled.span`
   &::before {
     content: "";
     display: block;
-    width: calc(100% + 40px); /* 양쪽 가장자리를 덮도록 너비를 설정 */
-    height: 20px; /* margin-top 크기와 동일하게 설정 */
+    width: calc(100% + 40px);
+    height: 20px;
     background-color: rgba(255, 107, 0, 0.04);
     position: absolute;
-    top: -20px; /* margin-top 크기와 동일하게 설정 */
-    left: -20px; /* 양쪽 가장자리를 덮도록 왼쪽 위치를 설정 */
+    top: -20px;
+    left: -20px;
   }
 `;
 export const Header = styled.div`
@@ -124,7 +140,6 @@ export const ReviewImageContainerMultiple = styled.div`
   display: flex;
   margin-top: 19px;
   padding-right: 20px;
-  gap: 6px;
   -ms-overflow-style: none;
   scrollbar-width: none;
   &::-webkit-scrollbar {
@@ -172,16 +187,15 @@ export const Helpfulness = styled.div`
   margin-top: 10px;
   height: 24px;
 `;
-
 export const HelpfulButton = styled.button`
   background: none;
-  border: 1px solid ${({ $active }) => ($active ? "#9A9A9A" : "#ff6b00")};
+  border: 1px solid ${({ $active }) => ($active ? "#ff6b00" : "#9A9A9A")};
   border-radius: 54px;
-  color: ${({ $active }) => ($active ? "#9A9A9A" : "#ff6b00")};
+  color: ${({ $active }) => ($active ? "#ff6b00" : "#9A9A9A")};
   padding: 5px 10px;
   display: flex;
   align-items: center;
-  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+  cursor: ${({ $active }) => ($active ? "default" : "pointer")};
   outline: none;
 `;
 

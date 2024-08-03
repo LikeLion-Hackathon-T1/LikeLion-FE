@@ -4,13 +4,21 @@ import { Map, MapMarker, Polyline } from "react-kakao-maps-sdk";
 import { useEffect, useState } from "react";
 import EditList from "./EditList";
 import useSyluvAxios from "hooks/useSyluvAxios";
+import { useGeoLocation } from "hooks/useGeoLocation";
+import Splash from "components/Common/Splash";
+import NoItem from "components/Common/NoItem";
+
+const geolocationOptions = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 1000 * 3600 * 24,
+};
 
 const VisitTab = ({
     visitList,
     handleVisitList = () => {},
     onChange = () => {},
 }) => {
-    console.log(visitList);
     const [isEdit, setIsEdit] = useState(false);
     const [selectedList, setSelectedList] = useState([]);
     const syluvAxios = useSyluvAxios();
@@ -18,13 +26,21 @@ const VisitTab = ({
         latitude: visitList[0]?.latitude,
         longitude: visitList[0]?.longitude,
     });
+    const { location, error } = useGeoLocation(geolocationOptions);
 
     useEffect(() => {
-        setFirstPosition({
-            latitude: visitList[0]?.latitude,
-            longitude: visitList[0]?.longitude,
-        });
-    }, [visitList]);
+        if (visitList.length > 0) {
+            setFirstPosition({
+                latitude: visitList[0]?.latitude,
+                longitude: visitList[0]?.longitude,
+            });
+        } else {
+            setFirstPosition({
+                latitude: location?.latitude,
+                longitude: location?.longitude,
+            });
+        }
+    }, [visitList, location]);
 
     const handleSelect = (id) => {
         if (selectedList.includes(id)) {
@@ -73,6 +89,13 @@ const VisitTab = ({
         lng: item.longitude,
     }));
 
+    if (
+        firstPosition.latitude === undefined ||
+        firstPosition.longitude === undefined
+    ) {
+        return <Splash />;
+    }
+
     return (
         <Container>
             <Map
@@ -86,6 +109,14 @@ const VisitTab = ({
                 }}
                 level={1}
             >
+                {/* 내 위치 마커 */}
+                {/* <MapMarker
+                    position={{
+                        lat: location?.latitude,
+                        lng: location?.longitude,
+                    }}
+                /> */}
+
                 {visitList.map((item) => (
                     <MapMarker
                         key={item.visitListId}
@@ -108,49 +139,55 @@ const VisitTab = ({
                     strokeStyle="dashed"
                 />
             </Map>
-            <NavBar>
-                <span className="text-title">오늘의 방문 리스트</span>
-                {isEdit ? (
-                    selectedList.length > 0 ? (
-                        <span
-                            className="delete"
-                            onClick={() => {
-                                handleDelete();
-                            }}
-                        >
-                            삭제
-                        </span>
+            {visitList.length > 0 ? (
+                <>
+                    <NavBar>
+                        <span className="text-title">오늘의 방문 리스트</span>
+                        {isEdit ? (
+                            selectedList.length > 0 ? (
+                                <span className="delete" onClick={handleDelete}>
+                                    삭제
+                                </span>
+                            ) : (
+                                <span
+                                    className="disabled"
+                                    onClick={() => setIsEdit(false)}
+                                >
+                                    취소
+                                </span>
+                            )
+                        ) : (
+                            <span
+                                className="edit"
+                                onClick={() => setIsEdit(true)}
+                            >
+                                편집
+                            </span>
+                        )}
+                    </NavBar>
+                    {isEdit ? (
+                        <EditList
+                            visitList={visitList}
+                            handleSelect={handleSelect}
+                        />
                     ) : (
-                        <span
-                            className="disabled"
-                            onClick={() => {
-                                setIsEdit(!isEdit);
-                            }}
-                        >
-                            취소
-                        </span>
-                    )
-                ) : (
-                    <span
-                        className="edit"
-                        onClick={() => {
-                            setIsEdit(!isEdit);
-                        }}
-                    >
-                        편집
-                    </span>
-                )}
-            </NavBar>
-            {isEdit ? (
-                <EditList visitList={visitList} handleSelect={handleSelect} />
+                        <VisitList visitList={visitList} />
+                    )}
+                </>
             ) : (
-                <VisitList visitList={visitList} />
+                <ItemContainer>
+                    <NoItem />
+                </ItemContainer>
             )}
         </Container>
     );
 };
 
 export default VisitTab;
+
+const ItemContainer = styled.div`
+    margin-top: 20px;
+`;
 
 const NavBar = styled.div`
     margin: 25px;

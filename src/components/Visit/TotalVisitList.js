@@ -2,7 +2,6 @@ import styled from "styled-components";
 import TotalVisitItem from "./TotalVisitItem";
 
 const TotalVisitList = ({ date, visitList }) => {
-    console.log(visitList);
     return (
         <Wrapper>
             <div className="date">{date}</div>

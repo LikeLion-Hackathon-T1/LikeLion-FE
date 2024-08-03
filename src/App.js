@@ -21,8 +21,9 @@ import OrderSuccess from "pages/OrderSuccess";
 import MyPage from "pages/MyPage";
 import OwnerPage from "owner/pages/OwnerPage";
 import OwnerDetailPage from "owner/pages/OwnerDetailPage";
-import useSyluvAxios from "hooks/useSyluvAxios";
-import Toss from "components/Payment/Toss/TossPay";
+import PayCallback from "utils/PayCallback";
+import OrderRequest from "utils/OrderRequest";
+
 const App = () => {
     useEffect(() => {
         if (window.location.host === "syluv.store") {
@@ -86,7 +87,14 @@ const App = () => {
                                     path="/owner/:storeId/:orderId"
                                     element={<OwnerDetailPage />}
                                 />
-                                <Route path="/toss" element={<Toss />} />
+                                <Route
+                                    path="/order/success"
+                                    element={<PayCallback />}
+                                />
+                                <Route
+                                    path="/orderRequest"
+                                    element={<OrderRequest />}
+                                />
                             </Routes>
                         </BrowserRouter>
                     </MobileContainer>

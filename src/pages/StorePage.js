@@ -49,21 +49,23 @@ const StorePage = () => {
   // 가게 및 메뉴 데이터를 가져오는 함수
   const fetchStoreAndMenuData = async () => {
     try {
-      const response = await axiosInstance.get("/store/info");
+      const response = await axiosInstance.get(`/store/info`);
       console.log("Full Store and Menu Data Response:", response.data);
+
       if (response.data && response.data.payload) {
         const store = response.data.payload.find(
-          (item) => item.storeId === parseInt(storeId)
+          (store) => store.storeId === parseInt(storeId)
         );
-        if (store) {
-          console.log("Store Data:", store);
-          if (store.menuDetails && store.menuDetails.length > 0) {
-            setMenuId(store.menuDetails[0].menuId);
-          }
+        if (store && store.menuDetails.length > 0) {
+          const initialMenuId = store.menuDetails[0].menuId;
+          setMenuId(initialMenuId);
           return store;
         } else {
-          console.error("Store not found");
-          throw new Error("Store not found");
+          console.error(
+            "Store not found or no menu details available for storeId:",
+            storeId
+          );
+          throw new Error("Store not found or no menu details available");
         }
       } else {
         console.error("Invalid store data response", response);
@@ -76,30 +78,18 @@ const StorePage = () => {
   };
 
   // 리뷰 데이터를 가져오는 함수
-  const fetchReviewData = async () => {
+  const fetchReviewData = async (menuId) => {
     try {
-      const response = await axiosInstance.get("/review", {
-        params: { storeId },
-      });
-      console.log("리뷰 데이터를 가져오는 중, 가게 ID:", storeId);
-      console.log("전체 리뷰 데이터 응답:", response.data);
-
+      const response = await axiosInstance.get(`/review/${menuId}`);
+      console.log("Review Data Response:", response.data);
       if (response.data && response.data.payload) {
-        console.log("리뷰 데이터 페이로드:", response.data.payload);
-
-        // 'likeCount'를 문자열에서 숫자로 변환
-        const updatedPayload = response.data.payload.map((review) => ({
-          ...review,
-          likeCount: parseInt(review.likeCount, 10), // 문자열을 숫자로 변환
-        }));
-
-        return updatedPayload;
+        return response.data.payload;
       } else {
-        console.error("잘못된 리뷰 데이터 응답", response);
-        throw new Error("잘못된 리뷰 데이터 응답");
+        console.error("Invalid review data response", response);
+        throw new Error("Invalid review data response");
       }
     } catch (error) {
-      console.error("리뷰 데이터 가져오기 오류:", error);
+      console.error("Error fetching review data:", error);
       throw error;
     }
   };
@@ -121,51 +111,12 @@ const StorePage = () => {
     error: reviewError,
     isError: isReviewError,
     isLoading: isReviewLoading,
+    refetch: refetchReviews,
   } = useQuery({
-    queryKey: ["reviewData", storeId],
-    queryFn: fetchReviewData,
+    queryKey: ["reviewData", menuId],
+    queryFn: () => fetchReviewData(menuId),
     enabled: !!menuId, // menuId가 있을 때만 실행
-    onSuccess: (data) => {
-      if (data) {
-        const myReview = data.filter((review) => review.isMine);
-        const otherReviews = data
-          .filter((review) => !review.isMine)
-          .sort((a, b) => b.likeCount - a.likeCount);
-
-        setReviews([...myReview, ...otherReviews]);
-      }
-    },
   });
-
-  // 리뷰 삭제 핸들러
-  const handleReviewDelete = (reviewId) => {
-    setReviews((prevReviews) =>
-      prevReviews.filter((review) => review.reviewId !== reviewId)
-    );
-  };
-
-  // 도움이 돼요 클릭 핸들러
-  const handleReviewHelpful = (reviewId) => {
-    setReviews((prevReviews) => {
-      const updatedReviews = prevReviews.map((review) => {
-        if (review.reviewId === reviewId) {
-          return {
-            ...review,
-            likeCount: review.likeCount + 1,
-            HelpfulYn: true,
-          };
-        }
-        return review;
-      });
-
-      const myReview = updatedReviews.filter((review) => review.isMine);
-      const otherReviews = updatedReviews
-        .filter((review) => !review.isMine)
-        .sort((a, b) => b.likeCount - a.likeCount);
-
-      return [...myReview, ...otherReviews];
-    });
-  };
 
   // 리뷰 데이터를 설정하는 효과
   useEffect(() => {
@@ -192,70 +143,126 @@ const StorePage = () => {
   // 메뉴 클릭 핸들러
   const handleMenuClick = (menu) => {
     setSelectedMenu(menu);
-    setMenuId(menu.menuId); // 메뉴 클릭 시 menuId를 설정합니다
+    setMenuId(menu.menuId);
+    refetchReviews();
   };
 
-  let isFirstMyReview = true; // 첫 번째 본인의 리뷰인지 확인하는 플래그
+  // 리뷰 삭제 핸들러
+  const handleReviewDelete = (reviewId) => {
+    setReviews((prevReviews) =>
+      prevReviews.filter((review) => review.reviewId !== reviewId)
+    );
+  };
 
-  return selectedMenu ? (
-    <MenuItemDetail menu={selectedMenu} onClick={handleMenuClick} />
-  ) : (
+  // 도움이 돼요 클릭 핸들러
+  const handleReviewHelpful = (reviewId) => {
+    setReviews((prevReviews) => {
+      const updatedReviews = prevReviews.map((review) => {
+        if (review.reviewId === reviewId) {
+          return {
+            ...review,
+            likeCount: review.likeCount + 1,
+            helpfulYn: true,
+          };
+        }
+        return review;
+      });
+
+      const myReview = updatedReviews.filter((review) => review.isMine);
+      const otherReviews = updatedReviews
+        .filter((review) => !review.isMine)
+        .sort((a, b) => b.likeCount - a.likeCount);
+
+      return [...myReview, ...otherReviews];
+    });
+  };
+
+  let isFirstMyReview = true; // 첫 번째 본인의 리뷰인지 확인
+  let myReviewCount = reviews.filter((review) => review.isMine).length;
+  let myReviewIndex = 0;
+
+  return (
     <PageWrapper>
-      {storeData && (
+      {selectedMenu ? (
+        <MenuItemDetail menu={selectedMenu} />
+      ) : (
         <>
-          <StoreInfo
-            name={storeData.name}
-            call={storeData.contact}
-            address={storeData.location}
-            openHours={storeData.openHours}
-            closeHours={storeData.closeHours}
-            ratingAvg={storeData.ratingAvg}
-            storeImage={storeData.storeImage}
-            category={storeData.category}
-          />
-          <NavBar
-            items={["메뉴", "리뷰"]}
-            selected={activeSection}
-            handleSelected={setActiveSection}
-          />
-          {activeSection === "메뉴" && (
-            <Section activeSection={activeSection}>
-              {storeData.menuDetails.map((item, index) => (
-                <MenuItem key={index} item={item} onClick={handleMenuClick} />
-              ))}
-            </Section>
-          )}
-          {activeSection === "리뷰" && (
-            <Section activeSection={activeSection}>
-              {Array.isArray(reviews) && reviews.length > 0 ? (
-                reviews.map((review, index) => {
-                  const isFirst = isFirstMyReview && review.isMine;
-                  if (isFirst) {
-                    isFirstMyReview = false;
-                  }
-                  return (
-                    <ReviewItem
+          {storeData && (
+            <>
+              <StoreInfo
+                name={storeData.name}
+                call={storeData.contact}
+                address={storeData.location}
+                openHours={storeData.openHours}
+                closeHours={storeData.closeHours}
+                ratingAvg={storeData.ratingAvg}
+                storeImage={storeData.storeImage}
+                category={storeData.category}
+              />
+              <NavBar
+                items={["메뉴", "리뷰"]}
+                selected={activeSection}
+                handleSelected={setActiveSection}
+              />
+              {activeSection === "메뉴" && (
+                <Section activeSection={activeSection}>
+                  {storeData.menuDetails.map((item, index) => (
+                    <MenuItem
                       key={index}
-                      review={review}
-                      isFirst={isFirst}
-                      onDelete={handleReviewDelete}
-                      onHelpful={handleReviewHelpful}
+                      item={item}
+                      onClick={handleMenuClick}
                     />
-                  );
-                })
-              ) : (
-                <EmptyReviewContainer>
-                  <EmptyReviewImageStyled
-                    src={EmptyReviewImage}
-                    alt="리뷰가 없습니다"
-                  />
-                  <EmptyReviewText>리뷰가 아직 없어요</EmptyReviewText>
-                  <EmptyReviewText>
-                    첫 리뷰의 주인공이 돼주세요!
-                  </EmptyReviewText>
-                </EmptyReviewContainer>
+                  ))}
+                </Section>
               )}
-            </Section>
+              {activeSection === "리뷰" && (
+                <Section activeSection={activeSection}>
+                  {isReviewLoading ? (
+                    <Splash />
+                  ) : isReviewError ? (
+                    <div>리뷰 데이터를 가져오는 중 오류가 발생했습니다</div>
+                  ) : Array.isArray(reviews) && reviews.length > 0 ? (
+                    reviews.map((review, index) => {
+                      const isFirst = isFirstMyReview && review.isMine;
+                      if (isFirst) {
+                        isFirstMyReview = false;
+                      }
+                      if (review.isMine) {
+                        myReviewIndex += 1;
+                      }
+                      const isLastMyReview =
+                        review.isMine && myReviewIndex === myReviewCount;
+                      const isFirstOtherReview =
+                        !review.isMine &&
+                        index === reviews.findIndex((r) => !r.isMine);
+
+                      return (
+                        <ReviewItem
+                          key={index}
+                          review={review}
+                          isFirst={isFirst}
+                          isLastMyReview={isLastMyReview}
+                          isFirstOtherReview={isFirstOtherReview}
+                          onDelete={handleReviewDelete}
+                          onHelpful={handleReviewHelpful}
+                        />
+                      );
+                    })
+                  ) : (
+                    <EmptyReviewContainer>
+                      <EmptyReviewImageStyled
+                        src={EmptyReviewImage}
+                        alt="리뷰가 없습니다"
+                      />
+                      <EmptyReviewText>리뷰가 아직 없어요</EmptyReviewText>
+                      <EmptyReviewText>
+                        첫 리뷰의 주인공이 돼주세요!
+                      </EmptyReviewText>
+                    </EmptyReviewContainer>
+                  )}
+                </Section>
+              )}
+            </>
           )}
         </>
       )}

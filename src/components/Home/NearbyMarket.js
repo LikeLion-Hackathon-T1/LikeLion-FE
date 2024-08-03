@@ -17,14 +17,13 @@ const NearbyMarket = ({ username }) => {
     const syluvAxios = useSyluvAxios();
     const { location, error } = useGeoLocation(geolocationOptions);
     const [nearMarket, setNearMarket] = useState("");
-    const [text, setText] = useState("시럽");
+    const [text, setText] = useState(username ? username : "시럽");
     const { setName } = useTokenStore();
     useEffect(() => {
         if (username === undefined) {
             syluvAxios.get("/users/mypage").then((res) => {
                 setName(res.data.payload.name);
                 setText(res.data.payload.name);
-                console.log(res);
             });
         }
     }, []);
