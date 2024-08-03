@@ -2,13 +2,10 @@ import Header from "components/Common/Header";
 import styled from "styled-components";
 import { ReactComponent as Toss } from "assets/images/toss.svg";
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { ReactComponent as Warn } from "assets/images/warning.svg";
 import Payments from "components/Order/Payment";
 
 const OrderPage = ({ item, onClick = () => {} }) => {
-    const navigate = useNavigate();
-
     const [hour, setHour] = useState("");
     const [minute, setMinute] = useState("");
     const [phone, setPhone] = useState("");
@@ -72,6 +69,28 @@ const OrderPage = ({ item, onClick = () => {} }) => {
             setMinute(value);
         }
     }, []);
+
+    // 시간이 현재 시간 이후인지 확인
+    const checkTimeValid = useCallback(() => {
+        const now = new Date();
+        const nowHour = now.getHours();
+        const nowMinute = now.getMinutes();
+        const selectedHour = parseInt(hour);
+        const selectedMinute = parseInt(minute);
+
+        if (
+            selectedHour < nowHour ||
+            (selectedHour === nowHour && selectedMinute < nowMinute)
+        ) {
+            setError(true);
+            setMessage("현재 시간 이후로 선택해주세요.");
+            setIsReady(false);
+            return false;
+        } else {
+            setError(false);
+            return true;
+        }
+    }, [hour, minute, setError, setMessage]);
 
     useEffect(() => {
         //hour, minute이 한 자리 이상이고 현재 시간보다 전인 경우
@@ -171,7 +190,15 @@ const OrderPage = ({ item, onClick = () => {} }) => {
                 </div>
             </Container>
             <ButtonContainer>
-                <Payments isReady={isReady} />
+                <Payments
+                    isReady={isReady}
+                    onClick={checkTimeValid}
+                    data={item}
+                    phone={phone}
+                    hour={hour}
+                    min={minute}
+                    pickUpRoute={isDelivery ? "배달" : "픽업"}
+                />
             </ButtonContainer>
         </>
     );
