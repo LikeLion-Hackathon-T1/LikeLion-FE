@@ -57,6 +57,7 @@ const ReviewItem = ({
   const [helpfulness, setHelpfulness] = useState(Number(review.helpfulCnt));
   const [isHelpfulClicked, setIsHelpfulClicked] = useState(review.helpfulYn);
 
+  // 도움이 돼요 시작입니당
   const syluvAxios = useSyluvAxios();
 
   useEffect(() => {
@@ -65,7 +66,7 @@ const ReviewItem = ({
   }, [review.helpfulCnt, review.helpfulYn]);
 
   const handleHelpfulnessClick = async () => {
-    console.log("handleHelpfulnessClick called"); // 함수 호출 여부 확인
+    console.log("handleHelpfulnessClick called");
 
     if (isHelpfulClicked) {
       console.log("이미 누른 리뷰입니다.");
@@ -78,16 +79,25 @@ const ReviewItem = ({
 
     try {
       console.log("도움이 돼요 요청 시작");
+
       const response = await syluvAxios.post(`/review/${review.reviewId}/like`);
-      const result = response.data;
-      console.log("서버 응답:", result);
-      if (result.result.code !== 0) {
-        console.log("서버 응답 실패:", result);
+      console.log("서버 응답:", response);
+      if (response) {
+        const result = response.data;
+        console.log("서버 응답 데이터:", result);
+
+        if (result.result && result.result.code !== 0) {
+          console.log("서버 응답 실패:", result);
+          setHelpfulness((prevHelpfulness) => prevHelpfulness - 1);
+          setIsHelpfulClicked(false);
+        } else {
+          console.log("서버 응답 성공:", result);
+          onHelpful(review.reviewId);
+        }
+      } else {
+        console.log("서버 응답이 없습니다.");
         setHelpfulness((prevHelpfulness) => prevHelpfulness - 1);
         setIsHelpfulClicked(false);
-      } else {
-        console.log("서버 응답 성공:", result);
-        onHelpful(review.reviewId);
       }
     } catch (error) {
       console.error("도움이 돼요 요청 중 오류 발생:", error);
@@ -95,6 +105,8 @@ const ReviewItem = ({
       setIsHelpfulClicked(false);
     }
   };
+
+  // 리뷰 삭제 api 시작입니당
 
   const handleDelete = useCallback(() => {
     onDelete(review.reviewId);
