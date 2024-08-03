@@ -4,47 +4,24 @@ import AddModal from "owner/components/AddModal";
 import Button from "components/Common/Button";
 import MenuItem from "components/Store/MenuItem";
 
-const MenuEditTab = ({ item }) => {
+const MenuEditTab = ({ items, setItems }) => {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+
+    const handleAddItem = (newItem) => {
+        setItems([...items, newItem]);
+    };
+
+    if (!items) {
+        return <div>로딩 중...</div>;
+    }
 
     return (
         <>
             <ListContainer>
                 <div className="item-wrapper">
-                    <MenuItem item={item} />
-                </div>
-                <div className="item-wrapper">
-                    <MenuItem item={item} />
-                </div>
-                <div className="item-wrapper">
-                    <MenuItem item={item} />
-                </div>
-                <div className="item-wrapper">
-                    <MenuItem item={item} />
-                </div>
-                <div className="item-wrapper">
-                    <MenuItem item={item} />
-                </div>
-                <div className="item-wrapper">
-                    <MenuItem item={item} />
-                </div>
-                <div className="item-wrapper">
-                    <MenuItem item={item} />
-                </div>
-                <div className="item-wrapper">
-                    <MenuItem item={item} />
-                </div>
-                <div className="item-wrapper">
-                    <MenuItem item={item} />
-                </div>
-                <div className="item-wrapper">
-                    <MenuItem item={item} />
-                </div>
-                <div className="item-wrapper">
-                    <MenuItem item={item} />
-                </div>
-                <div className="item-wrapper">
-                    <MenuItem item={item} />
+                    {items.map((item, index) => (
+                        <MenuItem key={index} item={item} />
+                    ))}
                 </div>
             </ListContainer>
             {isAddModalOpen && (
@@ -52,6 +29,7 @@ const MenuEditTab = ({ item }) => {
                     onClose={() => {
                         setIsAddModalOpen(false);
                     }}
+                    onAdd={handleAddItem}
                 />
             )}
             <ButtonContainer>
@@ -84,7 +62,7 @@ const ButtonContainer = styled.div`
 `;
 
 const ListContainer = styled.div`
-    margin-top: -53px;
+    margin-top: 104px;
     margin-bottom: 100px;
     .item-wrapper {
         padding: 20px 20px 0px 20px;

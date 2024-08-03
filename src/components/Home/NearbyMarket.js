@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import useSyluvAxios from "hooks/useSyluvAxios";
 import { useCallback, useEffect, useState } from "react";
 import { useGeoLocation } from "hooks/useGeoLocation";
+import useTokenStore from "hooks/useTokenStore";
 
 const geolocationOptions = {
     enableHighAccuracy: true,
@@ -16,6 +17,17 @@ const NearbyMarket = ({ username }) => {
     const syluvAxios = useSyluvAxios();
     const { location, error } = useGeoLocation(geolocationOptions);
     const [nearMarket, setNearMarket] = useState("");
+    const [text, setText] = useState("시럽");
+    const { setName } = useTokenStore();
+    useEffect(() => {
+        if (username === undefined) {
+            syluvAxios.get("/users/mypage").then((res) => {
+                setName(res.data.payload.name);
+                setText(res.data.payload.name);
+                console.log(res);
+            });
+        }
+    }, []);
 
     const getLocation = useCallback(() => {
         syluvAxios
@@ -39,7 +51,7 @@ const NearbyMarket = ({ username }) => {
     return (
         <Container>
             <span className="title">
-                {username ? username : "시럽"}님과
+                {text}님과
                 <br />
                 지금 가까운 시장은?
             </span>

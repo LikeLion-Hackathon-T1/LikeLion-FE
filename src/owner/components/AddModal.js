@@ -3,10 +3,11 @@ import add from "assets/images/add-button.png";
 import { useCallback, useState } from "react";
 import Button from "components/Common/Button";
 
-const AddModal = ({ onClose = () => {} }) => {
+const AddModal = ({ onClose = () => {}, onAdd = () => {} }) => {
     const [menu, setMenu] = useState({
+        menuImage: "",
         name: "",
-        description: "",
+        content: "",
         price: "",
     });
 
@@ -20,12 +21,45 @@ const AddModal = ({ onClose = () => {} }) => {
         },
         [menu]
     );
+
+    const handlePhotoChange = (e) => {
+        if (e.target.files && e.target.files[0]) {
+            setMenu({
+                ...menu,
+                menuImage: URL.createObjectURL(e.target.files[0]),
+            });
+        }
+    };
+
+    const handleAddClick = () => {
+        onAdd(menu);
+        onClose();
+    };
+
     return (
         <AddMenu>
             <div className="body">
                 <div className="photo">
-                    <span>사진을 추가해주세요</span>
-                    <img src={add} alt="add" />
+                    {menu.menuImage ? (
+                        <img src={menu.menuImage} alt="uploaded" />
+                    ) : (
+                        <>
+                            <span>사진을 추가해주세요</span>
+                            <label
+                                htmlFor="photo-upload"
+                                className="custom-file-upload"
+                            >
+                                <img src={add} alt="add" />
+                            </label>
+                            <input
+                                id="photo-upload"
+                                type="file"
+                                accept="image/*"
+                                onChange={handlePhotoChange}
+                                style={{ display: "none" }}
+                            />
+                        </>
+                    )}
                 </div>
                 <div className="form">
                     <div className="item">
@@ -42,8 +76,8 @@ const AddModal = ({ onClose = () => {} }) => {
                         <span>설명</span>
                         <input
                             type="text"
-                            name="description"
-                            value={menu.description}
+                            name="content"
+                            value={menu.content}
                             onChange={handleChange}
                             placeholder="이 메뉴에 대해 설명해주세요"
                         />
@@ -61,7 +95,7 @@ const AddModal = ({ onClose = () => {} }) => {
                 </div>
                 <div className="buttons">
                     <Button text="취소" onClick={() => onClose()} />
-                    <Button text="완료" type="2" onClick={() => onClose()} />
+                    <Button text="완료" type="2" onClick={handleAddClick} />
                 </div>
             </div>
         </AddMenu>
@@ -153,9 +187,14 @@ const AddMenu = styled.div`
             color: ${({ theme }) => theme.color.gray900};
         }
 
+        .custom-file-upload {
+            cursor: pointer;
+        }
+
         img {
+            max-width: 100%;
+            max-height: 100%;
             &:hover {
-                cursor: pointer;
                 transform: scale(1.08);
                 transition: transform 0.1s;
             }

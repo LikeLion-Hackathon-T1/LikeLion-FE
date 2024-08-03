@@ -1,21 +1,26 @@
 import NavBar from "components/Common/NavBar";
+import useSyluvAxios from "hooks/useSyluvAxios";
 import MenuEditTab from "owner/components/MenuEditTab";
 import OrderManageTab from "owner/components/OrderManageTab";
 import OwnerHeader from "owner/components/OwnerHeader";
-import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const OwnerPage = () => {
-    const { storeId } = useParams();
+    const syluvAxios = useSyluvAxios();
     const menus = ["메뉴 관리", "주문 관리"];
     const [selected, setSelected] = useState(menus[0]);
-    const item = {
-        menuImage: "https://via.placeholder.com/100",
-        name: "아메리카노",
-        price: 3000,
-        content: "최고의 아메리카노",
-    };
+    const [allStoreInfo, setAllStoreInfo] = useState([]);
+    const [storeInfo, setStoreInfo] = useState({});
+    const [items, setItems] = useState([]);
+
+    useEffect(() => {
+        syluvAxios.get(`/store/info`).then((res) => {
+            setAllStoreInfo(res.data.payload);
+            setStoreInfo(res.data.payload[0]);
+            setItems(res.data.payload[0].menuDetails);
+        });
+    }, []);
 
     const handleSelected = (item) => {
         setSelected(item);
@@ -24,7 +29,7 @@ const OwnerPage = () => {
     return (
         <>
             <Header>
-                <OwnerHeader name={"꽃분이네"} />
+                <OwnerHeader name={storeInfo.name} />
                 <NavBar
                     items={menus}
                     selected={selected}
@@ -33,7 +38,7 @@ const OwnerPage = () => {
                 />
             </Header>
             {selected === "메뉴 관리" ? (
-                <MenuEditTab item={item} />
+                <MenuEditTab items={items} setItems={setItems} />
             ) : (
                 <OrderManageTab />
             )}
