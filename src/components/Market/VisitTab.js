@@ -6,6 +6,7 @@ import EditList from "./EditList";
 import useSyluvAxios from "hooks/useSyluvAxios";
 import { useGeoLocation } from "hooks/useGeoLocation";
 import Splash from "components/Common/Splash";
+import NoItem from "components/Common/NoItem";
 
 const geolocationOptions = {
     enableHighAccuracy: true,
@@ -138,49 +139,55 @@ const VisitTab = ({
                     strokeStyle="dashed"
                 />
             </Map>
-            <NavBar>
-                <span className="text-title">오늘의 방문 리스트</span>
-                {isEdit ? (
-                    selectedList.length > 0 ? (
-                        <span
-                            className="delete"
-                            onClick={() => {
-                                handleDelete();
-                            }}
-                        >
-                            삭제
-                        </span>
+            {visitList.length > 0 ? (
+                <>
+                    <NavBar>
+                        <span className="text-title">오늘의 방문 리스트</span>
+                        {isEdit ? (
+                            selectedList.length > 0 ? (
+                                <span className="delete" onClick={handleDelete}>
+                                    삭제
+                                </span>
+                            ) : (
+                                <span
+                                    className="disabled"
+                                    onClick={() => setIsEdit(false)}
+                                >
+                                    취소
+                                </span>
+                            )
+                        ) : (
+                            <span
+                                className="edit"
+                                onClick={() => setIsEdit(true)}
+                            >
+                                편집
+                            </span>
+                        )}
+                    </NavBar>
+                    {isEdit ? (
+                        <EditList
+                            visitList={visitList}
+                            handleSelect={handleSelect}
+                        />
                     ) : (
-                        <span
-                            className="disabled"
-                            onClick={() => {
-                                setIsEdit(!isEdit);
-                            }}
-                        >
-                            취소
-                        </span>
-                    )
-                ) : (
-                    <span
-                        className="edit"
-                        onClick={() => {
-                            setIsEdit(!isEdit);
-                        }}
-                    >
-                        편집
-                    </span>
-                )}
-            </NavBar>
-            {isEdit ? (
-                <EditList visitList={visitList} handleSelect={handleSelect} />
+                        <VisitList visitList={visitList} />
+                    )}
+                </>
             ) : (
-                <VisitList visitList={visitList} />
+                <ItemContainer>
+                    <NoItem />
+                </ItemContainer>
             )}
         </Container>
     );
 };
 
 export default VisitTab;
+
+const ItemContainer = styled.div`
+    margin-top: 20px;
+`;
 
 const NavBar = styled.div`
     margin: 25px;
