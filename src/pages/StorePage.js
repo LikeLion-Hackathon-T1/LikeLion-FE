@@ -106,6 +106,7 @@ const StorePage = () => {
       image: [
         "https://via.placeholder.com/300",
         "https://via.placeholder.com/300",
+        "https://via.placeholder.com/300",
       ],
       likeCount: "10",
       storeName: "스토어",

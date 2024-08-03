@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import "swiper/css/navigation";
 import {
   ReviewContainer,
   Header,
@@ -155,7 +154,7 @@ const ReviewItem = ({
         </ReviewImageContainerSingle>
       ) : Array.isArray(review.image) && review.image.length > 1 ? (
         <ReviewImageContainerMultiple>
-          <Swiper slidesPerView={2} spaceBetween={20}>
+          <Swiper slidesPerView={1.7} spaceBetween={6}>
             {review.image.map((image, index) => (
               <SwiperSlide key={index}>
                 <MultipleReviewImage src={image} alt={`review-${index}`} />

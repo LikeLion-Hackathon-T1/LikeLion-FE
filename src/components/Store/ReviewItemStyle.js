@@ -135,7 +135,6 @@ export const ReviewImageContainerMultiple = styled.div`
   display: flex;
   margin-top: 19px;
   padding-right: 20px;
-  gap: 6px;
   -ms-overflow-style: none;
   scrollbar-width: none;
   &::-webkit-scrollbar {
