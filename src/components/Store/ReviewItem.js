@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import "swiper/css/navigation";
 import {
   ReviewContainer,
   Header,
@@ -33,6 +32,7 @@ import {
 
 import useSyluvAxios from "../../hooks/useSyluvAxios";
 import goodIcon from "../../assets/images/good.png";
+import badIcon from "../../assets/images/bad.png";
 
 const formatTime = ({ beforeHours, beforeDay, beforeWeek }) => {
   if (beforeWeek > 0) {
@@ -54,38 +54,61 @@ const ReviewItem = ({
   onDelete,
   onHelpful,
 }) => {
-  const [helpfulness, setHelpfulness] = useState(Number(review.likeCount));
+  const [helpfulness, setHelpfulness] = useState(Number(review.helpfulCnt));
   const [isHelpfulClicked, setIsHelpfulClicked] = useState(review.helpfulYn);
 
   const syluvAxios = useSyluvAxios();
 
   useEffect(() => {
-    setHelpfulness(Number(review.likeCount));
+    setHelpfulness(Number(review.helpfulCnt));
     setIsHelpfulClicked(review.helpfulYn);
-  }, [review.likeCount, review.helpfulYn]);
+  }, [review.helpfulCnt, review.helpfulYn]);
 
   const handleHelpfulnessClick = async () => {
+    console.log("handleHelpfulnessClick called");
+
     if (isHelpfulClicked) {
       console.log("이미 누른 리뷰입니다.");
       return;
     }
 
+    console.log("도움이 돼요 클릭됨");
+
+    // UI를 즉시 업데이트
     setIsHelpfulClicked(true);
     setHelpfulness((prevHelpfulness) => prevHelpfulness + 1);
 
     try {
+      console.log("도움이 돼요 요청 시작");
+
       const response = await syluvAxios.post(`/review/${review.reviewId}/like`);
-      const result = response.data;
-      if (result.result.code !== 0) {
-        // 서버 응답이 실패한 경우 상태 되돌립니다
+      console.log("서버 응답:", response); // 서버 응답 전체를 로그로 출력
+
+      if (response) {
+        const result = response.data;
+        console.log("서버 응답 데이터:", result); // 서버 응답 데이터 로그
+
+        if (result.result && result.result.code !== 0) {
+          console.log("서버 응답 실패:", result);
+
+          // 서버 응답이 실패했을 때 UI 롤백
+          setHelpfulness((prevHelpfulness) => prevHelpfulness - 1);
+          setIsHelpfulClicked(false);
+        } else {
+          console.log("서버 응답 성공:", result);
+          onHelpful(review.reviewId);
+        }
+      } else {
+        console.log("서버 응답이 없습니다.");
+
+        // 서버 응답이 없을 때 UI 롤백
         setHelpfulness((prevHelpfulness) => prevHelpfulness - 1);
         setIsHelpfulClicked(false);
-      } else {
-        onHelpful(review.reviewId);
       }
     } catch (error) {
-      console.error("Error liking the review:", error);
-      // 서버 요청 중 오류 발생 시 상태 되돌립니다
+      console.error("도움이 돼요 요청 중 오류 발생:", error.response);
+
+      // 요청 중 오류가 발생했을 때 UI 롤백
       setHelpfulness((prevHelpfulness) => prevHelpfulness - 1);
       setIsHelpfulClicked(false);
     }
@@ -104,7 +127,7 @@ const ReviewItem = ({
         }
       })
       .catch((error) => {
-        console.error("Error deleting review:", error);
+        console.error("리뷰 삭제 요청 중 오류 발생:", error);
       });
   }, [review.reviewId, onDelete, syluvAxios]);
 
@@ -155,7 +178,7 @@ const ReviewItem = ({
         </ReviewImageContainerSingle>
       ) : Array.isArray(review.image) && review.image.length > 1 ? (
         <ReviewImageContainerMultiple>
-          <Swiper slidesPerView={2} spaceBetween={20}>
+          <Swiper slidesPerView={1.7} spaceBetween={6}>
             {review.image.map((image, index) => (
               <SwiperSlide key={index}>
                 <MultipleReviewImage src={image} alt={`review-${index}`} />
@@ -173,11 +196,15 @@ const ReviewItem = ({
       <Helpfulness>
         <div>{helpfulness}명에게 도움이 되었어요</div>
         <HelpfulButton
-          onClick={handleHelpfulnessClick}
+          onClick={() => {
+            console.log("HelpfulButton clicked");
+            handleHelpfulnessClick();
+          }}
           $active={isHelpfulClicked}
           disabled={isHelpfulClicked}
+          style={{ cursor: isHelpfulClicked ? "default" : "pointer" }}
         >
-          <Icon src={goodIcon} alt="thumbs up" />
+          <Icon src={isHelpfulClicked ? goodIcon : badIcon} alt="thumbs up" />
           도움이 돼요
         </HelpfulButton>
       </Helpfulness>
