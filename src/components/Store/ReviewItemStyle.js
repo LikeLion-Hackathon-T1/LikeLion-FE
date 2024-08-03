@@ -195,7 +195,7 @@ export const HelpfulButton = styled.button`
   padding: 5px 10px;
   display: flex;
   align-items: center;
-  cursor: pointer; // 일단 포인터로 바꿈
+  cursor: ${({ $active }) => ($active ? "default" : "pointer")};
   outline: none;
 `;
 
