@@ -84,7 +84,7 @@ export const Line = styled.div`
   align-content: center;
   height: 1px;
   border-bottom: 1px solid ${({ theme }) => theme.color.gray100};
-  margin-top: 330px;
+  margin-top: 430px;
 `;
 
 export const QuantityContainer = styled.div`
