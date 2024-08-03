@@ -56,6 +56,8 @@ const CartPage = () => {
         setToastMessage("");
     }, []);
 
+    console.log(cartList);
+
     return (
         <>
             <Header

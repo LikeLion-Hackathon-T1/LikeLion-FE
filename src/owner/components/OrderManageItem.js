@@ -1,28 +1,59 @@
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-const OrderManageItem = () => {
-    const navigate = useNavigate();
+const OrderManageItem = ({
+    item,
+    onClick = () => {},
+    handleItem = () => {},
+}) => {
     return (
-        <OrderContainer
-            onClick={() => {
-                navigate("/owner/1/1");
-            }}
-        >
+        <OrderContainer>
             <div className="header">
                 <div className="left">
-                    <span className="time">픽업(16:00)</span>
+                    <span className="time">
+                        {item.status === "cancel"
+                            ? "주문취소"
+                            : `픽업(${item.pickupTime})`}
+                    </span>
                     <div className="status">
-                        <span>08:12</span>
-                        <div>준비 중</div>
+                        <span>{item.orderTime}</span>
+                        {item.status === "주문접수" && <div>준비 중</div>}
+                        {item.status === "준비완료" && (
+                            <div onClick={() => onClick(item.id)}>
+                                방문 대기
+                            </div>
+                        )}
                     </div>
                 </div>
-                <button className="right">준비 완료</button>
+                {item.status === "주문접수" && (
+                    <button
+                        className="right"
+                        onClick={() => {
+                            onClick(item.id);
+                        }}
+                    >
+                        준비 완료
+                    </button>
+                )}
+                {item.status === "주문" && (
+                    <button
+                        className="right before"
+                        onClick={() => onClick(item.id)}
+                    >
+                        접수
+                    </button>
+                )}
             </div>
-            <div className="body">
-                <span>매콤 제육볶음x2, 키토김밥, 스시, 오니기리...</span>
-                <span>주문번호: B1UD01004L</span>
-                <span>토스페이 37,600원(예금주:OOO)</span>
+            <div
+                className="body"
+                onClick={() => {
+                    if (item.status === "주문") {
+                        handleItem(item);
+                    }
+                }}
+            >
+                <span>{item.menu.map((order) => order.name).join(", ")}</span>
+                <span>주문번호: {item.orderNumber}</span>
+                <span>{item.price}</span>
             </div>
         </OrderContainer>
     );
@@ -88,4 +119,8 @@ const OrderContainer = styled.div`
     border-bottom: 1px solid ${({ theme }) => theme.color.gray100};
     padding: 0px 20px;
     padding-bottom: 30px;
+
+    .body {
+        cursor: pointer;
+    }
 `;
