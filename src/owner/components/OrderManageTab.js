@@ -2,173 +2,34 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import OrderManageItem from "./OrderManageItem";
 import OwnerDetailPage from "owner/pages/OwnerDetailPage";
+import useSyluvAxios from "hooks/useSyluvAxios";
 
-const OrderManageTab = () => {
+const OrderManageTab = ({ storeId }) => {
+    const syluvAxios = useSyluvAxios();
     const [selected, setSelected] = useState("신규/진행중");
-    const [items, setItems] = useState([
-        {
-            id: 1,
-            status: "주문",
-            orderNumber: "B1UD01004L",
-            orderTime: "08:12",
-            pickupTime: "08:20",
-            menu: [
-                {
-                    name: "매콤 제육볶음",
-                    count: 2,
-                    price: 20000,
-                },
-                {
-                    name: "키토김밥",
-                    count: 1,
-                    price: 5000,
-                },
-                {
-                    name: "스시",
-                    count: 1,
-                    price: 10000,
-                },
-                {
-                    name: "오니기리",
-                    count: 1,
-                    price: 5000,
-                },
-            ],
-            price: "토스페이 40,000원(예금주:OOO)",
-        },
-        {
-            id: 2,
-            status: "주문접수",
-            orderNumber: "B1U343404L",
-            orderTime: "08:10",
-            pickupTime: "08:30",
-            menu: [
-                {
-                    name: "매콤 제육볶음",
-                    count: 2,
-                    price: 20000,
-                },
-                {
-                    name: "키토김밥",
-                    count: 1,
-                    price: 5000,
-                },
-                {
-                    name: "스시",
-                    count: 1,
-                    price: 10000,
-                },
-                {
-                    name: "오니기리",
-                    count: 1,
-                    price: 5000,
-                },
-            ],
-            price: "토스페이 40,000원(예금주:OOO)",
-        },
-        {
-            id: 3,
-            status: "준비완료",
-            orderNumber: "A12301034L",
-            orderTime: "08:09",
-            pickupTime: "08:40",
-            menu: [
-                {
-                    name: "매콤 제육볶음",
-                    count: 2,
-                    price: 20000,
-                },
-                {
-                    name: "키토김밥",
-                    count: 1,
-                    price: 5000,
-                },
-                {
-                    name: "스시",
-                    count: 1,
-                    price: 10000,
-                },
-                {
-                    name: "오니기리",
-                    count: 1,
-                    price: 5000,
-                },
-            ],
-            price: "토스페이 40,000원(예금주:OOO)",
-        },
-        {
-            id: 4,
-            status: "픽업완료",
-            orderNumber: "E1U231004A",
-            orderTime: "08:08",
-            pickupTime: "08:50",
-            menu: [
-                {
-                    name: "매콤 제육볶음",
-                    count: 2,
-                    price: 20000,
-                },
-                {
-                    name: "키토김밥",
-                    count: 1,
-                    price: 5000,
-                },
-                {
-                    name: "스시",
-                    count: 1,
-                    price: 10000,
-                },
-                {
-                    name: "오니기리",
-                    count: 1,
-                    price: 5000,
-                },
-            ],
-            price: "토스페이 40,000원(예금주:OOO)",
-        },
-    ]);
+    const [items, setItems] = useState([]);
     const [endItems, setEndItems] = useState([]);
     const [newItems, setNewItems] = useState([]);
     const [detailItem, setDetailItem] = useState(null);
 
     useEffect(() => {
-        const newItems = items.filter(
-            (item) => item.status !== "픽업완료" && item.status !== "cancel"
-        );
-        const endItems = items.filter(
-            (item) => item.status === "픽업완료" || item.status === "cancel"
-        );
+        syluvAxios
+            .get(`/customer/${storeId}`)
+            .then((res) => {
+                setItems(res.data.payload);
+                console.log(res.data.payload);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, []);
+
+    useEffect(() => {
+        const newItems = items.filter((item) => item.status !== "VISITED");
+        const endItems = items.filter((item) => item.status === "VISITED");
         setNewItems(newItems);
         setEndItems(endItems);
     }, [items]);
-
-    const handleStatus = (id) => {
-        //주문 => 주문접수 => 준비완료 => 방문대기 => 픽업완료
-        const newItems = items.map((item) => {
-            if (item.id === id) {
-                if (item.status === "주문") {
-                    return { ...item, status: "주문접수" };
-                } else if (item.status === "주문접수") {
-                    return { ...item, status: "준비완료" };
-                } else if (item.status === "준비완료") {
-                    return { ...item, status: "픽업완료" };
-                }
-            }
-            return item;
-        });
-        setItems(newItems);
-    };
-
-    const handleCancel = (id) => {
-        //status를 cancel로 바꾸기
-        const newItems = items.map((item) => {
-            if (item.id === id) {
-                return { ...item, status: "cancel" };
-            }
-            return item;
-        });
-        setItems(newItems);
-    };
 
     const handleDetailItem = (item) => {
         setDetailItem(item);
@@ -176,12 +37,7 @@ const OrderManageTab = () => {
 
     if (detailItem !== null) {
         return (
-            <OwnerDetailPage
-                item={detailItem}
-                handleItem={handleDetailItem}
-                handleCancel={handleCancel}
-                handleSuccess={handleStatus}
-            />
+            <OwnerDetailPage item={detailItem} handleItem={handleDetailItem} />
         );
     }
 
@@ -207,7 +63,7 @@ const OrderManageTab = () => {
                         <OrderManageItem
                             key={item.id}
                             item={item}
-                            onClick={handleStatus}
+                            // onClick={handleStatus}
                             handleItem={handleDetailItem}
                         />
                     ))}

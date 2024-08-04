@@ -9,6 +9,7 @@ import LatestMarketList from "components/Home/LatestMarketList";
 import Search from "components/Common/Search";
 import useTokenStore from "hooks/useTokenStore";
 import noVisit from "assets/images/app-icon.png";
+import Splash from "components/Common/Splash";
 
 const HomePage = () => {
     const { getName } = useTokenStore();
@@ -18,6 +19,7 @@ const HomePage = () => {
     const [latestMarkets, setLatestMarkets] = useState([]);
     const [hotMarkets, setHotMarkets] = useState([]);
     const { getAccessToken } = useTokenStore();
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         if (getAccessToken()) {
@@ -25,6 +27,7 @@ const HomePage = () => {
                 if (res.data) {
                     setLatestMarkets(res.data.payload.visitListHomeList);
                     setHotMarkets(res.data.payload.hotListHomeList);
+                    setIsLoading(false);
                 }
             });
         }
@@ -35,6 +38,10 @@ const HomePage = () => {
             setAllMarkets(res.data.payload);
         });
     }, []);
+
+    if (isLoading) {
+        return <Splash />;
+    }
 
     return (
         <>
