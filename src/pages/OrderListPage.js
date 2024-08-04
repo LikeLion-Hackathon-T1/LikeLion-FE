@@ -21,7 +21,6 @@ const OrderListPage = () => {
                 const res = await syluvAxios.get("/order");
                 setOrderList(res.data.payload);
                 setIsLoading(false);
-                console.log(res.data.payload);
             } catch (error) {
                 console.error(error);
             }
