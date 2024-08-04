@@ -148,25 +148,31 @@ const ReviewItem = ({
           <DeleteButton onClick={handleDelete}>삭제하기</DeleteButton>
         )}
       </Header>
-      {Array.isArray(review.image) && review.image.length === 1 ? (
-        <ReviewImageContainerSingle>
-          <SingleReviewImage src={review.image[0]} alt="review" />
-        </ReviewImageContainerSingle>
-      ) : Array.isArray(review.image) && review.image.length > 1 ? (
-        <ReviewImageContainerMultiple>
-          <Swiper slidesPerView={1.7} spaceBetween={6}>
-            {review.image.map((image, index) => (
-              <SwiperSlide key={index}>
-                <MultipleReviewImage src={image} alt={`review-${index}`} />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </ReviewImageContainerMultiple>
-      ) : review.image ? (
+      {review.image &&
+        Array.isArray(review.image) &&
+        review.image.length === 1 && (
+          <ReviewImageContainerSingle>
+            <SingleReviewImage src={review.image[0]} alt="review" />
+          </ReviewImageContainerSingle>
+        )}
+      {review.image &&
+        Array.isArray(review.image) &&
+        review.image.length > 1 && (
+          <ReviewImageContainerMultiple>
+            <Swiper slidesPerView={1.7} spaceBetween={6}>
+              {review.image.map((image, index) => (
+                <SwiperSlide key={index}>
+                  <MultipleReviewImage src={image} alt={`review-${index}`} />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </ReviewImageContainerMultiple>
+        )}
+      {review.image && !Array.isArray(review.image) && (
         <ReviewImageContainerSingle>
           <SingleReviewImage src={review.image} alt="review" />
         </ReviewImageContainerSingle>
-      ) : null}
+      )}
       <MenuName>{review.menuName}</MenuName>
       <ReviewText>{review.content}</ReviewText>
       <Helpfulness>
