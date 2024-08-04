@@ -6,13 +6,17 @@ import { useNavigate } from "react-router-dom";
 
 const TotalVisitItem = ({ item, isLast, index }) => {
     const [status, setStatus] = useState(null);
-    const [style, setStyle] = useState(true);
+    const [style, setStyle] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
         switch (item.status) {
             case "BEFORE":
                 setStatus("방문 전");
+                break;
+            case "PAYMENT":
+                setStatus("주문 확인 중");
+                setStyle(true);
                 break;
             case "PREPARING":
                 setStatus("준비 중");

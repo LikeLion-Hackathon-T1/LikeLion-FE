@@ -28,6 +28,10 @@ const VisitItem = ({
             case "BEFORE":
                 setStatus("방문 전");
                 break;
+            case "PAYMENT":
+                setStatus("주문 확인 중");
+                setStyle(true);
+                break;
             case "PREPARING":
                 setStatus("준비 중");
                 setStyle(true);

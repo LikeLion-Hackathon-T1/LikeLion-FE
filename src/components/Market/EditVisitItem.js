@@ -1,14 +1,42 @@
 import CheckButton from "components/Cart/CheckButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const EditVisitItem = ({ item, handleSelect = () => {} }) => {
     const [isChecked, setIsChecked] = useState(false);
+    const [status, setStatus] = useState(null);
+    const [style, setStyle] = useState(false);
 
     const handleClick = () => {
         setIsChecked(!isChecked);
         handleSelect(item.visitListId);
     };
+
+    useEffect(() => {
+        switch (item.status) {
+            case "BEFORE":
+                setStatus("방문 전");
+                break;
+            case "PAYMENT":
+                setStatus("주문 확인 중");
+                setStyle(true);
+                break;
+            case "PREPARING":
+                setStatus("준비 중");
+                setStyle(true);
+                break;
+            case "PREPARED":
+                setStatus("준비 완료");
+                setStyle(true);
+                break;
+            case "VISITED":
+                setStatus("방문 완료");
+                break;
+            default:
+                setStatus("Unknown status");
+                break;
+        }
+    }, []);
 
     return (
         <ListItem>
@@ -26,7 +54,7 @@ const EditVisitItem = ({ item, handleSelect = () => {} }) => {
                             <span>{item.category}</span>
                             <span className="store-name">{item.store}</span>
                         </di>
-                        <div className="status">방문 전</div>
+                        <div className="status">{status}</div>
                     </div>
                 </div>
             </Wrapper>
