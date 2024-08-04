@@ -29,8 +29,6 @@ const Payments = ({
         pickUpRoute,
     });
 
-    console.log(data);
-
     useEffect(() => {
         const totalAmount = data.reduce(
             (total, item) => total + item.price * item.quantity,

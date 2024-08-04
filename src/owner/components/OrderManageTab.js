@@ -17,11 +17,8 @@ const OrderManageTab = ({ storeId }) => {
             .get(`/customer/${storeId}`)
             .then((res) => {
                 setItems(res.data.payload);
-                console.log(res.data.payload);
             })
-            .catch((err) => {
-                console.log(err);
-            });
+            .catch((err) => {});
     }, []);
 
     useEffect(() => {

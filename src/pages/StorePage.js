@@ -41,15 +41,10 @@ const StorePage = () => {
     const [reviews, setReviews] = useState([]);
     const [menuId, setMenuId] = useState(null);
 
-    useEffect(() => {
-        console.log("Selected Menu:", selectedMenu);
-    }, [selectedMenu]);
-
     // 가게 및 메뉴 데이터를 가져오는 함수
     const fetchStoreAndMenuData = async () => {
         try {
             const response = await axiosInstance.get(`/store/info`);
-            console.log("Full Store and Menu Data Response:", response.data);
 
             if (response.data && response.data.payload) {
                 const store = response.data.payload.find(
@@ -82,7 +77,6 @@ const StorePage = () => {
     const fetchReviewData = async (menuId) => {
         try {
             const response = await axiosInstance.get(`/review/${menuId}`);
-            console.log("Review Data Response:", response.data);
             if (response.data && response.data.payload) {
                 return response.data.payload;
             } else {
@@ -122,7 +116,6 @@ const StorePage = () => {
     // 리뷰 데이터를 설정하는 효과
     useEffect(() => {
         if (reviewData) {
-            console.log("Fetched Review Data:", reviewData);
             const myReview = reviewData.filter((review) => review.isMine);
             const otherReviews = reviewData
                 .filter((review) => !review.isMine)

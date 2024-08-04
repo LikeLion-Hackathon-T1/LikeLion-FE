@@ -20,7 +20,6 @@ const OrderResult = () => {
     useEffect(() => {
         const data = getGlobalOrderData();
         if (data) {
-            console.log(data);
             setOrderData(data);
             setIsLoading(false);
         }

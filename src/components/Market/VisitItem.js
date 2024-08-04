@@ -6,6 +6,7 @@ import { ReactComponent as Gom2 } from "assets/images/foot_check2.svg";
 import { useCallback, useEffect, useState } from "react";
 import Button from "components/Common/Button";
 import useSyluvAxios from "hooks/useSyluvAxios";
+import { useNavigate } from "react-router-dom";
 
 const VisitItem = ({
     index,
@@ -18,6 +19,7 @@ const VisitItem = ({
     const [status, setStatus] = useState(null);
     const [style, setStyle] = useState(false);
     const syluvAxios = useSyluvAxios();
+    const navigate = useNavigate();
     const onCompleteClick = useCallback(() => {
         handleOpenModal(null);
     }, [handleOpenModal]);
@@ -71,7 +73,14 @@ const VisitItem = ({
                 </Container>
 
                 <Wrapper>
-                    <div className="store">
+                    <div
+                        className="store"
+                        onClick={() => {
+                            navigate(`/market/1/${item.storeId}`, {
+                                state: { item: item },
+                            });
+                        }}
+                    >
                         <img src={item.imageUrl} alt="store" />
                         <div className="store-info">
                             <div>
@@ -253,6 +262,7 @@ const Wrapper = styled.div`
     .store {
         display: flex;
         gap: 12px;
+        cursor: pointer;
     }
 
     .store-info {
