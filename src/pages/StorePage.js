@@ -137,7 +137,11 @@ const StorePage = () => {
 
   if (isStoreError || isReviewError) {
     console.error("Error fetching data", { storeError, reviewError });
-    return <div>데이터를 가져오는 중 오류가 발생했습니다</div>;
+    return (
+      <div>
+        <Splash />
+      </div>
+    );
   }
 
   // 메뉴 클릭 핸들러

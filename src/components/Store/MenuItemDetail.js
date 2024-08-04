@@ -15,7 +15,6 @@ import {
   CartButton,
   Title,
   Description,
-  Line,
   QuantityContainer,
   QuantityLabel,
   QuantityWrapper,
@@ -24,8 +23,6 @@ import {
   Quantity,
   AddToCartButton,
   ModalBackground,
-  ModalContent,
-  ModalTitle,
   VisitModal,
   ModalButton,
   CartBadge,
@@ -60,67 +57,24 @@ const MenuItemDetail = ({ menu }) => {
     console.log("Menu Name: ", menuName);
     console.log("Quantity: ", quantity);
     try {
-      // 현재 장바구니 아이템을 가져옴
-      const cartResponse = await syluvAxios.get("/cart");
-      const cartItems = cartResponse.data.payload || [];
+      console.log("Adding new item to cart...");
+      const addResponse = await syluvAxios.post(`/store/${menuId}/addcart`, {
+        menuId: menuId,
+        quantity: quantity,
+      });
+      console.log("Add Response: ", addResponse.data);
 
-      console.log("Cart items: ", cartItems);
-
-      // 장바구니에 동일한 메뉴가 있는지 확인
-      const existingCartItem = cartItems.find((item) => item.menuId === menuId);
-
-      if (existingCartItem) {
-        // 동일한 메뉴가 있으면 수량을 업데이트
-        const newQuantity = existingCartItem.quantity + quantity;
-        console.log("Updating quantity for existing cart item...");
-        console.log("Cart ID: ", existingCartItem.cartId);
-        console.log("New Quantity: ", newQuantity);
-        try {
-          const updateResponse = await syluvAxios.put("/cart", [
-            {
-              cartId: existingCartItem.cartId,
-              quantity: newQuantity,
-            },
-          ]);
-          console.log("Update Response: ", updateResponse.data);
-
-          // 장바구니 다시 불러오기
-          const updatedCartResponse = await syluvAxios.get("/cart");
-          console.log("Updated Cart items: ", updatedCartResponse.data.payload);
-        } catch (updateError) {
-          console.error(
-            "Update Error: ",
-            updateError.response ? updateError.response.data : updateError
-          );
-        }
-      } else {
-        // 동일한 메뉴가 없으면 새로운 항목으로 추가
-        console.log("Adding new item to cart...");
-        try {
-          const addResponse = await syluvAxios.post("/cart", {
-            menuId: menuId,
-            quantity: quantity,
-          });
-          console.log("Add Response: ", addResponse.data);
-
-          // 장바구니 다시 불러오기
-          const updatedCartResponse = await syluvAxios.get("/cart");
-          console.log("Updated Cart items: ", updatedCartResponse.data.payload);
-        } catch (addError) {
-          console.error(
-            "Add Error: ",
-            addError.response ? addError.response.data : addError
-          );
-        }
-      }
+      // 장바구니 다시 불러오기
+      const updatedCartResponse = await syluvAxios.get("/cart");
+      console.log("Updated Cart items: ", updatedCartResponse.data.payload);
 
       console.log("장바구니 업데이트 완료");
       setShowModal(true); // 모달 표시
-    } catch (err) {
-      console.error("에러 발생:", err);
-      if (err.response) {
-        console.error("Response error:", err.response.data);
-      }
+    } catch (addError) {
+      console.error(
+        "Add Error: ",
+        addError.response ? addError.response.data : addError
+      );
     }
   };
 
@@ -149,7 +103,6 @@ const MenuItemDetail = ({ menu }) => {
       </ImageContainer>
       <Title>{menu.name}</Title>
       <Description>{menu.content}</Description>
-      <Line />
       <QuantityContainer>
         <QuantityLabel>수량</QuantityLabel>
         <QuantityWrapper>

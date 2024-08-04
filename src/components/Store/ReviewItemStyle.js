@@ -184,7 +184,7 @@ export const Helpfulness = styled.div`
   color: ${({ theme }) => theme.color.gray500};
   font-weight: ${({ theme }) => theme.fontWeight.regular};
   font-size: 14px;
-  margin-top: 10px;
+  margin-top: 18px;
   height: 24px;
 `;
 export const HelpfulButton = styled.button`

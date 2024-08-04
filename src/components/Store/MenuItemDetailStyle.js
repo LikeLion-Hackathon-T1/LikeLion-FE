@@ -2,9 +2,9 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   font-family: "Pretendard", sans-serif;
-  padding-bottom: 120px;
   position: relative;
-  overflow: hidden;
+  overflow-y: hidden;
+  -ms-overflow-style: hidden;
   height: 100%;
 `;
 
@@ -84,7 +84,6 @@ export const Line = styled.div`
   align-content: center;
   height: 1px;
   border-bottom: 1px solid ${({ theme }) => theme.color.gray100};
-  margin-top: 430px;
 `;
 
 export const QuantityContainer = styled.div`
@@ -94,15 +93,14 @@ export const QuantityContainer = styled.div`
   position: fixed;
   bottom: 70px;
   width: 440px;
-  left: 50%;
-  transform: translateX(-50%);
   padding: 0 20px;
   background-color: white;
   border-radius: 8px;
-  margin-left: 0px;
   @media (max-width: 480px) {
     width: calc(100% - 40px);
   }
+  border-top: 1px solid ${({ theme }) => theme.color.gray100};
+  padding-top: 10px;
 `;
 
 export const QuantityLabel = styled.span`
@@ -150,6 +148,7 @@ export const Quantity = styled.span`
 `;
 
 export const AddToCartButton = styled.button`
+  position: sticky;
   position: fixed;
   width: 440px;
   height: 48px;
@@ -160,9 +159,9 @@ export const AddToCartButton = styled.button`
   border: none;
   border-radius: 8px;
   bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-left: 0px;
+  /* left: 50%;
+  transform: translateX(-50%); */
+  margin: 0 20px;
   @media (max-width: 480px) {
     width: calc(100% - 40px);
   }
