@@ -129,6 +129,7 @@ const Container = styled.div`
     }
     overflow: hidden;
     max-height: 100vh;
+    max-width: 480px;
 `;
 
 const Camera = styled.video`
@@ -161,8 +162,8 @@ const Overlay = styled.div`
     z-index: 2;
     height: 400px;
     width: 400px;
-    border-radius: 414px;
-    border: 400px solid rgba(0, 0, 0, 0.8);
+    border-radius: 820px;
+    border: 800px solid rgba(0, 0, 0, 0.8);
     position: absolute;
     top: 50%;
     left: 50%;

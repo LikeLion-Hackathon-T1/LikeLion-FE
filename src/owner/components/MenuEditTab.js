@@ -15,8 +15,6 @@ const MenuEditTab = ({ items, setItems, storeId }) => {
         setToastMessage("");
     };
 
-    console.log(items);
-
     const handleAddItem = async (newItem) => {
         if (
             !newItem.name ||
@@ -33,8 +31,6 @@ const MenuEditTab = ({ items, setItems, storeId }) => {
             price: newItem.price,
             content: newItem.content,
         };
-
-        console.log(newItem.menuImage);
 
         formData.append(
             "dto",
@@ -54,7 +50,6 @@ const MenuEditTab = ({ items, setItems, storeId }) => {
                 }
             );
             setItems([...items, newItem]); // Assuming the API returns the new item
-            console.log(response.data);
         } catch (error) {
             console.error("Error adding item:", error);
         }

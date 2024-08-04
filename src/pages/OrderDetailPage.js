@@ -63,8 +63,6 @@ const OrderDetailPage = () => {
 
     if (!orderDetail) return <Splash />;
 
-    console.log(orderDetail);
-
     return !isClicked ? (
         <Container>
             <Header

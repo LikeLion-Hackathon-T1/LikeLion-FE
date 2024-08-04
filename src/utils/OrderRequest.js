@@ -29,7 +29,6 @@ const OrderRequest = () => {
                     phoneNum: data.phone,
                 })
                 .then((res) => {
-                    console.log(res);
                     setResult(res.data.payload);
                     setIsLoading(false);
                 });
