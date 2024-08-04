@@ -76,7 +76,7 @@ const MenuItemDetail = ({ menu }) => {
         console.log("Cart ID: ", existingCartItem.cartId);
         console.log("New Quantity: ", newQuantity);
         try {
-          const updateResponse = await syluvAxios.put("/cart", [
+          const updateResponse = await syluvAxios.post("/cart", [
             {
               cartId: existingCartItem.cartId,
               quantity: newQuantity,
@@ -149,7 +149,6 @@ const MenuItemDetail = ({ menu }) => {
       </ImageContainer>
       <Title>{menu.name}</Title>
       <Description>{menu.content}</Description>
-      <Line />
       <QuantityContainer>
         <QuantityLabel>수량</QuantityLabel>
         <QuantityWrapper>

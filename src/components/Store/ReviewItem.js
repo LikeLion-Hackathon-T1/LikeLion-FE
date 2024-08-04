@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import {
@@ -65,59 +65,47 @@ const ReviewItem = ({
   }, [review.helpfulCnt, review.helpfulYn]);
 
   const handleHelpfulnessClick = async () => {
-    console.log("handleHelpfulnessClick called");
-
-    if (isHelpfulClicked) {
-      console.log("이미 누른 리뷰입니다.");
-      return;
-    }
-
-    console.log("도움이 돼요 클릭됨");
-
-    // ui 바로 보이게 하기
-    setIsHelpfulClicked(true);
-    setHelpfulness((prevHelpfulness) => prevHelpfulness + 1);
-
     try {
-      console.log("도움이 돼요 요청 시작");
+      if (isHelpfulClicked) {
+        // 도움이 돼요 취소
+        setIsHelpfulClicked(false);
+        setHelpfulness((prevHelpfulness) => prevHelpfulness - 1);
 
-      const response = await syluvAxios.post(`/review/${review.reviewId}/like`);
-      console.log("서버 응답:", response); // 서버 응답 전체를 로그로 출력
+        const response = await syluvAxios.delete(
+          `/review/${review.reviewId}/like/delete`
+        );
 
-      if (response) {
-        const result = response.data;
-        console.log("서버 응답 데이터:", result); // 서버 응답 데이터 로그
-
-        if (result.result && result.result.code !== 0) {
-          console.log("서버 응답 실패:", result);
-        } else {
-          console.log("서버 응답 성공:", result);
+        if (response && response.data && response.data.result.code === 0) {
           onHelpful(review.reviewId);
+        } else {
         }
       } else {
-        console.log("서버 응답이 없습니다.");
+        // 도움이 돼요 클릭
+        setIsHelpfulClicked(true);
+        setHelpfulness((prevHelpfulness) => prevHelpfulness + 1);
+
+        const response = await syluvAxios.post(
+          `/review/${review.reviewId}/like`
+        );
+
+        if (response && response.data && response.data.result.code === 0) {
+          onHelpful(review.reviewId);
+        } else {
+        }
       }
     } catch (error) {
       console.error("도움이 돼요 요청 중 오류 발생:", error.response);
     }
   };
 
-  const handleDelete = useCallback(() => {
-    onDelete(review.reviewId);
-    syluvAxios
-      .delete(`/review/${review.reviewId}/delete`)
-      .then((response) => {
-        const result = response.data;
-        if (result && result.result && result.result.code === 0) {
-          console.log("리뷰가 정상적으로 삭제되었습니다:", result.payload);
-        } else {
-          console.error("리뷰 삭제 중 오류 발생:", result);
-        }
-      })
-      .catch((error) => {
-        console.error("리뷰 삭제 요청 중 오류 발생:", error);
-      });
-  }, [review.reviewId, onDelete, syluvAxios]);
+  const handleDelete = async () => {
+    try {
+      await syluvAxios.delete(`/review/${review.reviewId}`);
+      onDelete(review.reviewId);
+    } catch (error) {
+      console.error("리뷰 삭제 중 오류 발생:", error);
+    }
+  };
 
   return (
     <ReviewContainer
@@ -189,8 +177,7 @@ const ReviewItem = ({
             handleHelpfulnessClick();
           }}
           $active={isHelpfulClicked}
-          disabled={isHelpfulClicked}
-          style={{ cursor: isHelpfulClicked ? "default" : "pointer" }}
+          style={{ cursor: "pointer" }}
         >
           <Icon src={isHelpfulClicked ? goodIcon : badIcon} alt="thumbs up" />
           도움이 돼요
