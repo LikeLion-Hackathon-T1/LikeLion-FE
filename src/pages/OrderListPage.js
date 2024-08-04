@@ -21,6 +21,7 @@ const OrderListPage = () => {
                 const res = await syluvAxios.get("/order");
                 setOrderList(res.data.payload);
                 setIsLoading(false);
+                console.log(res.data.payload);
             } catch (error) {
                 console.error(error);
             }
@@ -34,7 +35,7 @@ const OrderListPage = () => {
 
     return orderList === null ? (
         <>
-            <Header title="주문내역" />
+            <Header title="주문내역" backSrc={-1} />
             <NoItemContainer>
                 <NoItem />
                 <Button

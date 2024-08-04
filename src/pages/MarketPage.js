@@ -75,14 +75,14 @@ const MarketPage = () => {
     }, [listChanged]);
 
     if (isLoading) return <Splash />;
-    if (isError) return <div>Error: {error.message}</div>;
+    // if (isError) return <div>Error: {error.message}</div>;
 
     const handleNavClick = (navItem) => {
         setSelectedNav(navItem);
     };
     return (
         <Wrapper>
-            <Header title={marketInfo?.name} />
+            <Header title={marketInfo?.name} backSrc={"/"} />
             <NavBar
                 items={items}
                 selected={selectedNav}

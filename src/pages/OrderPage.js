@@ -125,7 +125,7 @@ const OrderPage = ({ item, onClick = () => {} }) => {
 
     return (
         <>
-            <Header title="주문하기" cart={false} />
+            <Header title="주문하기" cart={false} backSrc={-1} />
             <Container>
                 <div className="section">
                     <span className="title-text">수령 방식</span>
@@ -197,7 +197,7 @@ const OrderPage = ({ item, onClick = () => {} }) => {
                     phone={phone}
                     hour={hour}
                     min={minute}
-                    pickUpRoute={isDelivery ? "배달" : "픽업"}
+                    pickUpRoute={isDelivery ? "바로 이용하기" : "픽업하기"}
                 />
             </ButtonContainer>
         </>

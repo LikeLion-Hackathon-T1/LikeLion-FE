@@ -8,7 +8,8 @@ import { useNavigate } from "react-router-dom";
 
 const Header = ({
     title,
-    backSrc = -1,
+    onLeftClick = () => {},
+    backSrc,
     cart = true,
     home = false,
     back = true,
@@ -18,7 +19,6 @@ const Header = ({
     handleRight = () => {},
 }) => {
     const navigate = useNavigate();
-    // const totalItemCount = useCartStore((state) => state.totalItemCount);
 
     return (
         <>
@@ -27,11 +27,15 @@ const Header = ({
                 <LeftSection>
                     {back && (
                         <BackButton
-                            onClick={() =>
-                                navigate(backSrc, {
-                                    replace: true,
-                                })
-                            }
+                            onClick={() => {
+                                if (backSrc) {
+                                    navigate(backSrc, {
+                                        replace: true,
+                                    });
+                                } else if (onLeftClick) {
+                                    onLeftClick();
+                                }
+                            }}
                         >
                             <BackIcon />
                         </BackButton>
