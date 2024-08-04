@@ -132,9 +132,13 @@ const Container = styled.div`
 `;
 
 const Camera = styled.video`
+    width: 480px;
+    height: 100dvh;
     object-fit: cover;
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    @media (max-width: 480px) {
+        width: 100vw;
+    }
 `;
 
 const Hole = styled.div`
