@@ -74,7 +74,7 @@ const ReviewItem = ({
 
     console.log("도움이 돼요 클릭됨");
 
-    // UI를 즉시 업데이트
+    // ui 바로 보이게 하기
     setIsHelpfulClicked(true);
     setHelpfulness((prevHelpfulness) => prevHelpfulness + 1);
 
@@ -90,27 +90,15 @@ const ReviewItem = ({
 
         if (result.result && result.result.code !== 0) {
           console.log("서버 응답 실패:", result);
-
-          // 서버 응답이 실패했을 때 UI 롤백
-          setHelpfulness((prevHelpfulness) => prevHelpfulness - 1);
-          setIsHelpfulClicked(false);
         } else {
           console.log("서버 응답 성공:", result);
           onHelpful(review.reviewId);
         }
       } else {
         console.log("서버 응답이 없습니다.");
-
-        // 서버 응답이 없을 때 UI 롤백
-        setHelpfulness((prevHelpfulness) => prevHelpfulness - 1);
-        setIsHelpfulClicked(false);
       }
     } catch (error) {
       console.error("도움이 돼요 요청 중 오류 발생:", error.response);
-
-      // 요청 중 오류가 발생했을 때 UI 롤백
-      setHelpfulness((prevHelpfulness) => prevHelpfulness - 1);
-      setIsHelpfulClicked(false);
     }
   };
 
