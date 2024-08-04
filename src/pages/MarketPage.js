@@ -75,7 +75,7 @@ const MarketPage = () => {
     }, [listChanged]);
 
     if (isLoading) return <Splash />;
-    if (isError) return <div>Error: {error.message}</div>;
+    // if (isError) return <div>Error: {error.message}</div>;
 
     const handleNavClick = (navItem) => {
         setSelectedNav(navItem);

@@ -6,6 +6,7 @@ const OrderRequest = () => {
     const { getGlobalOrderData } = useOrderStore();
     const syluvAxios = useSyluvAxios();
     const [data, setData] = useState(null);
+    const [result, setResult] = useState(null);
 
     useEffect(() => {
         setData(getGlobalOrderData());
@@ -25,7 +26,8 @@ const OrderRequest = () => {
                     phoneNum: data.phone,
                 })
                 .then((res) => {
-                    // console.log(res);
+                    console.log(res);
+                    setResult(res.data.payload);
                 });
         }
     }, [data]);
