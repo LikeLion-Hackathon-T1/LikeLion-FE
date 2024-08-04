@@ -125,7 +125,7 @@ const OrderPage = ({ item, onClick = () => {} }) => {
 
     return (
         <>
-            <Header title="주문하기" cart={false} />
+            <Header title="주문하기" cart={false} backSrc={-1} />
             <Container>
                 <div className="section">
                     <span className="title-text">수령 방식</span>

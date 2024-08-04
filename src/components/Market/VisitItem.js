@@ -14,6 +14,7 @@ const VisitItem = ({
     openId,
     handleOpenModal = () => {},
 }) => {
+    const [clickable, setClickable] = useState(false);
     const [status, setStatus] = useState(null);
     const [style, setStyle] = useState(false);
     const syluvAxios = useSyluvAxios();
@@ -38,6 +39,7 @@ const VisitItem = ({
                 break;
             case "PREPARED":
                 setStatus("준비 완료");
+                setClickable(true);
                 setStyle(true);
                 break;
             case "VISITED":
@@ -55,6 +57,7 @@ const VisitItem = ({
             .then((res) => {
                 setStatus("방문 완료");
                 setStyle(false);
+                setClickable(false);
                 onCompleteClick();
             });
     }, [item.visitListId]);
@@ -89,7 +92,7 @@ const VisitItem = ({
                         </div>
                     </div>
                     <Foot able={style}>
-                        {style ? (
+                        {clickable ? (
                             <Gom2
                                 onClick={() =>
                                     handleOpenModal(item.visitListId)

@@ -82,7 +82,7 @@ const MarketPage = () => {
     };
     return (
         <Wrapper>
-            <Header title={marketInfo?.name} />
+            <Header title={marketInfo?.name} backSrc={"/"} />
             <NavBar
                 items={items}
                 selected={selectedNav}

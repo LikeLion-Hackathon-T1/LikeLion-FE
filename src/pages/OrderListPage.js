@@ -35,7 +35,7 @@ const OrderListPage = () => {
 
     return orderList === null ? (
         <>
-            <Header title="주문내역" />
+            <Header title="주문내역" backSrc={-1} />
             <NoItemContainer>
                 <NoItem />
                 <Button

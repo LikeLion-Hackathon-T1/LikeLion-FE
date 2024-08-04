@@ -72,6 +72,7 @@ const OrderDetailPage = () => {
                 rightText="삭제"
                 cart={false}
                 handleRight={deleteOrder}
+                backSrc={-1}
             />
             <SimpleReceipt
                 date={handleDate(orderDetail.orderDate)}
