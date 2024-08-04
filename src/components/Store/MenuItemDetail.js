@@ -58,7 +58,7 @@ const MenuItemDetail = ({ menu }) => {
     console.log("Quantity: ", quantity);
     try {
       console.log("Adding new item to cart...");
-      const addResponse = await syluvAxios.post(`/store/${menuId}/addcart`, {
+      const addResponse = await syluvAxios.post(`/cart`, {
         menuId: menuId,
         quantity: quantity,
       });
