@@ -41,7 +41,11 @@ const OwnerPage = () => {
                 />
             </Header>
             {selected === "메뉴 관리" ? (
-                <MenuEditTab items={items} setItems={setItems} />
+                <MenuEditTab
+                    storeId={storeId}
+                    items={items}
+                    setItems={setItems}
+                />
             ) : (
                 <OrderManageTab storeId={storeId} />
             )}

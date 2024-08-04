@@ -1,16 +1,21 @@
 import styled from "styled-components";
 
-const OrderItem = () => {
+const OrderItem = ({ order }) => {
+    const formatAmount = (amount) => {
+        return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
     return (
         <Container>
             <div className="content">
-                <img src="https://via.placeholder.com/150" alt="주문상품" />
+                <img src={order.menuImg} alt="주문상품" />
                 <div className="item-info">
                     <div>
-                        <span>치즈 참치 김밥</span>
-                        <span className="count">2개</span>
+                        <span>{order.menuName}</span>
+                        <span className="count">{order.quantity}개</span>
                     </div>
-                    <span className="price">가격: 5,000원</span>
+                    <span className="price">
+                        가격: {formatAmount(order.totalPrice)}원
+                    </span>
                 </div>
             </div>
         </Container>

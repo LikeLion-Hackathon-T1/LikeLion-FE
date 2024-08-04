@@ -1,61 +1,142 @@
+import Button from "components/Common/Button";
+import ButtonModal from "components/Common/ButtonModal";
+import Splash from "components/Common/Splash";
+import useSyluvAxios from "hooks/useSyluvAxios";
+import { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 
-const OrderManageItem = ({
-    item,
-    onClick = () => {},
-    handleItem = () => {},
-}) => {
+const OrderManageItem = ({ item, handleItem = () => {} }) => {
+    const [status, setStatus] = useState();
+    const [isLoading, setIsLoading] = useState(true);
+    const syluvAxios = useSyluvAxios();
+    const [modal, setModal] = useState();
+
+    const formatAmount = (amount) => {
+        return amount.toLocaleString();
+    };
+
+    useEffect(() => {
+        if (item.orderStatus === "PAYMENT") {
+            setStatus("접수");
+        } else if (item.orderStatus === "PREPARING") {
+            setStatus("준비 완료");
+        } else if (item.orderStatus === "PREPARED") {
+            setStatus("방문 대기");
+        }
+        setIsLoading(false);
+    }, [item]);
+
+    const handleStauts = useCallback(() => {
+        if (status === "접수") {
+            syluvAxios.post(`/customer/17/2/preparing`).then((res) => {
+                setStatus("준비 완료");
+            });
+        } else if (status === "준비 완료") {
+            syluvAxios.post(`/customer/17/7/prepared`).then((res) => {
+                setStatus("방문 대기");
+            });
+        }
+    }, [status]);
+
+    const formatTime = (time) => {
+        try {
+            // ISO 8601 문자열을 Date 객체로 변환
+            const date = new Date(time);
+            // 시간과 분을 HH:mm 형식으로 포맷팅
+            const formattedTime = date.toLocaleTimeString("ko-KR", {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: false,
+            });
+            return formattedTime;
+        } catch (error) {
+            console.error("Invalid time format:", time);
+            return "시간 오류"; // 잘못된 시간 형식이 입력된 경우
+        }
+    };
+
+    if (isLoading) {
+        return <Splash />;
+    }
+
     return (
-        <OrderContainer>
-            <div className="header">
-                <div className="left">
-                    <span className="time">
-                        {item.status === "cancel"
-                            ? "주문취소"
-                            : `픽업(${item.pickupTime})`}
-                    </span>
-                    <div className="status">
-                        <span>{item.orderTime}</span>
-                        {item.status === "주문접수" && <div>준비 중</div>}
-                        {item.status === "준비완료" && (
-                            <div onClick={() => onClick(item.id)}>
-                                방문 대기
-                            </div>
-                        )}
+        <>
+            <OrderContainer>
+                <div className="header">
+                    <div className="left">
+                        <span className="pickup-time">
+                            {item.pickUpRoute === "픽업하기"
+                                ? `픽업(${item.visitHour}:${item.visitMin})`
+                                : `가게 이용(${item.visitHour}:${item.visitMin})`}
+                        </span>
+                        <span className="order-time">
+                            주문시각: {formatTime(item.createdAt)}
+                        </span>
                     </div>
+                    {status && (
+                        <div
+                            className={`
+                        right ${
+                            status === "접수" || status === "방문 대기"
+                                ? "accept"
+                                : ""
+                        }
+                    `}
+                            onClick={() =>
+                                status === "접수"
+                                    ? setModal("accept")
+                                    : setModal("complete")
+                            }
+                        >
+                            {status}
+                        </div>
+                    )}
                 </div>
-                {item.status === "주문접수" && (
-                    <button
-                        className="right"
-                        onClick={() => {
-                            onClick(item.id);
-                        }}
-                    >
-                        준비 완료
-                    </button>
-                )}
-                {item.status === "주문" && (
-                    <button
-                        className="right before"
-                        onClick={() => onClick(item.id)}
-                    >
-                        접수
-                    </button>
-                )}
-            </div>
-            <div
-                className="body"
-                onClick={() => {
-                    if (item.status === "주문") {
+                <div
+                    className="body"
+                    onClick={() => {
                         handleItem(item);
-                    }
-                }}
-            >
-                <span>{item.menu.map((order) => order.name).join(", ")}</span>
-                <span>주문번호: {item.orderNumber}</span>
-                <span>{item.price}</span>
-            </div>
-        </OrderContainer>
+                    }}
+                >
+                    <span>
+                        {item.menu
+                            .map((order) =>
+                                order.quantity > 1
+                                    ? `${order.menuName}x${order.quantity}`
+                                    : order.menuName
+                            )
+                            .join(", ")}
+                    </span>
+                    <span>주문번호: {item.orderNum}</span>
+                    <span>토스페이 {formatAmount(item.totalPrice)}원</span>
+                </div>
+            </OrderContainer>
+            {modal &&
+                (modal === "accept" ? (
+                    <ButtonModal
+                        title="해당 주문을 접수할까요?"
+                        subText={`방문 시간: ${item.visitHour}:${item.visitMin}`}
+                        left="더 생각해볼게요"
+                        right="네, 접수할게요"
+                        onLeftClick={() => setModal(null)}
+                        onRightClick={() => {
+                            handleStauts();
+                            setModal(null);
+                        }}
+                    />
+                ) : (
+                    <ButtonModal
+                        title="해당 주문이 준비완료 되었나요?"
+                        left="취소하기"
+                        right="완료하기"
+                        onLeftClick={() => setModal(null)}
+                        onRightClick={() => {
+                            handleStauts();
+                            setModal(null);
+                        }}
+                    />
+                ))}
+        </>
     );
 };
 
@@ -70,31 +151,17 @@ const OrderContainer = styled.div`
             display: flex;
             flex-direction: column;
             gap: 12px;
+            font-weight: ${({ theme }) => theme.fontWeight.semiBold};
 
-            .time {
+            .pickup-time {
                 color: ${({ theme }) => theme.color.primary};
                 font-size: 16px;
-                font-weight: ${({ theme }) => theme.fontWeight.semiBold};
             }
-
-            .status {
-                align-items: center;
-                display: flex;
-                gap: 8px;
-                span {
-                    color: ${({ theme }) => theme.color.gray900};
-                    font-size: 20px;
-                    font-weight: ${({ theme }) => theme.fontWeight.semiBold};
-                }
-                div {
-                    font-weight: ${({ theme }) => theme.fontWeight.medium};
-                    border: 1px solid ${({ theme }) => theme.color.primary};
-                    color: ${({ theme }) => theme.color.primary};
-                    border-radius: 54px;
-                    padding: 5px 8px;
-                    font-size: 12px;
-                }
+            .order-time {
+                color: ${({ theme }) => theme.color.gray900};
+                font-size: 20px;
             }
+            padding-bottom: 20px;
         }
         .right {
             width: 80px;
@@ -103,20 +170,23 @@ const OrderContainer = styled.div`
             border: none;
             background-color: ${({ theme }) => theme.color.primary};
             border: 1px solid ${({ theme }) => theme.color.primary};
-            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
 
             font-size: 16px;
             font-weight: ${({ theme }) => theme.fontWeight.semiBold};
+            color: white;
             cursor: pointer;
         }
-        .before {
-            color: ${({ theme }) => theme.color.primary};
+        .accept {
             background-color: white;
-            border: 1px solid ${({ theme }) => theme.color.primary};
+            color: ${({ theme }) => theme.color.primary};
         }
         margin-bottom: 20px;
     }
     border-bottom: 1px solid ${({ theme }) => theme.color.gray100};
+    margin-top: 20px;
     padding: 0px 20px;
     padding-bottom: 30px;
 

@@ -61,9 +61,8 @@ const OrderManageTab = ({ storeId }) => {
                 <div className="body">
                     {newItems.map((item, index) => (
                         <OrderManageItem
-                            key={item.id}
+                            key={item.createdAt}
                             item={item}
-                            // onClick={handleStatus}
                             handleItem={handleDetailItem}
                         />
                     ))}
@@ -72,7 +71,7 @@ const OrderManageTab = ({ storeId }) => {
                 <div className="body">
                     {endItems.map((item, index) => (
                         <OrderManageItem
-                            key={item.id}
+                            key={item.createdAt}
                             item={item}
                             handleDetailItem={handleDetailItem}
                         />
@@ -87,6 +86,7 @@ export default OrderManageTab;
 
 const Container = styled.div`
     .body {
+        margin-top: -20px;
         display: flex;
         flex-direction: column;
         gap: 8px;

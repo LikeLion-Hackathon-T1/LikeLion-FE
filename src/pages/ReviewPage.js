@@ -10,7 +10,14 @@ import "swiper/css";
 import "swiper/css/navigation";
 import useSyluvAxios from "hooks/useSyluvAxios";
 
-const ReviewPage = ({ image, name, date, handleClick = () => {}, orderId }) => {
+const ReviewPage = ({
+    image,
+    name,
+    date,
+    handleClick = () => {},
+    orderId,
+    menus,
+}) => {
     const [review, setReview] = useState("");
     const [currentCount, setCurrentCount] = useState(0);
     const [rating, setRating] = useState(0);
@@ -77,14 +84,20 @@ const ReviewPage = ({ image, name, date, handleClick = () => {}, orderId }) => {
     return (
         <Wrapper>
             <div>
-                <Header title="후기 작성하기" cart={false} />
+                <Header title="후기 작성하기" cart={false} backSrc={-1} />
                 <Menu>
                     <img src={image} alt="menu" />
                     <div className="store-info">
                         <div>
                             <span className="store-name">{name}</span>
                             <span className="menu-name">
-                                이거 뭘로표시함 메뉴별로 리뷰?
+                                {menus
+                                    .map((menu) =>
+                                        menu.quantity > 1
+                                            ? `${menu.menuName}x${menu.quantity}`
+                                            : menu.menuName
+                                    )
+                                    .join(", ")}
                             </span>
                         </div>
                         <span>{date}</span>
