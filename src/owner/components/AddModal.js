@@ -5,7 +5,7 @@ import Button from "components/Common/Button";
 
 const AddModal = ({ onClose = () => {}, onAdd = () => {} }) => {
     const [menu, setMenu] = useState({
-        menuImage: "",
+        menuImage: null,
         name: "",
         content: "",
         price: "",
@@ -26,7 +26,7 @@ const AddModal = ({ onClose = () => {}, onAdd = () => {} }) => {
         if (e.target.files && e.target.files[0]) {
             setMenu({
                 ...menu,
-                menuImage: URL.createObjectURL(e.target.files[0]),
+                menuImage: e.target.files[0],
             });
         }
     };
@@ -41,7 +41,10 @@ const AddModal = ({ onClose = () => {}, onAdd = () => {} }) => {
             <div className="body">
                 <div className="photo">
                     {menu.menuImage ? (
-                        <img src={menu.menuImage} alt="uploaded" />
+                        <img
+                            src={URL.createObjectURL(menu.menuImage)}
+                            alt="uploaded"
+                        />
                     ) : (
                         <>
                             <span>사진을 추가해주세요</span>

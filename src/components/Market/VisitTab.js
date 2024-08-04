@@ -84,11 +84,6 @@ const VisitTab = ({
         return `data:image/svg+xml;base64,${btoa(svg)}`;
     };
 
-    const polylinePath = visitList.map((item) => ({
-        lat: item.latitude,
-        lng: item.longitude,
-    }));
-
     if (
         firstPosition.latitude === undefined ||
         firstPosition.longitude === undefined
@@ -131,13 +126,6 @@ const VisitTab = ({
                         }}
                     />
                 ))}
-                <Polyline
-                    path={polylinePath}
-                    strokeWeight={5}
-                    strokeColor="#FF6B00"
-                    strokeOpacity={0.7}
-                    strokeStyle="dashed"
-                />
             </Map>
             {visitList.length > 0 ? (
                 <>

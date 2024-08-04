@@ -32,14 +32,13 @@ const Payments = ({
     console.log(data);
 
     useEffect(() => {
-        const formattedPhone = phone.split("-").join("");
         const totalAmount = data.reduce(
             (total, item) => total + item.price * item.quantity,
             0
         );
         setOrderData((prev) => ({
             ...prev,
-            phone: formattedPhone,
+            phone: phone,
             amount: totalAmount,
             hour: hour,
             min: min,

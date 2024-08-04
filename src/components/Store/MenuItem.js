@@ -43,6 +43,9 @@ const MenuItemDescription = styled.p`
 `;
 
 const MenuItem = ({ item, onClick }) => {
+    const formatPrice = (price) => {
+        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
     return (
         <MenuItemWrapper
             onClick={() => {
@@ -54,7 +57,7 @@ const MenuItem = ({ item, onClick }) => {
             <MenuItemImage src={item.menuImage} alt={item.name} />
             <MenuItemInfo>
                 <MenuItemName>{item.name}</MenuItemName>
-                <MenuItemPrice>{item.price}원</MenuItemPrice>
+                <MenuItemPrice>{formatPrice(item.price)}원</MenuItemPrice>
                 {item.content && (
                     <MenuItemDescription>{item.content}</MenuItemDescription>
                 )}

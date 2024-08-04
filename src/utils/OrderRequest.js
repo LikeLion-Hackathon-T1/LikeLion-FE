@@ -1,11 +1,15 @@
+import Splash from "components/Common/Splash";
 import useOrderStore from "hooks/useOrderStore";
 import useSyluvAxios from "hooks/useSyluvAxios";
+import OrderResult from "pages/OrderResult";
 import { useEffect, useState } from "react";
 
 const OrderRequest = () => {
     const { getGlobalOrderData } = useOrderStore();
     const syluvAxios = useSyluvAxios();
     const [data, setData] = useState(null);
+    const [result, setResult] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         setData(getGlobalOrderData());
@@ -15,7 +19,7 @@ const OrderRequest = () => {
         if (data) {
             syluvAxios
                 .post("/order/toss", {
-                    menuIds: data.items.map((item) => item.cartid),
+                    cartIds: data.items.map((item) => item.cartid),
                     orderNum: data.orderNum,
                     paymentKey: data.paymentKey,
                     amount: data.amount,
@@ -25,14 +29,17 @@ const OrderRequest = () => {
                     phoneNum: data.phone,
                 })
                 .then((res) => {
-                    // console.log(res);
+                    console.log(res);
+                    setResult(res.data.payload);
+                    setIsLoading(false);
                 });
         }
     }, [data]);
-    return (
-        <div>
-            <h1>Order</h1>
-        </div>
-    );
+
+    if (isLoading) {
+        return <Splash />;
+    }
+
+    return <OrderResult />;
 };
 export default OrderRequest;

@@ -17,12 +17,12 @@ import OrderListPage from "pages/OrderListPage";
 import OrderDetailPage from "pages/OrderDetailPage";
 import OrderPage from "pages/OrderPage";
 import VisitListPage from "pages/VisitListPage";
-import OrderSuccess from "pages/OrderSuccess";
 import MyPage from "pages/MyPage";
 import OwnerPage from "owner/pages/OwnerPage";
 import OwnerDetailPage from "owner/pages/OwnerDetailPage";
 import PayCallback from "utils/PayCallback";
 import OrderRequest from "utils/OrderRequest";
+import OrderResult from "pages/OrderResult";
 
 const App = () => {
     useEffect(() => {
@@ -48,8 +48,8 @@ const App = () => {
                                 <Route path="/cart" element={<CartPage />} />
                                 <Route path="/order" element={<OrderPage />} />
                                 <Route
-                                    path="/ordersuccess"
-                                    element={<OrderSuccess />}
+                                    path="/order/result"
+                                    element={<OrderResult />}
                                 />
                                 <Route
                                     path="/menuTest"
@@ -82,7 +82,10 @@ const App = () => {
                                     path="/oauth/kakao/callback"
                                     element={<OauthCallback />}
                                 />
-                                <Route path="/owner" element={<OwnerPage />} />
+                                <Route
+                                    path="/owner/:storeId"
+                                    element={<OwnerPage />}
+                                />
                                 <Route
                                     path="/owner/:storeId/:orderId"
                                     element={<OwnerDetailPage />}

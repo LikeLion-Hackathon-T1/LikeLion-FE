@@ -3,16 +3,65 @@ import styled from "styled-components";
 import AddModal from "owner/components/AddModal";
 import Button from "components/Common/Button";
 import MenuItem from "components/Store/MenuItem";
+import useSyluvAxios from "hooks/useSyluvAxios";
+import Splash from "components/Common/Splash";
+import Toast from "components/Common/Toast";
 
-const MenuEditTab = ({ items, setItems }) => {
+const MenuEditTab = ({ items, setItems, storeId }) => {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const syluvAxios = useSyluvAxios();
+    const [toastMessage, setToastMessage] = useState("");
+    const closeToast = () => {
+        setToastMessage("");
+    };
 
-    const handleAddItem = (newItem) => {
-        setItems([...items, newItem]);
+    console.log(items);
+
+    const handleAddItem = async (newItem) => {
+        if (
+            !newItem.name ||
+            !newItem.price ||
+            !newItem.content ||
+            !newItem.menuImage
+        ) {
+            setToastMessage("올바르지 않은 메뉴 정보입니다.");
+            return;
+        }
+        const formData = new FormData();
+        const dto = {
+            name: newItem.name,
+            price: newItem.price,
+            content: newItem.content,
+        };
+
+        console.log(newItem.menuImage);
+
+        formData.append(
+            "dto",
+            new Blob([JSON.stringify(dto)], { type: "application/json" })
+        );
+
+        formData.append("file", newItem.menuImage); // assuming newItem.file is a File object
+
+        try {
+            const response = await syluvAxios.post(
+                `/customer/${storeId}/addmenu`,
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                }
+            );
+            setItems([...items, newItem]); // Assuming the API returns the new item
+            console.log(response.data);
+        } catch (error) {
+            console.error("Error adding item:", error);
+        }
     };
 
     if (!items) {
-        return <div>로딩 중...</div>;
+        return <Splash />;
     }
 
     return (
@@ -43,6 +92,13 @@ const MenuEditTab = ({ items, setItems }) => {
                     />
                 </div>
             </ButtonContainer>
+            {toastMessage && (
+                <Toast
+                    message={toastMessage}
+                    message2="내용을 모두 입력해주세요."
+                    onClose={closeToast}
+                />
+            )}
         </>
     );
 };
@@ -52,7 +108,6 @@ export default MenuEditTab;
 const ButtonContainer = styled.div`
     position: fixed;
     width: 440px;
-
     margin: 0 20px;
     bottom: 20px;
 
