@@ -77,9 +77,11 @@ const StoreInfo = ({
                     <HeaderBack2 />
                     <CartButton onClick={() => navigate("/cart")}>
                         <CartIcon color="white" />
-                        <div className="cart-num">
-                            <span>{cartLength}</span>
-                        </div>
+                        {cartLength > 0 && (
+                            <div className="cart-num">
+                                <span>{cartLength}</span>
+                            </div>
+                        )}
                     </CartButton>
                 </div>
                 {images.length > 1 && (
