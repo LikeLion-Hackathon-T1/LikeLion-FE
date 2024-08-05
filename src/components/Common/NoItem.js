@@ -1,16 +1,16 @@
 import styled from "styled-components";
 import noItem from "assets/images/no-cart.png";
 
-const NoItem = () => {
+const NoItem = ({
+    title = "리스트가 비어있어요",
+    subtext = "시장을 구경하고 리스트를 채워주세요",
+    mt = 0,
+}) => {
     return (
         <NoItemContainer>
-            <span className="title-text">리스트가 비어있어요</span>
+            <span className="title-text">{title}</span>
             <img src={noItem} alt="no-item" width={158} height={158} />
-            <span className="sub-text">
-                시장을 구경하고
-                <br />
-                리스트를 채워주세요
-            </span>
+            <span className="sub-text">{subtext}</span>
         </NoItemContainer>
     );
 };
@@ -36,5 +36,8 @@ const NoItemContainer = styled.div`
         font-weight: ${({ theme }) => theme.fontWeight.medium};
         text-align: center;
         color: ${({ theme }) => theme.color.gray600};
+        width: 150px;
+        word-break: keep-all;
+        line-height: 28px;
     }
 `;

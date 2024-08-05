@@ -1,4 +1,5 @@
 import NavBar from "components/Common/NavBar";
+import NoItem from "components/Common/NoItem";
 import useSyluvAxios from "hooks/useSyluvAxios";
 import MenuEditTab from "owner/components/MenuEditTab";
 import OrderManageTab from "owner/components/OrderManageTab";
@@ -22,8 +23,10 @@ const OwnerPage = () => {
                 (store) => store.storeId === Number(storeId)
             );
             setAllStores(res.data.payload);
-            setStoreInfo(store[0]);
-            setItems(store[0].menuDetails);
+            if (storeId) {
+                setStoreInfo(store[0]);
+                setItems(store[0].menuDetails);
+            }
         });
     }, [storeId]);
 
@@ -42,14 +45,21 @@ const OwnerPage = () => {
                     margin={false}
                 />
             </Header>
-            {selected === "메뉴 관리" ? (
-                <MenuEditTab
-                    storeId={storeId}
-                    items={items}
-                    setItems={setItems}
-                />
+            {storeId ? (
+                selected === "메뉴 관리" ? (
+                    <MenuEditTab
+                        storeId={storeId}
+                        items={items}
+                        setItems={setItems}
+                    />
+                ) : (
+                    <OrderManageTab storeId={storeId} />
+                )
             ) : (
-                <OrderManageTab storeId={storeId} />
+                <NoItem
+                    title="관리할 가게가 선택되지 않았습니다"
+                    subtext="우측 상단 메뉴에서 가게를 선택하고 관리하세요"
+                />
             )}
         </>
     );
