@@ -24,7 +24,7 @@ const Welcome = () => {
             </Title>
             <UserContainer>
                 <Button
-                    onClick={() => navigate("/owner/17")}
+                    onClick={() => navigate("/owner")}
                     onMouseEnter={() => setIsOwnerHovered(true)}
                     onMouseLeave={() => setIsOwnerHovered(false)}
                 >
