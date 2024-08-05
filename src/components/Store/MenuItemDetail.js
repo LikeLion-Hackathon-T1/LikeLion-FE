@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ReactComponent as BackIcon } from "assets/images/back.svg";
-import { ReactComponent as CartIcon } from "assets/images/marketbag.svg";
-import { ReactComponent as HomeIcon } from "assets/images/newhome.svg";
+import HomeIcon from "assets/icons/HomeIcon";
+import BackIcon from "assets/icons/BackIcon";
+import CartIcon from "assets/icons/CartIcon";
 import useSyluvAxios from "hooks/useSyluvAxios";
 import Splash from "components/Common/Splash";
-import styled from "styled-components";
 import {
   Container,
   ImageContainer,
@@ -26,6 +25,9 @@ import {
   VisitModal,
   ModalButton,
   CartBadge,
+  HeaderBack1,
+  HeaderBack2,
+  HeaderBack3,
 } from "./MenuItemDetailStyle";
 
 const MenuItemDetail = ({ menu }) => {
@@ -89,14 +91,17 @@ const MenuItemDetail = ({ menu }) => {
   return (
     <Container>
       <ImageContainer>
+        <HeaderBack3 />
         <BackButton onClick={() => navigate(-1)} aria-label="뒤로가기">
-          <BackIcon />
+          <BackIcon color="white" />
         </BackButton>
-        <HomeButton onClick={() => navigate("/")} aria-label="홈으로">
-          <HomeIcon />
+        <HeaderBack1 />
+        <HomeButton onClick={() => navigate("/")}>
+          <HomeIcon color="white" />
         </HomeButton>
+        <HeaderBack2 />
         <CartButton onClick={() => navigate("/cart")} aria-label="장바구니로">
-          <CartIcon />
+          <CartIcon color="white" />
           {showModal && <CartBadge>{quantity}</CartBadge>}
         </CartButton>
         <Image src={menu.menuImage} alt={menu.name} />
