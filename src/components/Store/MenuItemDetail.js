@@ -116,7 +116,7 @@ const MenuItemDetail = ({ menu }) => {
         </QuantityWrapper>
       </QuantityContainer>
       <AddToCartButton onClick={handleAddToCart}>
-        {menu.price}원 담기
+        {menu.price * quantity}원 담기
       </AddToCartButton>
       {showModal && (
         <ModalBackground show={showModal}>
