@@ -23,8 +23,8 @@ const VisitTab = ({
     const [selectedList, setSelectedList] = useState([]);
     const syluvAxios = useSyluvAxios();
     const [mapCenter, setMapCenter] = useState({
-        latitude: visitList[0]?.latitude,
-        longitude: visitList[0]?.longitude,
+        latitude: null,
+        longitude: null,
         level: 3,
     });
     const { location, error } = useGeoLocation(geolocationOptions);

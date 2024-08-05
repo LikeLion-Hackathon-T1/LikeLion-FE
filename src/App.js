@@ -83,6 +83,7 @@ const App = () => {
                                     path="/oauth/kakao/callback"
                                     element={<OauthCallback />}
                                 />
+                                <Route path="/owner" element={<OwnerPage />} />
                                 <Route
                                     path="/owner/:storeId"
                                     element={<OwnerPage />}
