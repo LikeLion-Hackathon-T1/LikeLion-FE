@@ -1,7 +1,5 @@
 import Header from "components/Common/Header";
 import styled from "styled-components";
-import star from "assets/images/star-empty.png";
-import starFilled from "assets/images/star-fill.png";
 import add from "assets/images/add-button.png";
 import { useEffect, useState } from "react";
 import Button from "components/Common/Button";
@@ -9,12 +7,15 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import useSyluvAxios from "hooks/useSyluvAxios";
+import { ReactComponent as Star } from "assets/images/star-empty.svg";
+import { ReactComponent as StarFilled } from "assets/images/star-fill.svg";
 
 const ReviewPage = ({
     image,
     name,
     date,
     handleClick = () => {},
+    handleReviewYn = () => {},
     orderId,
     menus,
 }) => {
@@ -68,6 +69,8 @@ const ReviewPage = ({
             photos.forEach((photo) => {
                 formData.append("file", photo);
             });
+        } else {
+            formData.append("file", new Blob());
         }
         syluvAxios
             .post("review", formData, {
@@ -75,7 +78,9 @@ const ReviewPage = ({
                     "Content-Type": "multipart/form-data",
                 },
             })
-            .then((response) => {})
+            .then((response) => {
+                handleReviewYn();
+            })
             .finally(() => {
                 handleClick();
             });
@@ -110,14 +115,23 @@ const ReviewPage = ({
                         </span>
                         <div className="rating-star">
                             <div className="rating-image">
-                                {[...Array(5)].map((_, index) => (
-                                    <img
-                                        key={index}
-                                        src={index < rating ? starFilled : star}
-                                        alt="star"
-                                        onClick={() => handleStarClick(index)}
-                                    />
-                                ))}
+                                {[...Array(5)].map((_, index) =>
+                                    index < rating ? (
+                                        <StarFilled
+                                            cursor={"pointer"}
+                                            onClick={() =>
+                                                handleStarClick(index)
+                                            }
+                                        />
+                                    ) : (
+                                        <Star
+                                            cursor={"pointer"}
+                                            onClick={() =>
+                                                handleStarClick(index)
+                                            }
+                                        />
+                                    )
+                                )}
                             </div>
                             <span>{ratingText}</span>
                         </div>

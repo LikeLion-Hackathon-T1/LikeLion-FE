@@ -77,9 +77,11 @@ const StoreInfo = ({
                     <HeaderBack2 />
                     <CartButton onClick={() => navigate("/cart")}>
                         <CartIcon color="white" />
-                        <div className="cart-num">
-                            <span>{cartLength}</span>
-                        </div>
+                        {cartLength > 0 && (
+                            <div className="cart-num">
+                                <span>{cartLength}</span>
+                            </div>
+                        )}
                     </CartButton>
                 </div>
                 {images.length > 1 && (
@@ -239,7 +241,7 @@ const InfoContainer = styled.div`
     margin: 20px 20px 0 20px;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 4px; // 전화번호 이름 각각 간격
 `;
 
 const Info = styled.div`

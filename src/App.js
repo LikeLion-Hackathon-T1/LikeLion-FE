@@ -23,6 +23,7 @@ import OwnerDetailPage from "owner/pages/OwnerDetailPage";
 import PayCallback from "utils/PayCallback";
 import OrderRequest from "utils/OrderRequest";
 import OrderResult from "pages/OrderResult";
+import QRredirection from "utils/QRredirection";
 
 const App = () => {
     useEffect(() => {
@@ -82,6 +83,7 @@ const App = () => {
                                     path="/oauth/kakao/callback"
                                     element={<OauthCallback />}
                                 />
+                                <Route path="/owner" element={<OwnerPage />} />
                                 <Route
                                     path="/owner/:storeId"
                                     element={<OwnerPage />}
@@ -97,6 +99,10 @@ const App = () => {
                                 <Route
                                     path="/orderRequest"
                                     element={<OrderRequest />}
+                                />
+                                <Route
+                                    path="/qr/redirection/:marketId/:storeId"
+                                    element={<QRredirection />}
                                 />
                             </Routes>
                         </BrowserRouter>

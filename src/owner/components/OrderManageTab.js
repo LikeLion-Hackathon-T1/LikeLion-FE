@@ -25,8 +25,8 @@ const OrderManageTab = ({ storeId }) => {
     }, [storeId]);
 
     useEffect(() => {
-        const newItems = items.filter((item) => item.status !== "VISITED");
-        const endItems = items.filter((item) => item.status === "VISITED");
+        const newItems = items.filter((item) => item.orderStatus !== "VISITED");
+        const endItems = items.filter((item) => item.orderStatus === "VISITED");
         setNewItems(newItems);
         setEndItems(endItems);
     }, [items]);

@@ -10,24 +10,21 @@ import ButtonModal from "components/Common/ButtonModal";
 const QrScanPage = () => {
     const videoRef = useRef(null);
     const navigate = useNavigate();
-    const syluvAxios = useSyluvAxios();
-    const [qrCodeMessage, setQrCodeMessage] = useState("");
-    const [scanData, setScanData] = useState({ marketId: "", storeId: "" });
+    const [isScan, setIsScan] = useState(false);
+    const [link, setLink] = useState("");
 
     useEffect(() => {
         const qrScanner = new QrScanner(
             videoRef.current,
             (result) => {
-                setQrCodeMessage(result.data);
-                if (result.data.startsWith("syluv")) {
+                if (
+                    result.data.startsWith(
+                        "https://www.syluv.store/qr/redirection"
+                    )
+                ) {
                     qrScanner.stop();
-                    const params = new URLSearchParams(
-                        result.data.split("?")[1]
-                    );
-                    const marketId = params.get("marketId");
-                    const storeId = params.get("storeId");
-
-                    setScanData({ marketId, storeId });
+                    setLink(result.data);
+                    setIsScan(true);
                 }
             },
             {
@@ -43,17 +40,10 @@ const QrScanPage = () => {
     }, []);
 
     const handleNavigate = useCallback(() => {
-        syluvAxios
-            .post(`/home/${scanData.storeId}/qrvisit`)
-            .catch((error) => {
-                // Do Nothing
-            })
-            .finally(() => {
-                navigate(`/market/${scanData.marketId}/${scanData.storeId}`, {
-                    replace: true,
-                });
-            });
-    }, [scanData, syluvAxios, navigate]);
+        navigate(link.replace("https://www.syluv.store/qr/", ""), {
+            replace: true,
+        });
+    }, [navigate, link]);
 
     const handleReScan = useCallback(() => {
         //새로고침
@@ -62,7 +52,7 @@ const QrScanPage = () => {
 
     return (
         <>
-            {scanData.marketId && scanData.storeId && (
+            {isScan && (
                 <ButtonModal
                     title={"가게 방문"}
                     subText={"가게 방문을 시작합니다."}
