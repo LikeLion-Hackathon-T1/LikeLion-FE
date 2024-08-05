@@ -61,8 +61,13 @@ const MarketPage = () => {
                     return;
                 } else {
                     const dates = Object.keys(res.data.payload);
-                    setVisitList(res.data.payload[dates[0]]);
-                    const num = res.data.payload[dates[0]].length;
+                    const totalVisitList = res.data.payload[dates[0]];
+                    const marketVisitList = totalVisitList.filter(
+                        (visit) =>
+                            visit.marketId.toString() === marketId.toString()
+                    );
+                    setVisitList(marketVisitList);
+                    const num = marketVisitList.length;
                     setVisitNum(num);
                 }
             })
