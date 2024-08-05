@@ -52,12 +52,11 @@ const MenuItemDetail = ({ menu }) => {
             return;
         }
 
-    try {
-      console.log("Adding new item to cart...");
-      const addResponse = await syluvAxios.post(`/cart`, {
-        menuId: menuId,
-        quantity: quantity,
-      });
+        try {
+            const addResponse = await syluvAxios.post(`/cart`, {
+                menuId: menuId,
+                quantity: quantity,
+            });
 
             // 장바구니 다시 불러오기
             const updatedCartResponse = await syluvAxios.get("/cart");

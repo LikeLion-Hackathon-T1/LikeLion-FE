@@ -29,6 +29,8 @@ const Payments = ({
         pickUpRoute,
     });
 
+    const deleteDash = (str) => str.replace(/-/g, "");
+
     useEffect(() => {
         const totalAmount = data.reduce(
             (total, item) => total + item.price * item.quantity,
@@ -84,7 +86,7 @@ const Payments = ({
                 failUrl: `${window.location.origin}/order/fail`,
                 customerEmail: newOrderData.userData.email,
                 customerName: newOrderData.userData.name,
-                customerMobilePhone: newOrderData.phone,
+                customerMobilePhone: deleteDash(newOrderData.phone),
                 card: {
                     useEscrow: false,
                     flowMode: "DEFAULT",

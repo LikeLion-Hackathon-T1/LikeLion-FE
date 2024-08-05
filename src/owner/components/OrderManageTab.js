@@ -18,7 +18,6 @@ const OrderManageTab = ({ storeId }) => {
             .get(`/customer/${storeId}`)
             .then((res) => {
                 setItems(res.data.payload);
-                console.log(res.data.payload);
             })
             .catch((err) => {
                 setItems([]);
@@ -26,7 +25,6 @@ const OrderManageTab = ({ storeId }) => {
     }, [storeId]);
 
     useEffect(() => {
-        console.log("items");
         const newItems = items.filter((item) => item.status !== "VISITED");
         const endItems = items.filter((item) => item.status === "VISITED");
         setNewItems(newItems);
@@ -45,7 +43,6 @@ const OrderManageTab = ({ storeId }) => {
                 setItems((prev) => {
                     return prev.map((item) => {
                         if (item.orderId === orderId) {
-                            console.log(item);
                             return { ...item, orderStatus: "PREPARING" };
                         }
                         return item;

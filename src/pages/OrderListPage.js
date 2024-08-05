@@ -19,6 +19,7 @@ const OrderListPage = () => {
         const getOrderList = async () => {
             try {
                 const res = await syluvAxios.get("/order");
+                console.log(res.data.payload);
                 setOrderList(res.data.payload);
                 setIsLoading(false);
             } catch (error) {
