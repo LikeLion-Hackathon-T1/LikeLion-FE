@@ -7,7 +7,9 @@ const QrGenPage = () => {
     const [storeId, setStoreId] = useState(null);
     return (
         <Container>
-            <QRCode value={`syluv?marketId=${marketId}&storeId=${storeId}`} />
+            <QRCode
+                value={`https://www.syluv.store/qr/redirection/${marketId}/${storeId}`}
+            />
             <InputContainer>
                 <Input
                     type="text"

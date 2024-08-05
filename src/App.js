@@ -23,6 +23,7 @@ import OwnerDetailPage from "owner/pages/OwnerDetailPage";
 import PayCallback from "utils/PayCallback";
 import OrderRequest from "utils/OrderRequest";
 import OrderResult from "pages/OrderResult";
+import QRredirection from "utils/QRredirection";
 
 const App = () => {
     useEffect(() => {
@@ -97,6 +98,10 @@ const App = () => {
                                 <Route
                                     path="/orderRequest"
                                     element={<OrderRequest />}
+                                />
+                                <Route
+                                    path="/qr/redirection/:marketId/:storeId"
+                                    element={<QRredirection />}
                                 />
                             </Routes>
                         </BrowserRouter>
