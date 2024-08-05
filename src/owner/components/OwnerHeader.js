@@ -3,22 +3,13 @@ import { useNavigate } from "react-router-dom";
 import useSyluvAxios from "hooks/useSyluvAxios";
 import { useEffect, useState } from "react";
 
-const OwnerHeader = ({ name }) => {
-    const syluvAxios = useSyluvAxios();
+const OwnerHeader = ({ name, stores }) => {
     const navigate = useNavigate();
-    const [storeData, setStoreData] = useState([]);
+    const storeData = stores || [];
 
     const handleSelectStore = (storeId) => {
         navigate(`/owner/${storeId}`);
     };
-
-    useEffect(() => {
-        syluvAxios.get(`/store/info`).then((res) => {
-            setStoreData(res.data.payload);
-        });
-    }, []);
-
-    console.log(storeData);
 
     return (
         <Header>

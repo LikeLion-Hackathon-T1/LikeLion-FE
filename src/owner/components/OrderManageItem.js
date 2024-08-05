@@ -1,8 +1,8 @@
-import Button from "components/Common/Button";
 import ButtonModal from "components/Common/ButtonModal";
 import Splash from "components/Common/Splash";
 import useSyluvAxios from "hooks/useSyluvAxios";
 import { useCallback, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 
 const OrderManageItem = ({ item, handleItem = () => {} }) => {
@@ -10,6 +10,7 @@ const OrderManageItem = ({ item, handleItem = () => {} }) => {
     const [isLoading, setIsLoading] = useState(true);
     const syluvAxios = useSyluvAxios();
     const [modal, setModal] = useState();
+    const { storeId } = useParams();
 
     const formatAmount = (amount) => {
         return amount.toLocaleString();
@@ -24,17 +25,21 @@ const OrderManageItem = ({ item, handleItem = () => {} }) => {
             setStatus("방문 대기");
         }
         setIsLoading(false);
-    }, [item]);
+    }, [item.orderStatus]);
 
     const handleStauts = useCallback(() => {
         if (status === "접수") {
-            syluvAxios.post(`/customer/17/2/preparing`).then((res) => {
-                setStatus("준비 완료");
-            });
+            syluvAxios
+                .post(`/customer/${storeId}/${item.orderId}/preparing`)
+                .then((res) => {
+                    setStatus("준비 완료");
+                });
         } else if (status === "준비 완료") {
-            syluvAxios.post(`/customer/17/7/prepared`).then((res) => {
-                setStatus("방문 대기");
-            });
+            syluvAxios
+                .post(`/customer/${storeId}/${item.orderId}/prepared`)
+                .then((res) => {
+                    setStatus("방문 대기");
+                });
         }
     }, [status]);
 
@@ -55,6 +60,8 @@ const OrderManageItem = ({ item, handleItem = () => {} }) => {
         }
     };
 
+    const padZero = (num) => num.toString().padStart(2, "0");
+
     if (isLoading) {
         return <Splash />;
     }
@@ -66,8 +73,12 @@ const OrderManageItem = ({ item, handleItem = () => {} }) => {
                     <div className="left">
                         <span className="pickup-time">
                             {item.pickUpRoute === "픽업하기"
-                                ? `픽업(${item.visitHour}:${item.visitMin})`
-                                : `가게 이용(${item.visitHour}:${item.visitMin})`}
+                                ? `픽업(${padZero(item.visitHour)}:${padZero(
+                                      item.visitMin
+                                  )})`
+                                : `가게 이용(${padZero(
+                                      item.visitHour
+                                  )}:${padZero(item.visitMin)})`}
                         </span>
                         <span className="order-time">
                             주문시각: {formatTime(item.createdAt)}
@@ -80,12 +91,13 @@ const OrderManageItem = ({ item, handleItem = () => {} }) => {
                             status === "접수" || status === "방문 대기"
                                 ? "accept"
                                 : ""
-                        }
+                        } ${status === "방문 대기" ? "complete" : ""}
                     `}
                             onClick={() =>
-                                status === "접수"
+                                status !== "방문 대기" &&
+                                (status === "접수"
                                     ? setModal("accept")
-                                    : setModal("complete")
+                                    : setModal("complete"))
                             }
                         >
                             {status}
@@ -95,7 +107,7 @@ const OrderManageItem = ({ item, handleItem = () => {} }) => {
                 <div
                     className="body"
                     onClick={() => {
-                        handleItem(item);
+                        handleItem(item, status);
                     }}
                 >
                     <span>
@@ -182,6 +194,9 @@ const OrderContainer = styled.div`
         .accept {
             background-color: white;
             color: ${({ theme }) => theme.color.primary};
+        }
+        .complete {
+            cursor: default;
         }
         margin-bottom: 20px;
     }

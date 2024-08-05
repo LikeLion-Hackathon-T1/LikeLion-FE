@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import OrderManageItem from "./OrderManageItem";
 import OwnerDetailPage from "owner/pages/OwnerDetailPage";
@@ -11,30 +11,60 @@ const OrderManageTab = ({ storeId }) => {
     const [endItems, setEndItems] = useState([]);
     const [newItems, setNewItems] = useState([]);
     const [detailItem, setDetailItem] = useState(null);
+    const [detailStatus, setDetailStatus] = useState();
 
     useEffect(() => {
         syluvAxios
             .get(`/customer/${storeId}`)
             .then((res) => {
                 setItems(res.data.payload);
+                console.log(res.data.payload);
             })
-            .catch((err) => {});
-    }, []);
+            .catch((err) => {
+                setItems([]);
+            });
+    }, [storeId]);
 
     useEffect(() => {
+        console.log("items");
         const newItems = items.filter((item) => item.status !== "VISITED");
         const endItems = items.filter((item) => item.status === "VISITED");
         setNewItems(newItems);
         setEndItems(endItems);
     }, [items]);
 
-    const handleDetailItem = (item) => {
+    const handleDetailItem = useCallback((item, status) => {
         setDetailItem(item);
-    };
+        setDetailStatus(status);
+    }, []);
+
+    const handleAccept = useCallback((orderId) => {
+        syluvAxios
+            .post(`/customer/${storeId}/${orderId}/preparing`)
+            .then((res) => {
+                setItems((prev) => {
+                    return prev.map((item) => {
+                        if (item.orderId === orderId) {
+                            console.log(item);
+                            return { ...item, orderStatus: "PREPARING" };
+                        }
+                        return item;
+                    });
+                });
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+    }, []);
 
     if (detailItem !== null) {
         return (
-            <OwnerDetailPage item={detailItem} handleItem={handleDetailItem} />
+            <OwnerDetailPage
+                item={detailItem}
+                status={detailStatus}
+                handleItem={handleDetailItem}
+                handleAccept={handleAccept}
+            />
         );
     }
 

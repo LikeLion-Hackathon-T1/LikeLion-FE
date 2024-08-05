@@ -40,15 +40,11 @@ const MenuEditTab = ({ items, setItems, storeId }) => {
         formData.append("file", newItem.menuImage); // assuming newItem.file is a File object
 
         try {
-            const response = await syluvAxios.post(
-                `/customer/${storeId}/addmenu`,
-                formData,
-                {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                }
-            );
+            await syluvAxios.post(`/customer/${storeId}/addmenu`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
             setItems([...items, newItem]); // Assuming the API returns the new item
         } catch (error) {
             console.error("Error adding item:", error);

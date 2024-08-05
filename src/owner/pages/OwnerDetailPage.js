@@ -5,9 +5,9 @@ import styled from "styled-components";
 
 const OwnerDetailPage = ({
     item,
+    status,
     handleItem = () => {},
-    handleCancel = () => {},
-    handleSuccess = () => {},
+    handleAccept = () => {},
 }) => {
     const handleDate = (date) => {
         // "2024-08-01T01:54:46" -> "2024.08.01 오후 1:54"
@@ -30,7 +30,7 @@ const OwnerDetailPage = ({
             <Header
                 title="주문상세"
                 cart={false}
-                onLeftClick={() => handleItem(null)}
+                onLeftClick={() => handleItem(null, null)}
             />
             <Wrapper>
                 <div className="info">
@@ -41,7 +41,7 @@ const OwnerDetailPage = ({
                     <span>주문자명: {item.userName}</span>
                 </div>
                 {item.menu.map((order) => (
-                    <OrderItem key={order.createdAt} order={order} />
+                    <OrderItem key={order.menuImg} order={order} />
                 ))}
                 <BillContainer>
                     <div>
@@ -55,23 +55,18 @@ const OwnerDetailPage = ({
                         <span className="right">토스페이</span>
                     </div>
                 </BillContainer>
-                <ButtonContainer>
-                    <Button
-                        text="접수 취소"
-                        onClick={() => {
-                            handleCancel(item.id);
-                            handleItem(null);
-                        }}
-                    />
-                    <Button
-                        text="접수하기"
-                        type="2"
-                        onClick={() => {
-                            handleSuccess(item.id);
-                            handleItem(null);
-                        }}
-                    />
-                </ButtonContainer>
+                {status === "접수" && (
+                    <ButtonContainer>
+                        <Button
+                            text="접수하기"
+                            type="2"
+                            onClick={() => {
+                                handleAccept(item.orderId);
+                                handleItem(null, null);
+                            }}
+                        />
+                    </ButtonContainer>
+                )}
             </Wrapper>
         </>
     );

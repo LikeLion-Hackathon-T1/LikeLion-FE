@@ -14,12 +14,14 @@ const OwnerPage = () => {
     const [selected, setSelected] = useState(menus[0]);
     const [storeInfo, setStoreInfo] = useState({});
     const [items, setItems] = useState([]);
+    const [allStores, setAllStores] = useState([]);
 
     useEffect(() => {
         syluvAxios.get(`/store/info`).then((res) => {
             const store = res.data.payload.filter(
                 (store) => store.storeId === Number(storeId)
             );
+            setAllStores(res.data.payload);
             setStoreInfo(store[0]);
             setItems(store[0].menuDetails);
         });
@@ -32,7 +34,7 @@ const OwnerPage = () => {
     return (
         <>
             <Header>
-                <OwnerHeader name={storeInfo.name} />
+                <OwnerHeader name={storeInfo.name} stores={allStores} />
                 <NavBar
                     items={menus}
                     selected={selected}
