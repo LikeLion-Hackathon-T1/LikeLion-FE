@@ -21,7 +21,6 @@ const OrderDetailPage = () => {
         const getOrderDetail = async () => {
             try {
                 const res = await syluvAxios.get(`/order/${orderId}/detail`);
-                console.log(res.data.payload);
                 setOrderDetail(res.data.payload);
             } catch (error) {
                 console.error(error);
