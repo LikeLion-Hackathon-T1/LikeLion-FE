@@ -18,4 +18,4 @@
 <img src="https://img.shields.io/badge/EC2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white">
 
 ### Thanks to
-<img src="https://img.shields.io/badge/GitHubCopilot-000000?style=for-the-badge&logo=githubcopilot&logoColor=white">
+<img src="https://img.shields.io/badge/GitHub Copilot-000000?style=for-the-badge&logo=githubcopilot&logoColor=white">
