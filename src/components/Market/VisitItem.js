@@ -77,7 +77,8 @@ const VisitItem = ({
                     <div
                         className="store"
                         onClick={() =>
-                            onClickItem(item.latitude, item.longitude)
+                            // onClickItem(item.latitude, item.longitude)
+                            navigate(`/store/${item.storeId}`)
                         }
                     >
                         <img src={item.imageUrl} alt="store" />
