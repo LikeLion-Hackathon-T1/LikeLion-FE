@@ -46,6 +46,7 @@ const MarketImg = styled.img`
     width: 100%;
     height: 144px;
     border-radius: 12px;
+    object-fit: cover;
 `;
 
 const InfoContainer = styled.div`

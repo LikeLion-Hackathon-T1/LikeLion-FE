@@ -14,6 +14,7 @@ const VisitItem = ({
     isLast,
     openId,
     handleOpenModal = () => {},
+    onClickItem = () => {},
 }) => {
     const [clickable, setClickable] = useState(false);
     const [status, setStatus] = useState(null);
@@ -75,11 +76,10 @@ const VisitItem = ({
                 <Wrapper>
                     <div
                         className="store"
-                        onClick={() => {
-                            navigate(`/market/1/${item.storeId}`, {
-                                state: { item: item },
-                            });
-                        }}
+                        onClick={() =>
+                            // onClickItem(item.latitude, item.longitude)
+                            navigate(`/store/${item.storeId}`)
+                        }
                     >
                         <img src={item.imageUrl} alt="store" />
                         <div className="store-info">

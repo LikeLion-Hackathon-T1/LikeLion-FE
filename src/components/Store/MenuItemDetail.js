@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ReactComponent as BackIcon } from "assets/images/back.svg";
-import { ReactComponent as CartIcon } from "assets/images/marketbag.svg";
-import { ReactComponent as HomeIcon } from "assets/images/newhome.svg";
+import HomeIcon from "assets/icons/HomeIcon";
+import BackIcon from "assets/icons/BackIcon";
+import CartIcon from "assets/icons/CartIcon";
 import useSyluvAxios from "hooks/useSyluvAxios";
 import Splash from "components/Common/Splash";
-import styled from "styled-components";
 import {
     Container,
     ImageContainer,
@@ -26,6 +25,9 @@ import {
     VisitModal,
     ModalButton,
     CartBadge,
+    HeaderBack1,
+    HeaderBack2,
+    HeaderBack3,
 } from "./MenuItemDetailStyle";
 
 const MenuItemDetail = ({ menu }) => {
@@ -52,16 +54,26 @@ const MenuItemDetail = ({ menu }) => {
             return;
         }
 
-    try {
-      console.log("Adding new item to cart...");
-      const addResponse = await syluvAxios.post(`/cart`, {
-        menuId: menuId,
-        quantity: quantity,
-      });
+        console.log("Adding to cart...");
+        console.log("Menu ID: ", menuId);
+        console.log("Menu Name: ", menuName);
+        console.log("Quantity: ", quantity);
+        try {
+            console.log("Adding new item to cart...");
+            const addResponse = await syluvAxios.post(`/cart`, {
+                menuId: menuId,
+                quantity: quantity,
+            });
+            console.log("Add Response: ", addResponse.data);
 
             // 장바구니 다시 불러오기
             const updatedCartResponse = await syluvAxios.get("/cart");
+            console.log(
+                "Updated Cart items: ",
+                updatedCartResponse.data.payload
+            );
 
+            console.log("장바구니 업데이트 완료");
             setShowModal(true); // 모달 표시
         } catch (addError) {
             console.error(
@@ -82,17 +94,20 @@ const MenuItemDetail = ({ menu }) => {
     return (
         <Container>
             <ImageContainer>
+                <HeaderBack3 />
                 <BackButton onClick={() => navigate(-1)} aria-label="뒤로가기">
-                    <BackIcon />
+                    <BackIcon color="white" />
                 </BackButton>
-                <HomeButton onClick={() => navigate("/")} aria-label="홈으로">
-                    <HomeIcon />
+                <HeaderBack1 />
+                <HomeButton onClick={() => navigate("/")}>
+                    <HomeIcon color="white" />
                 </HomeButton>
+                <HeaderBack2 />
                 <CartButton
                     onClick={() => navigate("/cart")}
                     aria-label="장바구니로"
                 >
-                    <CartIcon />
+                    <CartIcon color="white" />
                     {showModal && <CartBadge>{quantity}</CartBadge>}
                 </CartButton>
                 <Image src={menu.menuImage} alt={menu.name} />
@@ -118,7 +133,7 @@ const MenuItemDetail = ({ menu }) => {
                 </QuantityWrapper>
             </QuantityContainer>
             <AddToCartButton onClick={handleAddToCart}>
-                {menu.price}원 담기
+                {menu.price * quantity}원 담기
             </AddToCartButton>
             {showModal && (
                 <ModalBackground show={showModal}>

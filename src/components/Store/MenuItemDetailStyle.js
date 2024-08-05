@@ -46,6 +46,30 @@ export const CartButton = styled.div`
   padding: 8px;
 `;
 
+const HeaderBack = styled.div`
+  position: absolute;
+  opacity: 0.3;
+  background-color: black;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+`;
+
+export const HeaderBack3 = styled(HeaderBack)`
+  top: 16px;
+  left: 16px;
+`;
+
+export const HeaderBack1 = styled(HeaderBack)`
+  top: 16px;
+  right: 64px;
+`;
+
+export const HeaderBack2 = styled(HeaderBack)`
+  top: 16px;
+  right: 20px;
+`;
+
 export const CartBadge = styled.div`
   position: absolute;
   top: 5px;
@@ -159,8 +183,6 @@ export const AddToCartButton = styled.button`
   border: none;
   border-radius: 8px;
   bottom: 10px;
-  /* left: 50%;
-  transform: translateX(-50%); */
   margin: 0 20px;
   @media (max-width: 480px) {
     width: calc(100% - 40px);

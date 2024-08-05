@@ -19,8 +19,10 @@ const OrderListPage = () => {
         const getOrderList = async () => {
             try {
                 const res = await syluvAxios.get("/order");
+                console.log(res.data.payload);
                 setOrderList(res.data.payload);
                 setIsLoading(false);
+                console.log(res.data.payload);
             } catch (error) {
                 console.error(error);
             }
@@ -32,7 +34,7 @@ const OrderListPage = () => {
         return <Splash />;
     }
 
-    return orderList === null ? (
+    return Object.keys(orderList).length === 0 ? (
         <>
             <Header title="주문내역" backSrc={-1} />
             <NoItemContainer>

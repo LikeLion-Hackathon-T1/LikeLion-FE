@@ -2,7 +2,7 @@ import styled from "styled-components";
 import VisitItem from "./VisitItem";
 import { useState } from "react";
 
-const VisitList = ({ visitList }) => {
+const VisitList = ({ visitList, onClickItem = () => {} }) => {
     const [openedModal, setOpenedModal] = useState(null);
     const handleOpenModal = (id) => {
         setOpenedModal(id);
@@ -19,6 +19,7 @@ const VisitList = ({ visitList }) => {
                         key={index} // 추가된 부분: key prop
                         openId={openedModal}
                         handleOpenModal={handleOpenModal}
+                        onClickItem={onClickItem}
                     />
                 </Container>
             ))}

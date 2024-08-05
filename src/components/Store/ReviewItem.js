@@ -169,7 +169,23 @@ const ReviewItem = ({
                 Array.isArray(review.image) &&
                 review.image.length > 1 && (
                     <ReviewImageContainerMultiple>
-                        <Swiper slidesPerView={1.7} spaceBetween={6}>
+                        <Swiper
+                            slidesPerView={1.7}
+                            breakpoints={{
+                                640: {
+                                    slidesPerView: 1.2,
+                                    spaceBetween: 10,
+                                },
+                                768: {
+                                    slidesPerView: 1.5,
+                                    spaceBetween: 15,
+                                },
+                                1024: {
+                                    slidesPerView: 1.7,
+                                    spaceBetween: 6,
+                                },
+                            }}
+                        >
                             {review.image.map((image, index) => (
                                 <SwiperSlide key={index}>
                                     <MultipleReviewImage
@@ -192,6 +208,7 @@ const ReviewItem = ({
                 <div>{helpfulness}명에게 도움이 되었어요</div>
                 <HelpfulButton
                     onClick={() => {
+                        console.log("HelpfulButton clicked");
                         handleHelpfulnessClick();
                     }}
                     $active={isHelpfulClicked}
