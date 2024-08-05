@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import VisitList from "./VisitList";
-import { Map, MapMarker, Polyline } from "react-kakao-maps-sdk";
+import { CustomOverlayMap, Map, MapMarker, useMap } from "react-kakao-maps-sdk";
 import { useCallback, useEffect, useState } from "react";
 import EditList from "./EditList";
 import useSyluvAxios from "hooks/useSyluvAxios";
@@ -99,6 +99,41 @@ const VisitTab = ({
         return `data:image/svg+xml;base64,${btoa(svg)}`;
     };
 
+    const MapMarkerWithCustomeOverlay = ({ lat, lng, number, content }) => {
+        const map = useMap();
+        const [isVisible, setIsVisible] = useState(false);
+
+        return (
+            <>
+                <MapMarker
+                    position={{
+                        lat,
+                        lng,
+                    }}
+                    onClick={(marker) => map.panTo(marker.getPosition())}
+                    onMouseOver={() => setIsVisible(true)}
+                    onMouseOut={() => setIsVisible(false)}
+                    image={{
+                        src: createMarkerSvg(number),
+                        size: { width: 28, height: 32 },
+                        alt: "마커 이미지",
+                    }}
+                />
+                {isVisible && (
+                    <CustomOverlayMap
+                        position={{
+                            lat,
+                            lng,
+                        }}
+                        yAnchor={0}
+                    >
+                        <WindowContainer>{content}</WindowContainer>
+                    </CustomOverlayMap>
+                )}
+            </>
+        );
+    };
+
     if (mapCenter.latitude === undefined || mapCenter.longitude === undefined) {
         return <Splash />;
     }
@@ -126,17 +161,12 @@ const VisitTab = ({
                 /> */}
 
                 {visitList.map((item) => (
-                    <MapMarker
+                    <MapMarkerWithCustomeOverlay
                         key={item.visitListId}
-                        position={{
-                            lat: item.latitude,
-                            lng: item.longitude,
-                        }}
-                        image={{
-                            src: createMarkerSvg(visitList.indexOf(item) + 1),
-                            size: { width: 28, height: 32 },
-                            alt: "마커 이미지",
-                        }}
+                        lat={item.latitude}
+                        lng={item.longitude}
+                        number={visitList.indexOf(item) + 1}
+                        content={item.store}
                     />
                 ))}
             </Map>
@@ -228,4 +258,16 @@ const Container = styled.div`
 
 const BodyContainer = styled.div`
     overflow-y: auto;
+`;
+
+const WindowContainer = styled.div`
+    border: 2px solid ${({ theme }) => theme.color.primary};
+    background-color: white;
+    padding: 4px 10px;
+    margin-top: 2px;
+    border-radius: 10px;
+
+    font-size: 14px;
+    font-weight: ${({ theme }) => theme.fontWeight.semiBold};
+    color: ${({ theme }) => theme.color.primary};
 `;

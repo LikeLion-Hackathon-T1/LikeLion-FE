@@ -8,7 +8,7 @@ const HotMarketList = ({ hotMarkets }) => {
     return (
         <MarketWrapper>
             <span className="text-title mt">요즘 핫한 시장</span>
-            <StyledSwiper slidesPerView={2} spaceBetween={20}>
+            <StyledSwiper slidesPerView={2} spaceBetween={0}>
                 {hotMarkets.map((market, index) => (
                     <SwiperSlide key={index}>
                         <HotMarket market={market} />

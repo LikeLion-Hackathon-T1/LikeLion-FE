@@ -52,9 +52,9 @@ const OrderRequest = () => {
             <ButtonModal
                 title="주문 요청에 실패했습니다."
                 subText="다시 시도해주세요."
-                left="홈으로 이동"
+                left="홈으로"
                 onLeftClick={() => navigate("/")}
-                right="장바구니로 이동"
+                right="장바구니로"
                 onRightClick={() => navigate("/cart")}
             />
         );
