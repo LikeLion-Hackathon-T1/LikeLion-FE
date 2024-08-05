@@ -58,6 +58,8 @@ const ReviewItem = ({
   const [isHelpfulClicked, setIsHelpfulClicked] = useState(review.helpfulYn);
 
   const syluvAxios = useSyluvAxios();
+  console.log(review);
+  console.log("hihis");
 
   useEffect(() => {
     setHelpfulness(Number(review.helpfulCnt));
@@ -77,7 +79,6 @@ const ReviewItem = ({
 
         if (response && response.data && response.data.result.code === 0) {
           onHelpful(review.reviewId);
-        } else {
         }
       } else {
         // 도움이 돼요 클릭
@@ -90,7 +91,6 @@ const ReviewItem = ({
 
         if (response && response.data && response.data.result.code === 0) {
           onHelpful(review.reviewId);
-        } else {
         }
       }
     } catch (error) {
@@ -149,45 +149,38 @@ const ReviewItem = ({
         )}
       </Header>
       {review.image &&
-        Array.isArray(review.image) &&
-        review.image.length === 1 && (
+        review.image.length === 1 &&
+        review.image[0] !== null && (
           <ReviewImageContainerSingle>
             <SingleReviewImage src={review.image[0]} alt="review" />
           </ReviewImageContainerSingle>
         )}
-      {review.image &&
-        Array.isArray(review.image) &&
-        review.image.length > 1 && (
-          <ReviewImageContainerMultiple>
-            <Swiper
-              slidesPerView={1.7}
-              breakpoints={{
-                640: {
-                  slidesPerView: 1.2,
-                  spaceBetween: 10,
-                },
-                768: {
-                  slidesPerView: 1.5,
-                  spaceBetween: 15,
-                },
-                1024: {
-                  slidesPerView: 1.7,
-                  spaceBetween: 6,
-                },
-              }}
-            >
-              {review.image.map((image, index) => (
-                <SwiperSlide key={index}>
-                  <MultipleReviewImage src={image} alt={`review-${index}`} />
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </ReviewImageContainerMultiple>
-        )}
-      {review.image && !Array.isArray(review.image) && (
-        <ReviewImageContainerSingle>
-          <SingleReviewImage src={review.image} alt="review" />
-        </ReviewImageContainerSingle>
+      {review.image && review.image.length > 1 && (
+        <ReviewImageContainerMultiple>
+          <Swiper
+            slidesPerView={1.7}
+            breakpoints={{
+              640: {
+                slidesPerView: 1.2,
+                spaceBetween: 10,
+              },
+              768: {
+                slidesPerView: 1.5,
+                spaceBetween: 15,
+              },
+              1024: {
+                slidesPerView: 1.7,
+                spaceBetween: 6,
+              },
+            }}
+          >
+            {review.image.map((image, index) => (
+              <SwiperSlide key={index}>
+                <MultipleReviewImage src={image} alt={`review-${index}`} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </ReviewImageContainerMultiple>
       )}
       <MenuName>{review.menuName}</MenuName>
       <ReviewText>{review.content}</ReviewText>
