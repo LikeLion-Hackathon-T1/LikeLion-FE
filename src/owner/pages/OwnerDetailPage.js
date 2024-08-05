@@ -1,6 +1,7 @@
 import Button from "components/Common/Button";
 import Header from "components/Common/Header";
 import OrderItem from "owner/components/OrderItem";
+import { useCallback } from "react";
 import styled from "styled-components";
 
 const OwnerDetailPage = ({
@@ -9,18 +10,18 @@ const OwnerDetailPage = ({
     handleItem = () => {},
     handleAccept = () => {},
 }) => {
-    const handleDate = (date) => {
+    const handleDate = useCallback((date) => {
         // "2024-08-01T01:54:46" -> "2024.08.01 오후 1:54"
         const dateObj = new Date(date);
         const year = dateObj.getFullYear();
-        const month = dateObj.getMonth() + 1;
-        const day = dateObj.getDate();
+        const month = (dateObj.getMonth() + 1).toString().padStart(2, "0"); // 월을 두 자리로 표현
+        const day = dateObj.getDate().toString().padStart(2, "0"); // 일을 두 자리로 표현
         const hour = dateObj.getHours();
-        const minute = dateObj.getMinutes();
+        const minute = dateObj.getMinutes().toString().padStart(2, "0"); // 분을 두 자리로 표현
         const ampm = hour >= 12 ? "오후" : "오전";
-        const hour12 = hour % 12;
+        const hour12 = (hour % 12 || 12).toString().padStart(2, "0"); // 시간을 12시간제로 표현하고 두 자리로 표현
         return `${year}.${month}.${day} ${ampm} ${hour12}:${minute}`;
-    };
+    }, []);
     const formatAmount = (amount) => {
         return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
