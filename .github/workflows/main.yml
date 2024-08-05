@@ -52,6 +52,8 @@ jobs:
                       REACT_APP_KAKAO_REST_API_KEY=${{ secrets.REACT_APP_KAKAO_REST_API_KEY }}
                       REACT_APP_KAKAO_REDIRECT_URI=${{ secrets.REACT_APP_KAKAO_REDIRECT_URI }}
                       REACT_APP_BASE_URL=${{ secrets.REACT_APP_BASE_URL }}
+                      REACT_APP_TOSS_CLIENT_KEY=${{ secrets.REACT_APP_TOSS_CLIENT_KEY }}
+                      REACT_APP_TOSS_SECRET_KEY=${{ secrets.REACT_APP_TOSS_SECRET_KEY }}
 
             - name: Pull and restart Docker Container
               uses: appleboy/ssh-action@master
