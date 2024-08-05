@@ -31,8 +31,8 @@ import {
 } from "./ReviewItemStyle";
 
 import useSyluvAxios from "../../hooks/useSyluvAxios";
-import goodIcon from "../../assets/images/good.png";
-import badIcon from "../../assets/images/bad.png";
+import goodIcon from "../../assets/images/good.svg";
+import badIcon from "../../assets/images/bad.svg";
 
 const formatTime = ({ beforeHours, beforeDay, beforeWeek }) => {
   if (beforeWeek > 0) {
