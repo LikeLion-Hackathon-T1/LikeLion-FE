@@ -21,9 +21,7 @@ const CartPage = () => {
                 }));
                 setCartList(updatedCartList);
                 setIsLoading(false);
-            } catch (err) {
-                console.log(err);
-            }
+            } catch (err) {}
         };
         getCartList();
     }, []);
@@ -46,9 +44,7 @@ const CartPage = () => {
                     );
                     setToastMessage("장바구니에서 메뉴가 삭제되었습니다.");
                 })
-                .catch((err) => {
-                    console.log(err);
-                });
+                .catch((err) => {});
         });
     }, [cartList, syluvAxios]);
 
