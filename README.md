@@ -1,6 +1,8 @@
 # [SYLUV] 서울과학기술대학교 멋쟁이사자처럼 1팀 Frontend
 - 2024년 멋쟁이사자처럼 12기 서울과학기술대학교 연합해커톤 1팀 프론트엔드 레포지토리 입니다.
 
+![✏️ App Icon](https://github.com/user-attachments/assets/4b8b3a6e-b961-4bec-9545-d00f175a5d3a)
+
 ### Syluv
 - [@Chaeyeoncho](https://github.com/Chaeyeoncho)
 - [@seokkkkkk](https://github.com/seokkkkkk)
