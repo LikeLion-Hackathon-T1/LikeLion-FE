@@ -27,7 +27,7 @@ const MarketList = ({
                 (store) => store.marketId === marketId
             );
             console.log(filteredStores);
-            setStoreList(filteredStores);
+            setStoreList(response.data.payload);
         } catch (error) {
             console.error("Error fetching data:", error);
         }

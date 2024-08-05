@@ -14,6 +14,7 @@ const MenuItemImage = styled.img`
     border-radius: 12px;
     display: flex;
     object-fit: cover;
+    min-width: 104px;
 `;
 
 const MenuItemInfo = styled.div`
