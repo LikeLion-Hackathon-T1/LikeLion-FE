@@ -53,29 +53,17 @@ const MenuItemDetail = ({ menu, cartLength, handleCartLength = () => {} }) => {
             console.error("Menu ID 또는 이름이 정의안됨");
             return;
         }
-
-        console.log("Adding to cart...");
-        console.log("Menu ID: ", menuId);
-        console.log("Menu Name: ", menuName);
-        console.log("Quantity: ", quantity);
         try {
-            console.log("Adding new item to cart...");
             const addResponse = await syluvAxios.post(`/cart`, {
                 menuId: menuId,
                 quantity: quantity,
             });
-            console.log("Add Response: ", addResponse.data);
 
             // 장바구니 다시 불러오기
             const updatedCartResponse = await syluvAxios.get("/cart");
             handleCartLength(updatedCartResponse.data.payload.length);
-            console.log(
-                "Updated Cart items: ",
-                updatedCartResponse.data.payload
-            );
             setQuantity(1);
 
-            console.log("장바구니 업데이트 완료");
             setShowModal(true); // 모달 표시
         } catch (addError) {
             console.error(
