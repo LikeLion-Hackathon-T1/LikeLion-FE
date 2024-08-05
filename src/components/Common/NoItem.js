@@ -4,7 +4,6 @@ import noItem from "assets/images/no-cart.png";
 const NoItem = ({
     title = "리스트가 비어있어요",
     subtext = "시장을 구경하고 리스트를 채워주세요",
-    mt = 0,
 }) => {
     return (
         <NoItemContainer>

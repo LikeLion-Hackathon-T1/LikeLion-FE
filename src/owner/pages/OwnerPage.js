@@ -56,10 +56,12 @@ const OwnerPage = () => {
                     <OrderManageTab storeId={storeId} />
                 )
             ) : (
-                <NoItem
-                    title="관리할 가게가 선택되지 않았습니다"
-                    subtext="우측 상단 메뉴에서 가게를 선택하고 관리하세요"
-                />
+                <Wrapper>
+                    <NoItem
+                        title="관리할 가게가 선택되지 않았습니다"
+                        subtext="우측 상단 메뉴에서 가게를 선택하고 관리하세요"
+                    />
+                </Wrapper>
             )}
         </>
     );
@@ -75,4 +77,8 @@ const Header = styled.div`
     @media (max-width: 480px) {
         width: 100%;
     }
+`;
+
+const Wrapper = styled.div`
+    margin-top: 150px;
 `;
