@@ -20,6 +20,7 @@ const StoreInfo = ({
     closeHours,
     ratingAvg,
     storeImage,
+    cartLength,
 }) => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -76,6 +77,9 @@ const StoreInfo = ({
                     <HeaderBack2 />
                     <CartButton onClick={() => navigate("/cart")}>
                         <CartIcon color="white" />
+                        <div className="cart-num">
+                            <span>{cartLength}</span>
+                        </div>
                     </CartButton>
                 </div>
                 {images.length > 1 && (
@@ -197,6 +201,21 @@ const CartButton = styled.div`
     right: 20px;
     cursor: pointer;
     padding: 8px;
+    .cart-num {
+        position: absolute;
+        top: 4px;
+        right: 0px;
+        background-color: ${({ theme }) => theme.color.primary};
+        color: white;
+        font-weight: ${({ theme }) => theme.fontWeight.semiBold};
+        font-size: 8px;
+        width: 15px;
+        height: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+    }
 `;
 
 const ImageCounter = styled.div`

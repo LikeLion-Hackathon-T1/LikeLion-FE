@@ -4,6 +4,9 @@ import { ReactComponent as CartIcon } from "assets/images/cart.svg";
 import { ReactComponent as HomeIcon } from "assets/images/home.svg";
 import { ReactComponent as Syluv } from "assets/images/syluv-small.svg";
 import { useNavigate } from "react-router-dom";
+import useSyluvAxios from "hooks/useSyluvAxios";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 // import useCartStore from "hooks/useCartStore";
 
 const Header = ({
@@ -19,6 +22,19 @@ const Header = ({
     handleRight = () => {},
 }) => {
     const navigate = useNavigate();
+    const syluvAxios = useSyluvAxios();
+    const [cartLength, setCartLength] = useState(0);
+
+    const { data } = useQuery({
+        queryKey: ["get-markets"],
+        queryFn: () => syluvAxios.get(`/cart`),
+    });
+
+    useEffect(() => {
+        if (data) {
+            setCartLength(data.data.payload.length);
+        }
+    }, [data]);
 
     return (
         <>
@@ -52,6 +68,9 @@ const Header = ({
                     {cart && (
                         <Cart onClick={() => navigate("/cart")}>
                             <CartIcon />
+                            <div className="cart-num">
+                                <span>{cartLength}</span>
+                            </div>
                         </Cart>
                     )}
                     {rightText && (
@@ -125,6 +144,21 @@ const Title = styled.h1`
 const Cart = styled.div`
     cursor: pointer;
     position: relative;
+    .cart-num {
+        position: absolute;
+        top: -2px;
+        right: -6px;
+        background-color: ${({ theme }) => theme.color.primary};
+        color: white;
+        font-weight: ${({ theme }) => theme.fontWeight.semiBold};
+        font-size: 8px;
+        width: 15px;
+        height: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+    }
 `;
 
 export default Header;

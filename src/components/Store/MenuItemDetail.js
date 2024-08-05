@@ -30,7 +30,7 @@ import {
     HeaderBack3,
 } from "./MenuItemDetailStyle";
 
-const MenuItemDetail = ({ menu }) => {
+const MenuItemDetail = ({ menu, cartLength, handleCartLength = () => {} }) => {
     const navigate = useNavigate();
     const syluvAxios = useSyluvAxios();
     const [quantity, setQuantity] = useState(1);
@@ -68,10 +68,12 @@ const MenuItemDetail = ({ menu }) => {
 
             // 장바구니 다시 불러오기
             const updatedCartResponse = await syluvAxios.get("/cart");
+            handleCartLength(updatedCartResponse.data.payload.length);
             console.log(
                 "Updated Cart items: ",
                 updatedCartResponse.data.payload
             );
+            setQuantity(1);
 
             console.log("장바구니 업데이트 완료");
             setShowModal(true); // 모달 표시
@@ -85,6 +87,10 @@ const MenuItemDetail = ({ menu }) => {
 
     const handleCloseModal = () => {
         setShowModal(false);
+    };
+
+    const formatPrice = (price) => {
+        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
 
     if (!menu) {
@@ -108,7 +114,7 @@ const MenuItemDetail = ({ menu }) => {
                     aria-label="장바구니로"
                 >
                     <CartIcon color="white" />
-                    {showModal && <CartBadge>{quantity}</CartBadge>}
+                    <CartBadge>{cartLength}</CartBadge>
                 </CartButton>
                 <Image src={menu.menuImage} alt={menu.name} />
             </ImageContainer>
@@ -133,7 +139,7 @@ const MenuItemDetail = ({ menu }) => {
                 </QuantityWrapper>
             </QuantityContainer>
             <AddToCartButton onClick={handleAddToCart}>
-                {menu.price * quantity}원 담기
+                {formatPrice(menu.price * quantity)}원 담기
             </AddToCartButton>
             {showModal && (
                 <ModalBackground show={showModal}>

@@ -189,6 +189,7 @@ const OrderPage = ({ item, onClick = () => {} }) => {
                     </button>
                 </div>
             </Container>
+            <ButtonSpacer />
             <ButtonContainer>
                 <Payments
                     isReady={isReady}
@@ -207,14 +208,13 @@ const OrderPage = ({ item, onClick = () => {} }) => {
 const Container = styled.div`
     margin-top: -60px;
     width: 100%;
-    margin-bottom: 80px;
 
     .section {
         display: flex;
         flex-direction: column;
         gap: 16px;
         padding: 28px 20px;
-        border-bottom: 1px solid ${({ theme }) => theme.color.gray100};
+        border-top: 1px solid ${({ theme }) => theme.color.gray100};
 
         .error-message {
             display: flex;
@@ -323,10 +323,14 @@ const Container = styled.div`
     }
 `;
 
+const ButtonSpacer = styled.div`
+    width: 440px;
+    height: 100px;
+`;
+
 const ButtonContainer = styled.div`
     position: fixed;
     bottom: 0px;
-    padding: 20px 0px;
     background-color: white;
     border-top: 1px solid ${({ theme }) => theme.color.gray100};
 `;
