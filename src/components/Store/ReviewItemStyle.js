@@ -1,12 +1,12 @@
 import styled from "styled-components";
 
-export const ReviewContainer = styled.div.attrs(
-  ({ isLastMyReview, isFirstOtherReview, isMine }) => ({
-    isLastMyReview: undefined,
-    isFirstOtherReview: undefined,
-    isMine: undefined,
-  })
-)`
+export const ReviewContainer = styled.div`
+  // ({ isLastMyReview, isFirstOtherReview, isMine }) => ({
+  //   isLastMyReview: undefined,
+  //   isFirstOtherReview: undefined,
+  //   isMine: undefined,
+  // });
+
   margin-bottom: 44px;
   background-color: ${({ isMine }) =>
     isMine ? "rgba(255, 107, 0, 0.04)" : "transparent"};
