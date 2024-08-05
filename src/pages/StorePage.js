@@ -40,6 +40,18 @@ const StorePage = () => {
     const [selectedMenu, setSelectedMenu] = useState(null);
     const [reviews, setReviews] = useState([]);
     const [menuId, setMenuId] = useState(null);
+    const [cartLength, setCartLength] = useState(0);
+
+    const { data } = useQuery({
+        queryKey: ["get-markets"],
+        queryFn: () => axiosInstance.get(`/cart`),
+    });
+
+    useEffect(() => {
+        if (data) {
+            setCartLength(data.data.payload.length);
+        }
+    }, [data]);
 
     // 가게 및 메뉴 데이터를 가져오는 함수
     const fetchStoreAndMenuData = async () => {
@@ -179,10 +191,18 @@ const StorePage = () => {
     let myReviewCount = reviews.filter((review) => review.isMine).length;
     let myReviewIndex = 0;
 
+    const handleCartLength = (quantity) => {
+        setCartLength(quantity);
+    };
+
     return (
         <PageWrapper>
             {selectedMenu ? (
-                <MenuItemDetail menu={selectedMenu} />
+                <MenuItemDetail
+                    menu={selectedMenu}
+                    cartLength={cartLength}
+                    handleCartLength={handleCartLength}
+                />
             ) : (
                 <>
                     {storeData && (
@@ -196,6 +216,7 @@ const StorePage = () => {
                                 ratingAvg={storeData.ratingAvg}
                                 storeImage={storeData.storeImage}
                                 category={storeData.category}
+                                cartLength={cartLength}
                             />
                             <NavBar
                                 items={["메뉴", "리뷰"]}

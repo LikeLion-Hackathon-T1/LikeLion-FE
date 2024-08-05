@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import MenuItemDetail from "./MenuItemDetail";
 //커밋
 const MenuItemWrapper = styled.div`
     display: flex;
@@ -14,6 +13,7 @@ const MenuItemImage = styled.img`
     width: 104px;
     border-radius: 12px;
     display: flex;
+    object-fit: cover;
 `;
 
 const MenuItemInfo = styled.div`

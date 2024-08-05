@@ -14,7 +14,7 @@ const HotMarket = ({ market }) => {
             <img
                 className="market-image"
                 src={market.marketImage}
-                alt="최근 방문한 시장"
+                alt="요즘 핫한 시장"
             />
             <div className="body-info">
                 <span className="body-text">{market.marketName}</span>
