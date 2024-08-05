@@ -4,11 +4,11 @@ import styled from "styled-components";
 const SimpleReceipt = ({ date, orderNum, name, state }) => {
     return (
         <Container>
+            <div className="container">
+                <span className="sub-text">{state}</span>
+                <span className="title-text">{name}</span>
+            </div>
             <div className="container order">
-                <div className="container">
-                    <span className="sub-text">{state}</span>
-                    <span className="title-text">{name}</span>
-                </div>
                 <span>{date} 주문</span>
                 <span>주문번호 {orderNum}</span>
             </div>

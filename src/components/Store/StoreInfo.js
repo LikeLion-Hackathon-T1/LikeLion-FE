@@ -53,79 +53,85 @@ const StoreInfo = ({
     return score + 1.5;
   };
 
-  return (
-    <Container>
-      <ImageContainer>
-        <Slider {...settings}>
-          {images.map((image, index) => (
-            <HeaderImage key={index} src={image} alt={`Store-${index}`} />
-          ))}
-        </Slider>
-        <div>
-          <HeaderBack3 />
-          <BackButton onClick={() => goToParentPath()}>
-            <BackIcon color="white" />
-          </BackButton>
-          <HeaderBack1 />
-          <HomeButton onClick={() => navigate("/")}>
-            <HomeIcon color="white" />
-          </HomeButton>
-          <HeaderBack2 />
-          <CartButton onClick={() => navigate("/cart")}>
-            <CartIcon color="white" />
-            <div className="cart-num">
-              <span>{cartLength}</span>
-            </div>
-          </CartButton>
-        </div>
-        {images.length > 1 && (
-          <ImageCounter>
-            {currentSlide + 1} / {images.length}
-          </ImageCounter>
-        )}
-      </ImageContainer>
-      <InfoContainer>
-        <SubTitle>{category}</SubTitle>
-        <Title>{name}</Title>
-        <Rating>
-          <StarRatings>
-            <StarRatingsFill
-              style={{ width: `${ratingToPercent(ratingAvg)}%` }}
-            >
-              <span>★</span>
-              <span>★</span>
-              <span>★</span>
-              <span>★</span>
-              <span>★</span>
-            </StarRatingsFill>
-            <StarRatingsBase>
-              <span>★</span>
-              <span>★</span>
-              <span>★</span>
-              <span>★</span>
-              <span>★</span>
-            </StarRatingsBase>
-          </StarRatings>
-          <RatingValue>{ratingAvg.toFixed(1)}</RatingValue>
-        </Rating>
-        <Info>
-          <CallIcon />
-          <InfoTitle>전화번호</InfoTitle>
-          <InfoDetail>{call}</InfoDetail>
-        </Info>
-        <Info>
-          <AddressIcon />
-          <InfoTitle>주소</InfoTitle>
-          <InfoDetail>{address}</InfoDetail>
-        </Info>
-        <Info>
-          <TimeIcon />
-          <InfoTitle>영업시간</InfoTitle>
-          <InfoDetail>{`${openHours} ~ ${closeHours}`}</InfoDetail>
-        </Info>
-      </InfoContainer>
-    </Container>
-  );
+    return (
+        <Container>
+            <ImageContainer>
+                <Slider {...settings}>
+                    {images.map((image, index) => (
+                        <HeaderImage
+                            key={index}
+                            src={image}
+                            alt={`Store-${index}`}
+                        />
+                    ))}
+                </Slider>
+                <div>
+                    <HeaderBack3 />
+                    <BackButton onClick={() => goToParentPath()}>
+                        <BackIcon color="white" />
+                    </BackButton>
+                    <HeaderBack1 />
+                    <HomeButton onClick={() => navigate("/")}>
+                        <HomeIcon color="white" />
+                    </HomeButton>
+                    <HeaderBack2 />
+                    <CartButton onClick={() => navigate("/cart")}>
+                        <CartIcon color="white" />
+                        {cartLength > 0 && (
+                            <div className="cart-num">
+                                <span>{cartLength}</span>
+                            </div>
+                        )}
+                    </CartButton>
+                </div>
+                {images.length > 1 && (
+                    <ImageCounter>
+                        {currentSlide + 1} / {images.length}
+                    </ImageCounter>
+                )}
+            </ImageContainer>
+            <InfoContainer>
+                <SubTitle>{category}</SubTitle>
+                <Title>{name}</Title>
+                <Rating>
+                    <StarRatings>
+                        <StarRatingsFill
+                            style={{ width: `${ratingToPercent(ratingAvg)}%` }}
+                        >
+                            <span>★</span>
+                            <span>★</span>
+                            <span>★</span>
+                            <span>★</span>
+                            <span>★</span>
+                        </StarRatingsFill>
+                        <StarRatingsBase>
+                            <span>★</span>
+                            <span>★</span>
+                            <span>★</span>
+                            <span>★</span>
+                            <span>★</span>
+                        </StarRatingsBase>
+                    </StarRatings>
+                    <RatingValue>{ratingAvg.toFixed(1)}</RatingValue>
+                </Rating>
+                <Info>
+                    <CallIcon />
+                    <InfoTitle>전화번호</InfoTitle>
+                    <InfoDetail>{call}</InfoDetail>
+                </Info>
+                <Info>
+                    <AddressIcon />
+                    <InfoTitle>주소</InfoTitle>
+                    <InfoDetail>{address}</InfoDetail>
+                </Info>
+                <Info>
+                    <TimeIcon />
+                    <InfoTitle>영업시간</InfoTitle>
+                    <InfoDetail>{`${openHours} ~ ${closeHours}`}</InfoDetail>
+                </Info>
+            </InfoContainer>
+        </Container>
+    );
 };
 
 const HeaderBack = styled.div`

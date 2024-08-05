@@ -4,6 +4,7 @@ import MarketList from "./MarketList";
 import { ReactComponent as SearchIcon } from "assets/images/search.svg";
 import MarketInfo from "./MarketInfo";
 import { useState } from "react";
+import Splash from "components/Common/Splash";
 
 const categories = [
     "전체",
@@ -24,6 +25,7 @@ const MarketTab = ({
     marketInfo,
     marketHours,
     visitList,
+    marketId,
     onChange = () => {},
 }) => {
     const [searchInfo, setSearchInfo] = useState({
@@ -53,6 +55,10 @@ const MarketTab = ({
         setSearchInput("");
     };
 
+    if (!marketInfo) {
+        return <Splash />;
+    }
+
     return (
         <div>
             <MarketInfo
@@ -74,7 +80,7 @@ const MarketTab = ({
                 <CategoryBar categories={categories} onClick={handleCategory} />
                 <MarketList
                     searchInfo={searchInfo}
-                    marketId={marketInfo?.marketId}
+                    marketId={marketId}
                     visitList={visitList}
                     onChange={onChange}
                 />

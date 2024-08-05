@@ -12,6 +12,6 @@ const PayCallback = () => {
 
     setPaymentKey(paymentKey);
 
-    navigate("/orderRequest");
+    navigate("/orderRequest", { replace: true });
 };
 export default PayCallback;

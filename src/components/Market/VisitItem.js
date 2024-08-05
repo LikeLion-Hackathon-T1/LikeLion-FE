@@ -6,7 +6,7 @@ import { ReactComponent as Gom2 } from "assets/images/foot_check2.svg";
 import { useCallback, useEffect, useState } from "react";
 import Button from "components/Common/Button";
 import useSyluvAxios from "hooks/useSyluvAxios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const VisitItem = ({
     index,
@@ -19,6 +19,7 @@ const VisitItem = ({
     const [clickable, setClickable] = useState(false);
     const [status, setStatus] = useState(null);
     const [style, setStyle] = useState(false);
+    const { marketId } = useParams();
     const syluvAxios = useSyluvAxios();
     const navigate = useNavigate();
     const onCompleteClick = useCallback(() => {
@@ -78,7 +79,7 @@ const VisitItem = ({
                         className="store"
                         onClick={() =>
                             // onClickItem(item.latitude, item.longitude)
-                            navigate(`/store/${item.storeId}`)
+                            navigate(`/market/${marketId}/${item.storeId}`)
                         }
                     >
                         <img src={item.imageUrl} alt="store" />

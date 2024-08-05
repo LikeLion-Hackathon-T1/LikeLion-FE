@@ -68,9 +68,11 @@ const Header = ({
                     {cart && (
                         <Cart onClick={() => navigate("/cart")}>
                             <CartIcon />
-                            <div className="cart-num">
-                                <span>{cartLength}</span>
-                            </div>
+                            {cartLength > 0 && (
+                                <div className="cart-num">
+                                    <span>{cartLength}</span>
+                                </div>
+                            )}
                         </Cart>
                     )}
                     {rightText && (

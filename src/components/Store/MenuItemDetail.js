@@ -114,7 +114,7 @@ const MenuItemDetail = ({ menu, cartLength, handleCartLength = () => {} }) => {
                     aria-label="장바구니로"
                 >
                     <CartIcon color="white" />
-                    <CartBadge>{cartLength}</CartBadge>
+                    {cartLength > 0 && <CartBadge>{cartLength}</CartBadge>}
                 </CartButton>
                 <Image src={menu.menuImage} alt={menu.name} />
             </ImageContainer>

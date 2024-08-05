@@ -15,6 +15,6 @@ export default MenuList;
 
 const Container = styled.div`
     width: 100%;
-    margin-top: 17px;
+    margin-top: 8px;
     margin-bottom: 12px;
 `;
