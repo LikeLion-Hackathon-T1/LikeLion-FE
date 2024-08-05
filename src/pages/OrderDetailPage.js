@@ -70,6 +70,7 @@ const OrderDetailPage = () => {
                 rightText="삭제"
                 cart={false}
                 handleRight={deleteOrder}
+                backSrc={-1}
             />
             <SimpleReceipt
                 date={handleDate(orderDetail.orderDate)}
@@ -90,28 +91,27 @@ const OrderDetailPage = () => {
                     <p className="right">{orderDetail.paymentTool}</p>
                 </div>
             </BillContainer>
-            {state !== "결제 확인 대기" && (
-                <ButtonContainer>
-                    <Button
-                        text={
-                            orderDetail.reviewYn
-                                ? "이미 리뷰를 작성했습니다"
-                                : "리뷰 남기기"
-                        }
-                        type="2"
-                        onClick={() => {
-                            if (orderDetail.reviewYn) return;
-                            handleClick();
-                        }}
-                        disabled={orderDetail.reviewYn}
-                    />
-                </ButtonContainer>
-            )}
+            <ButtonContainer>
+                <Button
+                    text={
+                        orderDetail.reviewYn
+                            ? "이미 리뷰를 작성했습니다"
+                            : "리뷰 남기기"
+                    }
+                    type="2"
+                    onClick={() => {
+                        if (orderDetail.reviewYn) return;
+                        handleClick();
+                    }}
+                    disabled={orderDetail.reviewYn}
+                />
+            </ButtonContainer>
         </Container>
     ) : (
         <ReviewPage
             name={orderDetail.storeName}
             date={handleDate(orderDetail.orderDate)}
+            menus={orderDetail.menuOrders}
             image={orderDetail.storeImg}
             handleClick={handleClick}
             orderId={orderId}

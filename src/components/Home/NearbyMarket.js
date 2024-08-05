@@ -18,9 +18,9 @@ const NearbyMarket = ({ username }) => {
     const { location, error } = useGeoLocation(geolocationOptions);
     const [nearMarket, setNearMarket] = useState("");
     const [text, setText] = useState(username ? username : "시럽");
-    const { setName } = useTokenStore();
+    const { setName, getAccessToken } = useTokenStore();
     useEffect(() => {
-        if (username === undefined) {
+        if (username === undefined && getAccessToken()) {
             syluvAxios.get("/users/mypage").then((res) => {
                 setName(res.data.payload.name);
                 setText(res.data.payload.name);

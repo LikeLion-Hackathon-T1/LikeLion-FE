@@ -29,17 +29,16 @@ const Payments = ({
         pickUpRoute,
     });
 
-    console.log(data);
+    const deleteDash = (str) => str.replace(/-/g, "");
 
     useEffect(() => {
-        const formattedPhone = phone.split("-").join("");
         const totalAmount = data.reduce(
             (total, item) => total + item.price * item.quantity,
             0
         );
         setOrderData((prev) => ({
             ...prev,
-            phone: formattedPhone,
+            phone: phone,
             amount: totalAmount,
             hour: hour,
             min: min,
@@ -87,7 +86,7 @@ const Payments = ({
                 failUrl: `${window.location.origin}/order/fail`,
                 customerEmail: newOrderData.userData.email,
                 customerName: newOrderData.userData.name,
-                customerMobilePhone: newOrderData.phone,
+                customerMobilePhone: deleteDash(newOrderData.phone),
                 card: {
                     useEscrow: false,
                     flowMode: "DEFAULT",

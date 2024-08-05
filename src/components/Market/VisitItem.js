@@ -6,6 +6,7 @@ import { ReactComponent as Gom2 } from "assets/images/foot_check2.svg";
 import { useCallback, useEffect, useState } from "react";
 import Button from "components/Common/Button";
 import useSyluvAxios from "hooks/useSyluvAxios";
+import { useNavigate } from "react-router-dom";
 
 const VisitItem = ({
     index,
@@ -13,10 +14,13 @@ const VisitItem = ({
     isLast,
     openId,
     handleOpenModal = () => {},
+    onClickItem = () => {},
 }) => {
+    const [clickable, setClickable] = useState(false);
     const [status, setStatus] = useState(null);
     const [style, setStyle] = useState(false);
     const syluvAxios = useSyluvAxios();
+    const navigate = useNavigate();
     const onCompleteClick = useCallback(() => {
         handleOpenModal(null);
     }, [handleOpenModal]);
@@ -28,12 +32,17 @@ const VisitItem = ({
             case "BEFORE":
                 setStatus("방문 전");
                 break;
+            case "PAYMENT":
+                setStatus("주문 확인 중");
+                setStyle(true);
+                break;
             case "PREPARING":
                 setStatus("준비 중");
                 setStyle(true);
                 break;
             case "PREPARED":
                 setStatus("준비 완료");
+                setClickable(true);
                 setStyle(true);
                 break;
             case "VISITED":
@@ -51,6 +60,7 @@ const VisitItem = ({
             .then((res) => {
                 setStatus("방문 완료");
                 setStyle(false);
+                setClickable(false);
                 onCompleteClick();
             });
     }, [item.visitListId]);
@@ -64,7 +74,13 @@ const VisitItem = ({
                 </Container>
 
                 <Wrapper>
-                    <div className="store">
+                    <div
+                        className="store"
+                        onClick={() =>
+                            // onClickItem(item.latitude, item.longitude)
+                            navigate(`/store/${item.storeId}`)
+                        }
+                    >
                         <img src={item.imageUrl} alt="store" />
                         <div className="store-info">
                             <div>
@@ -85,7 +101,7 @@ const VisitItem = ({
                         </div>
                     </div>
                     <Foot able={style}>
-                        {style ? (
+                        {clickable ? (
                             <Gom2
                                 onClick={() =>
                                     handleOpenModal(item.visitListId)
@@ -246,6 +262,7 @@ const Wrapper = styled.div`
     .store {
         display: flex;
         gap: 12px;
+        cursor: pointer;
     }
 
     .store-info {

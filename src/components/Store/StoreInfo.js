@@ -6,7 +6,7 @@ import { ReactComponent as TimeIcon } from "assets/images/time.svg";
 import HomeIcon from "assets/icons/HomeIcon";
 import BackIcon from "assets/icons/BackIcon";
 import CartIcon from "assets/icons/CartIcon";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -22,6 +22,18 @@ const StoreInfo = ({
     storeImage,
 }) => {
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const goToParentPath = () => {
+        // 현재 경로를 가져온 후 '/' 기준으로 분할
+        const pathSegments = location.pathname.split("/").filter(Boolean); // filter(Boolean)는 빈 문자열을 제거합니다.
+
+        // 마지막 세그먼트 제거
+        pathSegments.pop();
+
+        // 수정된 경로로 이동 (배열을 다시 문자열로 조합)
+        navigate(`/${pathSegments.join("/")}`, { replace: true });
+    };
     const images = [storeImage];
     const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -54,7 +66,7 @@ const StoreInfo = ({
                 </Slider>
                 <div>
                     <HeaderBack3 />
-                    <BackButton onClick={() => navigate(-1)}>
+                    <BackButton onClick={() => goToParentPath()}>
                         <BackIcon color="white" />
                     </BackButton>
                     <HeaderBack1 />

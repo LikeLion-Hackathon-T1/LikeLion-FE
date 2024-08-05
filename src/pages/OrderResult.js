@@ -1,11 +1,34 @@
+import Button from "components/Common/Button";
 import Header from "components/Common/Header";
 import { ReactComponent as OrderIcon } from "assets/images/order-success.svg";
-import Button from "components/Common/Button";
-import styled from "styled-components";
+import useOrderStore from "hooks/useOrderStore";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import Splash from "components/Common/Splash";
 
-const OrderSuccess = () => {
+const OrderResult = () => {
     const navigate = useNavigate();
+    const { getGlobalOrderData } = useOrderStore();
+    const [orderData, setOrderData] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    const formatAmount = (amount) => {
+        return amount.toLocaleString();
+    };
+
+    useEffect(() => {
+        const data = getGlobalOrderData();
+        if (data) {
+            setOrderData(data);
+            setIsLoading(false);
+        }
+    }, [getGlobalOrderData]);
+
+    if (isLoading) {
+        return <Splash />;
+    }
+
     return (
         <>
             <Header title="주문 완료" cart={false} back={false} />
@@ -20,19 +43,19 @@ const OrderSuccess = () => {
                 <div className="body">
                     <div>
                         <span className="left-text">상호명</span>
-                        <span className="right-text">원조 누드치즈김밥</span>
+                        <span className="right-text">
+                            {orderData.items[0].storeName}
+                        </span>
                     </div>
                     <div>
                         <span className="left-text">결제수단</span>
                         <span className="right-text">토스페이</span>
                     </div>
                     <div>
-                        <span className="left-text">결제일시</span>
-                        <span className="right-text">2024.07.31 19:19:02</span>
-                    </div>
-                    <div>
                         <span className="left-text">결제금액</span>
-                        <span className="price-text">5000,000원</span>
+                        <span className="price-text">
+                            {formatAmount(orderData.amount)}원
+                        </span>
                     </div>
                 </div>
                 <div className="cancle">
@@ -52,7 +75,7 @@ const OrderSuccess = () => {
     );
 };
 
-export default OrderSuccess;
+export default OrderResult;
 
 const Wrapper = styled.div`
     padding: 0px 20px;

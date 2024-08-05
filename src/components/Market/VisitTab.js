@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import VisitList from "./VisitList";
 import { Map, MapMarker, Polyline } from "react-kakao-maps-sdk";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import EditList from "./EditList";
 import useSyluvAxios from "hooks/useSyluvAxios";
 import { useGeoLocation } from "hooks/useGeoLocation";
@@ -22,20 +22,21 @@ const VisitTab = ({
     const [isEdit, setIsEdit] = useState(false);
     const [selectedList, setSelectedList] = useState([]);
     const syluvAxios = useSyluvAxios();
-    const [firstPosition, setFirstPosition] = useState({
+    const [mapCenter, setMapCenter] = useState({
         latitude: visitList[0]?.latitude,
         longitude: visitList[0]?.longitude,
+        level: 3,
     });
     const { location, error } = useGeoLocation(geolocationOptions);
 
     useEffect(() => {
         if (visitList.length > 0) {
-            setFirstPosition({
+            setMapCenter({
                 latitude: visitList[0]?.latitude,
                 longitude: visitList[0]?.longitude,
             });
         } else {
-            setFirstPosition({
+            setMapCenter({
                 latitude: location?.latitude,
                 longitude: location?.longitude,
             });
@@ -73,6 +74,20 @@ const VisitTab = ({
         }
     };
 
+    const moveCenter = useCallback((latitude, longitude) => {
+        setMapCenter({
+            latitude,
+            longitude,
+            level: 1,
+        });
+
+        // 스크롤 이동
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+        });
+    }, []);
+
     const createMarkerSvg = (number) => {
         const svg = `
           <svg width="28" height="32" viewBox="0 0 28 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -84,15 +99,7 @@ const VisitTab = ({
         return `data:image/svg+xml;base64,${btoa(svg)}`;
     };
 
-    const polylinePath = visitList.map((item) => ({
-        lat: item.latitude,
-        lng: item.longitude,
-    }));
-
-    if (
-        firstPosition.latitude === undefined ||
-        firstPosition.longitude === undefined
-    ) {
+    if (mapCenter.latitude === undefined || mapCenter.longitude === undefined) {
         return <Splash />;
     }
 
@@ -101,13 +108,14 @@ const VisitTab = ({
             <Map
                 style={{
                     width: "100%",
-                    height: "224px",
+                    height: "420px",
                 }}
                 center={{
-                    lat: firstPosition.latitude,
-                    lng: firstPosition.longitude,
+                    lat: mapCenter.latitude,
+                    lng: mapCenter.longitude,
                 }}
-                level={1}
+                isPanto={true}
+                level={mapCenter.level}
             >
                 {/* 내 위치 마커 */}
                 {/* <MapMarker
@@ -131,16 +139,9 @@ const VisitTab = ({
                         }}
                     />
                 ))}
-                <Polyline
-                    path={polylinePath}
-                    strokeWeight={5}
-                    strokeColor="#FF6B00"
-                    strokeOpacity={0.7}
-                    strokeStyle="dashed"
-                />
             </Map>
             {visitList.length > 0 ? (
-                <>
+                <BodyContainer>
                     <NavBar>
                         <span className="text-title">오늘의 방문 리스트</span>
                         {isEdit ? (
@@ -171,9 +172,12 @@ const VisitTab = ({
                             handleSelect={handleSelect}
                         />
                     ) : (
-                        <VisitList visitList={visitList} />
+                        <VisitList
+                            visitList={visitList}
+                            onClickItem={moveCenter}
+                        />
                     )}
-                </>
+                </BodyContainer>
             ) : (
                 <ItemContainer>
                     <NoItem />
@@ -219,4 +223,9 @@ const NavBar = styled.div`
 const Container = styled.div`
     display: flex;
     flex-direction: column;
+    max-height: 100dvh;
+`;
+
+const BodyContainer = styled.div`
+    overflow-y: auto;
 `;

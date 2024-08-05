@@ -5,49 +5,68 @@ import styled from "styled-components";
 
 const OwnerDetailPage = ({
     item,
+    status,
     handleItem = () => {},
-    handleCancel = () => {},
-    handleSuccess = () => {},
+    handleAccept = () => {},
 }) => {
+    const handleDate = (date) => {
+        // "2024-08-01T01:54:46" -> "2024.08.01 오후 1:54"
+        const dateObj = new Date(date);
+        const year = dateObj.getFullYear();
+        const month = dateObj.getMonth() + 1;
+        const day = dateObj.getDate();
+        const hour = dateObj.getHours();
+        const minute = dateObj.getMinutes();
+        const ampm = hour >= 12 ? "오후" : "오전";
+        const hour12 = hour % 12;
+        return `${year}.${month}.${day} ${ampm} ${hour12}:${minute}`;
+    };
+    const formatAmount = (amount) => {
+        return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
+
     return (
         <>
-            <Header title="주문상세" cart={false} />
+            <Header
+                title="주문상세"
+                cart={false}
+                onLeftClick={() => handleItem(null, null)}
+            />
             <Wrapper>
                 <div className="info">
-                    <span>주문일시: 2024년 7월 17일 오후 {item.orderTime}</span>
-                    <span>주문번호: {item.orderNumber}</span>
-                    <span>고객번호: 010-8634-0405</span>
+                    <span>
+                        주문일시: {handleDate(item.createdAt)} {item.orderTime}
+                    </span>
+                    <span>주문번호: {item.orderNum}</span>
+                    <span>주문자명: {item.userName}</span>
                 </div>
-                <OrderItem />
-                <OrderItem />
-                <OrderItem />
+                {item.menu.map((order) => (
+                    <OrderItem key={order.menuImg} order={order} />
+                ))}
                 <BillContainer>
                     <div>
                         <span>결제금액</span>
-                        <span className="right">63,000원</span>
+                        <span className="right">
+                            {formatAmount(item.totalPrice)}원
+                        </span>
                     </div>
                     <div>
                         <span>결제방법</span>
                         <span className="right">토스페이</span>
                     </div>
                 </BillContainer>
-                <ButtonContainer>
-                    <Button
-                        text="접수 취소"
-                        onClick={() => {
-                            handleCancel(item.id);
-                            handleItem(null);
-                        }}
-                    />
-                    <Button
-                        text="접수하기"
-                        type="2"
-                        onClick={() => {
-                            handleSuccess(item.id);
-                            handleItem(null);
-                        }}
-                    />
-                </ButtonContainer>
+                {status === "접수" && (
+                    <ButtonContainer>
+                        <Button
+                            text="접수하기"
+                            type="2"
+                            onClick={() => {
+                                handleAccept(item.orderId);
+                                handleItem(null, null);
+                            }}
+                        />
+                    </ButtonContainer>
+                )}
             </Wrapper>
         </>
     );

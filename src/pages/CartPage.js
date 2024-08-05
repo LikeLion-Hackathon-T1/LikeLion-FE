@@ -63,6 +63,7 @@ const CartPage = () => {
                 rightText="삭제"
                 handleRight={handleRight}
                 rightDisabled={rightDisabled}
+                backSrc={-1}
             />
             <StoreList
                 cartList={cartList}

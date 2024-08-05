@@ -4,23 +4,28 @@ import MenuEditTab from "owner/components/MenuEditTab";
 import OrderManageTab from "owner/components/OrderManageTab";
 import OwnerHeader from "owner/components/OwnerHeader";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 
 const OwnerPage = () => {
+    const { storeId } = useParams();
     const syluvAxios = useSyluvAxios();
     const menus = ["메뉴 관리", "주문 관리"];
     const [selected, setSelected] = useState(menus[0]);
-    const [allStoreInfo, setAllStoreInfo] = useState([]);
     const [storeInfo, setStoreInfo] = useState({});
     const [items, setItems] = useState([]);
+    const [allStores, setAllStores] = useState([]);
 
     useEffect(() => {
         syluvAxios.get(`/store/info`).then((res) => {
-            setAllStoreInfo(res.data.payload);
-            setStoreInfo(res.data.payload[0]);
-            setItems(res.data.payload[0].menuDetails);
+            const store = res.data.payload.filter(
+                (store) => store.storeId === Number(storeId)
+            );
+            setAllStores(res.data.payload);
+            setStoreInfo(store[0]);
+            setItems(store[0].menuDetails);
         });
-    }, []);
+    }, [storeId]);
 
     const handleSelected = (item) => {
         setSelected(item);
@@ -29,7 +34,7 @@ const OwnerPage = () => {
     return (
         <>
             <Header>
-                <OwnerHeader name={storeInfo.name} />
+                <OwnerHeader name={storeInfo.name} stores={allStores} />
                 <NavBar
                     items={menus}
                     selected={selected}
@@ -38,9 +43,13 @@ const OwnerPage = () => {
                 />
             </Header>
             {selected === "메뉴 관리" ? (
-                <MenuEditTab items={items} setItems={setItems} />
+                <MenuEditTab
+                    storeId={storeId}
+                    items={items}
+                    setItems={setItems}
+                />
             ) : (
-                <OrderManageTab />
+                <OrderManageTab storeId={storeId} />
             )}
         </>
     );
