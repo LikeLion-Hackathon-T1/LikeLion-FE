@@ -35,7 +35,7 @@ const MarketPage = () => {
     }, [listChanged]);
 
     const { isLoading, data, isError, error } = useQuery({
-        queryKey: ["get-markets"],
+        queryKey: ["get-markets-info"],
         queryFn: () => syluvAxios.get(`/market/${marketId}/info`),
     });
 
@@ -80,6 +80,7 @@ const MarketPage = () => {
     const handleNavClick = (navItem) => {
         setSelectedNav(navItem);
     };
+
     return (
         <Wrapper>
             <Header title={marketInfo?.name} backSrc={"/"} />
@@ -91,6 +92,7 @@ const MarketPage = () => {
             />
             {selectedNav === "홈" ? (
                 <MarketTab
+                    marketId={marketId}
                     marketInfo={marketInfo}
                     marketHours={marketHours}
                     visitList={visitList}
