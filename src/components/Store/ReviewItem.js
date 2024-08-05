@@ -59,7 +59,6 @@ const ReviewItem = ({
 
   const syluvAxios = useSyluvAxios();
   console.log(review);
-  console.log("hihis");
 
   useEffect(() => {
     setHelpfulness(Number(review.helpfulCnt));
