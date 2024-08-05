@@ -92,6 +92,7 @@ const ScrollContainer = styled.div`
     }
     -ms-overflow-style: none; // IE 및 Edge
     scrollbar-width: none; // Firefox
+    overflow-x: hidden;
 `;
 
 export { GlobalStyle, ScrollContainer };
