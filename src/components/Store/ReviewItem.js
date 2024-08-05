@@ -115,99 +115,11 @@ const ReviewItem = ({
         }
     };
 
-  return (
-    <ReviewContainer
-      isMine={review.isMine}
-      isLastMyReview={isLastMyReview}
-      isFirstOtherReview={isFirstOtherReview}
-    >
-      {isFirst && review.isMine && (
-        <MyReviewContainer>
-          <MyReviewText>내가 남긴 리뷰</MyReviewText>
-        </MyReviewContainer>
-      )}
-      <Header>
-        <UserInfo>
-          <UserProfileImage src={review.picture} alt="User Profile" />
-          <div>
-            <UserName>{review.name}</UserName>
-            <StarsAndTime>
-              <StarContainer>
-                {[...Array(5)].map((_, index) => (
-                  <Star
-                    key={index}
-                    $filled={(index < review.rating).toString()}
-                  >
-                    ★
-                  </Star>
-                ))}
-              </StarContainer>
-              <Time>
-                {formatTime({
-                  beforeHours: review.beforeHours,
-                  beforeDay: review.beforeDay,
-                  beforeWeek: review.beforeWeek,
-                })}
-              </Time>
-            </StarsAndTime>
-          </div>
-        </UserInfo>
-        {review.isMine && (
-          <DeleteButton onClick={handleDelete}>삭제하기</DeleteButton>
-        )}
-      </Header>
-      {review.image &&
-        Array.isArray(review.image) &&
-        review.image.length === 1 && (
-          <ReviewImageContainerSingle>
-            <SingleReviewImage src={review.image[0]} alt="review" />
-          </ReviewImageContainerSingle>
-        )}
-      {review.image &&
-        Array.isArray(review.image) &&
-        review.image.length > 1 && (
-          <ReviewImageContainerMultiple>
-            <Swiper
-              slidesPerView={1.7}
-              breakpoints={{
-                640: {
-                  slidesPerView: 1.2,
-                  spaceBetween: 10,
-                },
-                768: {
-                  slidesPerView: 1.5,
-                  spaceBetween: 15,
-                },
-                1024: {
-                  slidesPerView: 1.7,
-                  spaceBetween: 6,
-                },
-              }}
-            >
-              {review.image.map((image, index) => (
-                <SwiperSlide key={index}>
-                  <MultipleReviewImage src={image} alt={`review-${index}`} />
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </ReviewImageContainerMultiple>
-        )}
-      {review.image && !Array.isArray(review.image) && (
-        <ReviewImageContainerSingle>
-          <SingleReviewImage src={review.image} alt="review" />
-        </ReviewImageContainerSingle>
-      )}
-      <MenuName>{review.menuName}</MenuName>
-      <ReviewText>{review.content}</ReviewText>
-      <Helpfulness>
-        <div>{helpfulness}명에게 도움이 되었어요</div>
-        <HelpfulButton
-          onClick={() => {
-            console.log("HelpfulButton clicked");
-            handleHelpfulnessClick();
-          }}
-          $active={isHelpfulClicked}
-          style={{ cursor: "pointer" }}
+    return (
+        <ReviewContainer
+            isMine={review.isMine}
+            isLastMyReview={isLastMyReview}
+            isFirstOtherReview={isFirstOtherReview}
         >
             {isFirst && review.isMine && (
                 <MyReviewContainer>
@@ -257,7 +169,23 @@ const ReviewItem = ({
                 Array.isArray(review.image) &&
                 review.image.length > 1 && (
                     <ReviewImageContainerMultiple>
-                        <Swiper slidesPerView={1.7} spaceBetween={6}>
+                        <Swiper
+                            slidesPerView={1.7}
+                            breakpoints={{
+                                640: {
+                                    slidesPerView: 1.2,
+                                    spaceBetween: 10,
+                                },
+                                768: {
+                                    slidesPerView: 1.5,
+                                    spaceBetween: 15,
+                                },
+                                1024: {
+                                    slidesPerView: 1.7,
+                                    spaceBetween: 6,
+                                },
+                            }}
+                        >
                             {review.image.map((image, index) => (
                                 <SwiperSlide key={index}>
                                     <MultipleReviewImage
@@ -280,6 +208,7 @@ const ReviewItem = ({
                 <div>{helpfulness}명에게 도움이 되었어요</div>
                 <HelpfulButton
                     onClick={() => {
+                        console.log("HelpfulButton clicked");
                         handleHelpfulnessClick();
                     }}
                     $active={isHelpfulClicked}
