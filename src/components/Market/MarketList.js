@@ -23,7 +23,10 @@ const MarketList = ({
                     category: searchInfo.category,
                 },
             });
-            setStoreList(response.data.payload);
+            const filteredStores = response.data.payload.filter(
+                (store) => store.marketId.toString() === marketId.toString()
+            );
+            setStoreList(filteredStores);
         } catch (error) {
             console.error("Error fetching data:", error);
         }
@@ -35,7 +38,7 @@ const MarketList = ({
 
     return (
         <Container>
-            {storeList ? (
+            {storeList?.length > 0 ? (
                 storeList.map((store) => (
                     <MarketItem
                         key={store.storeId}
