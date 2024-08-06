@@ -30,7 +30,12 @@ import {
     HeaderBack3,
 } from "./MenuItemDetailStyle";
 
-const MenuItemDetail = ({ menu, cartLength, handleCartLength = () => {} }) => {
+const MenuItemDetail = ({
+    menu,
+    cartLength,
+    handleCartLength = () => {},
+    handleSelectedMenu = () => {},
+}) => {
     const navigate = useNavigate();
     const syluvAxios = useSyluvAxios();
     const [quantity, setQuantity] = useState(1);
@@ -89,7 +94,10 @@ const MenuItemDetail = ({ menu, cartLength, handleCartLength = () => {} }) => {
         <Container>
             <ImageContainer>
                 <HeaderBack3 />
-                <BackButton onClick={() => navigate(-1)} aria-label="뒤로가기">
+                <BackButton
+                    onClick={() => handleSelectedMenu()}
+                    aria-label="뒤로가기"
+                >
                     <BackIcon color="white" />
                 </BackButton>
                 <HeaderBack1 />

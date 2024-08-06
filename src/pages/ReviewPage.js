@@ -25,6 +25,7 @@ const ReviewPage = ({
     const [ratingText, setRatingText] = useState("");
     const [photos, setPhotos] = useState([]);
     const syluvAxios = useSyluvAxios();
+    const [isClicked, setIsClicked] = useState(false);
 
     useEffect(() => {
         setCurrentCount(review.length);
@@ -52,6 +53,7 @@ const ReviewPage = ({
     };
 
     const handleSubmit = () => {
+        setIsClicked(true);
         const formData = new FormData();
 
         const dto = {
@@ -188,7 +190,9 @@ const ReviewPage = ({
                 <Button
                     text="등록하기"
                     type="2"
-                    onClick={() => handleSubmit()}
+                    onClick={() => {
+                        if (!isClicked) handleSubmit();
+                    }}
                 />
             </BottomBar>
         </Wrapper>

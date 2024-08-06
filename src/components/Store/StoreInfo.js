@@ -179,6 +179,8 @@ const HeaderImage = styled.img`
     display: block;
     margin: 0;
     height: 272px;
+
+    object-fit: cover;
 `;
 
 const BackButton = styled.div`
