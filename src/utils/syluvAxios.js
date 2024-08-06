@@ -55,7 +55,7 @@ const CreateSyluvAxios = (navigate) => {
     const syluvAxios = axios.create({
         withCredentials: true,
         baseURL: baseURL + "/v1",
-        timeout: 10000,
+        timeout: 100000,
     });
 
     let token = getAccessToken();

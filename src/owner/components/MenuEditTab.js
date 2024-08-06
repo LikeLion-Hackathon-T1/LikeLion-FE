@@ -20,7 +20,7 @@ const MenuEditTab = ({ items, setItems, storeId }) => {
             !newItem.name ||
             !newItem.price ||
             !newItem.content ||
-            !newItem.menuImage
+            !newItem.serverImage
         ) {
             setToastMessage("올바르지 않은 메뉴 정보입니다.");
             return;
@@ -37,7 +37,7 @@ const MenuEditTab = ({ items, setItems, storeId }) => {
             new Blob([JSON.stringify(dto)], { type: "application/json" })
         );
 
-        formData.append("file", newItem.menuImage); // assuming newItem.file is a File object
+        formData.append("file", newItem.serverImage); // assuming newItem.file is a File object
 
         try {
             await syluvAxios.post(`/customer/${storeId}/addmenu`, formData, {

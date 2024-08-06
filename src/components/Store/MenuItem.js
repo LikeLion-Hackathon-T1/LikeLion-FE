@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-//커밋
+import defaultImage from "assets/images/syrup_icon.svg";
+
 const MenuItemWrapper = styled.div`
     display: flex;
     align-items: center;
     margin-bottom: 28px;
-    cursor: pointer; // 클릭 가능한 커서 추가
+    cursor: pointer;
 `;
 
 const MenuItemImage = styled.img`
@@ -44,9 +45,13 @@ const MenuItemDescription = styled.p`
 `;
 
 const MenuItem = ({ item, onClick }) => {
+    console.log(item);
     const formatPrice = (price) => {
         return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
+
+    const imageSrc = item.menuImage ? item.menuImage : defaultImage;
+
     return (
         <MenuItemWrapper
             onClick={() => {
@@ -55,7 +60,7 @@ const MenuItem = ({ item, onClick }) => {
                 }
             }}
         >
-            <MenuItemImage src={item.menuImage} alt={item.name} />
+            <MenuItemImage src={imageSrc} alt={item.name} />
             <MenuItemInfo>
                 <MenuItemName>{item.name}</MenuItemName>
                 <MenuItemPrice>{formatPrice(item.price)}원</MenuItemPrice>

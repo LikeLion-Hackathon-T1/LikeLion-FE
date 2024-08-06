@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -6,6 +6,7 @@ import "swiper/css/navigation";
 
 const CategoryBar = ({ categories, onClick }) => {
     const [selectedCategory, setSelectedCategory] = useState("전체");
+    const [slidesPerView, setSlidesPerView] = useState(6);
 
     const handleClick = (category) => {
         if (category === "전체") {
@@ -16,9 +17,28 @@ const CategoryBar = ({ categories, onClick }) => {
         setSelectedCategory(category);
     };
 
+    useEffect(() => {
+        // Function to adjust the slides per view based on the window width
+        const handleResize = () => {
+            if (window.innerWidth <= 400) {
+                setSlidesPerView(5);
+            } else {
+                setSlidesPerView(6);
+            }
+        };
+
+        // Add the event listener when the component mounts
+        window.addEventListener("resize", handleResize);
+
+        // Cleanup function to remove the event listener on unmount
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
+
     return (
         <CategoryContainer>
-            <Swiper slidesPerView={6} spaceBetween={8}>
+            <Swiper slidesPerView={slidesPerView} spaceBetween={8}>
                 {categories.map((categories) => (
                     <SwiperSlide key={categories}>
                         <Category
@@ -43,10 +63,11 @@ const CategoryContainer = styled.div`
     display: flex;
     gap: 12px;
     margin-bottom: 12px;
-    text-wrap: nowrap;
 `;
 
 const Category = styled.div`
+    word-wrap: keep-all;
+    word-break: keep-all;
     border: ${(props) =>
         props.selected
             ? `1px solid ${props.theme.color.primary}`
