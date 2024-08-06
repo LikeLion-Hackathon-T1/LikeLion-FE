@@ -253,42 +253,4 @@ const Review = styled.div`
     }
 `;
 
-const Menu = styled.div`
-    display: flex;
-    gap: 12px;
-    font-size: 14px;
-    font-weight: ${({ theme }) => theme.fontWeight.medium};
-    color: ${({ theme }) => theme.color.gray300};
-    border-bottom: 1px solid ${({ theme }) => theme.color.gray100};
-    padding: 21.5px 20px 24px 20px;
-    margin-bottom: 32px;
-
-    img {
-        width: 70px;
-        height: 70px;
-        border-radius: 12px;
-    }
-
-    .store-name {
-        color: ${({ theme }) => theme.color.gray800};
-        font-weight: ${({ theme }) => theme.fontWeight.semiBold};
-    }
-
-    .menu-name {
-        color: ${({ theme }) => theme.color.gray400};
-    }
-
-    .store-info {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-
-        div {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-    }
-`;
-
 export default FeedBack;
