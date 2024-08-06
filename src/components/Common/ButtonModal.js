@@ -15,12 +15,16 @@ const ButtonModal = ({
                 <div className="title-text">{title}</div>
                 <div className="sub-text">{subText}</div>
                 <div className="buttons">
-                    <ModalButton onClick={() => onLeftClick()}>
-                        {left}
-                    </ModalButton>
-                    <ModalButton onClick={() => onRightClick()}>
-                        {right}
-                    </ModalButton>
+                    {left && (
+                        <ModalButton onClick={() => onLeftClick()}>
+                            {left}
+                        </ModalButton>
+                    )}
+                    {right && (
+                        <ModalButton onClick={() => onRightClick()}>
+                            {right}
+                        </ModalButton>
+                    )}
                 </div>
             </ModalContainer>
         </>
