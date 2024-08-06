@@ -53,7 +53,9 @@ const OwnerPage = () => {
                         setItems={setItems}
                     />
                 ) : (
-                    <OrderManageTab storeId={storeId} />
+                    <>
+                        <OrderManageTab storeId={storeId} />
+                    </>
                 )
             ) : (
                 <Wrapper>

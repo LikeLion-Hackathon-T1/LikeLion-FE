@@ -20,6 +20,11 @@ const useOrderStore = create((set, get) => ({
         localStorage.setItem("orderData", JSON.stringify(data)); // 데이터를 로컬 스토리지에 저장
         set({ orderData: data }); // Zustand 스토어 업데이트
     },
+
+    deleteGlobalOrderData: () => {
+        localStorage.removeItem("orderData"); // 로컬 스토리지에서 데이터 삭제
+        set({ orderData: {} }); // Zustand 스토어 업데이트
+    },
 }));
 
 export default useOrderStore;

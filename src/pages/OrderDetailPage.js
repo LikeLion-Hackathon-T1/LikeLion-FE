@@ -74,9 +74,9 @@ const OrderDetailPage = () => {
         <Container>
             <Header
                 title="주문상세"
-                rightText="삭제"
+                // rightText="삭제"
                 cart={false}
-                handleRight={deleteOrder}
+                // handleRight={deleteOrder}
                 backSrc={-1}
             />
             <SimpleReceipt
