@@ -8,6 +8,7 @@ import useSyluvAxios from "hooks/useSyluvAxios";
 import { useQuery } from "@tanstack/react-query";
 import Splash from "components/Common/Splash";
 import styled from "styled-components";
+import ErrorPage from "./ErrorPage";
 
 const MarketPage = () => {
     const items = ["홈", "방문"];
@@ -80,6 +81,10 @@ const MarketPage = () => {
     }, [listChanged]);
 
     if (isLoading) return <Splash />;
+
+    if (isError) {
+        return <ErrorPage />;
+    }
     // if (isError) return <div>Error: {error.message}</div>;
 
     const handleNavClick = (navItem) => {

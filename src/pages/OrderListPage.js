@@ -8,12 +8,14 @@ import TabBar from "components/Common/TabBar";
 import useSyluvAxios from "hooks/useSyluvAxios";
 import { useEffect, useState } from "react";
 import Splash from "components/Common/Splash";
+import ErrorPage from "./ErrorPage";
 
 const OrderListPage = () => {
     const navigate = useNavigate();
     const syluvAxios = useSyluvAxios();
     const [orderList, setOrderList] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [isError, setIsError] = useState(false);
 
     useEffect(() => {
         const getOrderList = async () => {
@@ -22,7 +24,7 @@ const OrderListPage = () => {
                 setOrderList(res.data.payload);
                 setIsLoading(false);
             } catch (error) {
-                console.error(error);
+                setIsError(true);
             }
         };
         getOrderList();
@@ -30,6 +32,10 @@ const OrderListPage = () => {
 
     if (isLoading) {
         return <Splash />;
+    }
+
+    if (isError) {
+        return <ErrorPage />;
     }
 
     return Object.keys(orderList).length === 0 ? (
