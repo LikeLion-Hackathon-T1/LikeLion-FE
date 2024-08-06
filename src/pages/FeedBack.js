@@ -9,7 +9,7 @@ import "swiper/css/navigation";
 import ButtonModal from "components/Common/ButtonModal";
 import { useNavigate } from "react-router-dom";
 
-const FeedBack = ({}) => {
+const FeedBack = () => {
     const [review, setReview] = useState("");
     const [currentCount, setCurrentCount] = useState(0);
     const [photos, setPhotos] = useState([]);
@@ -30,74 +30,80 @@ const FeedBack = ({}) => {
     }, [review]);
 
     return (
-        <Wrapper>
+        <>
             {isSubmitted && (
                 <ButtonModal
                     title="피드백이 제출되었습니다"
-                    subText="더 나은 시럽을 위해 노력하겠습니다"
+                    subText="좋은 서비스를 위해 노력하겠습니다"
                     right="홈으로"
                     onRightClick={() => navigate("/", { replace: true })}
                 />
             )}
-            <div>
-                <Header title="피드백 작성하기" cart={false} backSrc={"/"} />
-                <Review>
-                    <div className="review-section">
-                        <textarea
-                            className="review-input"
-                            type="text"
-                            placeholder="시럽 페이지를 이용하는 데 발생한 문제를 자세하게 알려주세요.  더 나은 서비스를 위해 노력하겠습니다."
-                            value={review}
-                            onChange={(e) => setReview(e.target.value)}
-                        />
-                        <div className="review-count">
-                            <span className="current-count">
-                                {currentCount}
-                            </span>
-                            /300
-                        </div>
-                    </div>
-                    <StyledSwiper slidesPerView={4} spaceBetween={20}>
-                        <SwiperSlide>
-                            <div
-                                className={`photo-section ${
-                                    photos.length > 0 ? "photo-added" : ""
-                                }`}
-                            >
-                                <span>사진을 추가해주세요</span>
-                                <label htmlFor="photo-upload">
-                                    <img src={add} alt="add" />
-                                </label>
-                                <input
-                                    id="photo-upload"
-                                    type="file"
-                                    multiple
-                                    accept="image/*"
-                                    style={{ display: "none" }}
-                                    onChange={handlePhotoChange}
-                                />
+            <Wrapper>
+                <div>
+                    <Header
+                        title="피드백 작성하기"
+                        cart={false}
+                        backSrc={"/"}
+                    />
+                    <Review>
+                        <div className="review-section">
+                            <textarea
+                                className="review-input"
+                                type="text"
+                                placeholder="시럽 페이지를 이용하는 데 발생한 문제를 자세하게 알려주세요.  더 나은 서비스를 위해 노력하겠습니다."
+                                value={review}
+                                onChange={(e) => setReview(e.target.value)}
+                            />
+                            <div className="review-count">
+                                <span className="current-count">
+                                    {currentCount}
+                                </span>
+                                /300
                             </div>
-                        </SwiperSlide>
-                        {photos.map((photo, index) => (
-                            <SwiperSlide key={index}>
-                                <img
-                                    src={URL.createObjectURL(photo)}
-                                    alt={`preview-${index}`}
-                                    className="preview-image"
-                                />
+                        </div>
+                        <StyledSwiper slidesPerView={4} spaceBetween={20}>
+                            <SwiperSlide>
+                                <div
+                                    className={`photo-section ${
+                                        photos.length > 0 ? "photo-added" : ""
+                                    }`}
+                                >
+                                    <span>사진을 추가해주세요</span>
+                                    <label htmlFor="photo-upload">
+                                        <img src={add} alt="add" />
+                                    </label>
+                                    <input
+                                        id="photo-upload"
+                                        type="file"
+                                        multiple
+                                        accept="image/*"
+                                        style={{ display: "none" }}
+                                        onChange={handlePhotoChange}
+                                    />
+                                </div>
                             </SwiperSlide>
-                        ))}
-                    </StyledSwiper>
-                </Review>
-            </div>
-            <BottomBar>
-                <Button
-                    text="제출하기"
-                    type="2"
-                    onClick={() => handleSubmit()}
-                />
-            </BottomBar>
-        </Wrapper>
+                            {photos.map((photo, index) => (
+                                <SwiperSlide key={index}>
+                                    <img
+                                        src={URL.createObjectURL(photo)}
+                                        alt={`preview-${index}`}
+                                        className="preview-image"
+                                    />
+                                </SwiperSlide>
+                            ))}
+                        </StyledSwiper>
+                    </Review>
+                </div>
+                <BottomBar>
+                    <Button
+                        text="제출하기"
+                        type="2"
+                        onClick={() => handleSubmit()}
+                    />
+                </BottomBar>
+            </Wrapper>
+        </>
     );
 };
 

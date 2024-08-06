@@ -77,6 +77,7 @@ const Header = styled.div`
     @media (max-width: 480px) {
         width: 100%;
     }
+    z-index: 10;
 `;
 
 const Wrapper = styled.div`

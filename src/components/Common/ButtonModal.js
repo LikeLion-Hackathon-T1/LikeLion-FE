@@ -38,7 +38,7 @@ const Overlay = styled.div`
     top: 0;
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.5); // Semi-transparent black
-    z-index: 5; // Ensure it's below the modal but above other content
+    z-index: 120; // Ensure it's below the modal but above other content
     width: 480px;
     @media (max-width: 480px) {
         width: 100dvw;
@@ -46,11 +46,12 @@ const Overlay = styled.div`
 `;
 
 const ModalContainer = styled.div`
+    min-width: 380px;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 10;
+    z-index: 121;
     background-color: white;
     border-radius: 5px;
     display: flex;
@@ -74,6 +75,7 @@ const ModalContainer = styled.div`
         font-weight: ${({ theme }) => theme.fontWeight.bold};
         color: ${({ theme }) => theme.color.gray900};
         margin-bottom: 20px;
+        text-align: center;
     }
 
     .sub-text {
@@ -81,6 +83,11 @@ const ModalContainer = styled.div`
         color: ${({ theme }) => theme.color.primary};
         font-weight: ${({ theme }) => theme.fontWeight.bold};
         margin-bottom: 20px;
+        text-align: center;
+    }
+
+    @media (max-width: 480px) {
+        min-width: 80dvw;
     }
 `;
 
