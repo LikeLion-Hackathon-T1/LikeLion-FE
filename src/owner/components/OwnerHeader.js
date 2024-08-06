@@ -13,9 +13,6 @@ const OwnerHeader = ({ name, stores }) => {
         navigate(`/owner/${storeId}`);
     };
 
-    console.log("hi");
-    console.log(name);
-
     return (
         <>
             {isClicked && (
