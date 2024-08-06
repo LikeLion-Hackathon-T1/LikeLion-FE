@@ -25,7 +25,10 @@ const OrderManageTab = ({ storeId }) => {
     }, [storeId]);
 
     useEffect(() => {
-        const newItems = items.filter((item) => item.orderStatus !== "VISITED");
+        const newItems = items.filter(
+            (item) =>
+                item.orderStatus !== "VISITED" && item.orderStatus !== "BEFORE"
+        );
         const endItems = items.filter((item) => item.orderStatus === "VISITED");
         setNewItems(newItems);
         setEndItems(endItems);
