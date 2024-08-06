@@ -94,7 +94,7 @@ const MyPage = () => {
                                         navigate("/owner");
                                     }}
                                 >
-                                    상인 계정 전환
+                                    사장님 계정 전환
                                 </span>
                                 <Line />
                                 <span

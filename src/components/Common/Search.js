@@ -9,18 +9,11 @@ const Search = ({ marketList }) => {
     const [searchInput, setSearchInput] = useState("");
 
     const getHighlightedText = (text, highlight) => {
-        const highlightIndex = Hangul.search(text, highlight);
-        if (highlightIndex === -1) return text;
+        const regex = new RegExp(`(${highlight})`, "gi");
+        const parts = text.split(regex);
 
-        const startIndex = highlightIndex;
-        const endIndex = highlightIndex + highlight.length;
-
-        return (
-            <>
-                {text.substring(0, startIndex)}
-                <Highlight>{text.substring(startIndex, endIndex)}</Highlight>
-                {text.substring(endIndex)}
-            </>
+        return parts.map((part, index) =>
+            regex.test(part) ? <Highlight key={index}>{part}</Highlight> : part
         );
     };
 
