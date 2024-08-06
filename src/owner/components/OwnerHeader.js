@@ -35,7 +35,7 @@ const OwnerHeader = ({ name, stores }) => {
                     defaultValue=""
                 >
                     <option value="" disabled>
-                        가게를 선택해주세요.
+                        {name ? name : "가게를 선택해주세요."}
                     </option>
                     {storeData.map((store) => (
                         <option key={store.storeId} value={store.storeId}>
