@@ -63,7 +63,7 @@ const Wrapper = styled.div`
             margin-left: 2px;
             margin-right: 10px;
             font-size: 14px;
-            font-weight: ${(props) => props.theme.fontWeight.semiBold};
+            font-weight: ${(props) => props.theme.fontWeight.regular};
             color: ${(props) => props.theme.color.gray900};
         }
         margin-bottom: 10px;

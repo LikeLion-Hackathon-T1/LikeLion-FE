@@ -11,7 +11,7 @@ import styled from "styled-components";
 import ErrorPage from "./ErrorPage";
 
 const MarketPage = () => {
-    const items = ["홈", "방문"];
+    const items = ["홈", "오늘의 방문"];
     const [selectedNav, setSelectedNav] = useState(items[0]);
     const [visitList, setVisitList] = useState([]);
     const { marketId } = useParams();
