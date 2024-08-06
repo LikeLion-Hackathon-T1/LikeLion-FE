@@ -18,7 +18,7 @@ const OwnerHeader = ({ name, stores }) => {
             {isClicked && (
                 <ButtonModal
                     title="계정 유형 전환"
-                    subText="일반 사용자 계정으로 전환하시겠습니까?"
+                    subText="방문객 계정으로 전환하시겠습니까?"
                     left="이동"
                     right="취소"
                     onLeftClick={() => {
