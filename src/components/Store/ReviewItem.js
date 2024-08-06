@@ -193,7 +193,11 @@ const ReviewItem = ({
                     </Swiper>
                 </ReviewImageContainerMultiple>
             )}
-            <MenuName>{review.menuName}</MenuName>
+            <MenuName>
+                {review.menuName.map((menu, index) =>
+                    index === review.menuName.length - 1 ? menu : menu + ", "
+                )}
+            </MenuName>
             <ReviewText>{review.content}</ReviewText>
             <Helpfulness>
                 <div>{helpfulness}명에게 도움이 되었어요</div>
