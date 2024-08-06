@@ -24,6 +24,8 @@ import PayCallback from "utils/PayCallback";
 import OrderRequest from "utils/OrderRequest";
 import OrderResult from "pages/OrderResult";
 import QRredirection from "utils/QRredirection";
+import ErrorPage from "pages/ErrorPage";
+import FeedBack from "pages/FeedBack";
 
 const App = () => {
     useEffect(() => {
@@ -103,6 +105,11 @@ const App = () => {
                                 <Route
                                     path="/qr/redirection/:marketId/:storeId"
                                     element={<QRredirection />}
+                                />
+                                <Route path="/error" element={<ErrorPage />} />
+                                <Route
+                                    path="/feedback"
+                                    element={<FeedBack />}
                                 />
                             </Routes>
                         </BrowserRouter>
