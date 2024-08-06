@@ -24,9 +24,12 @@ const AddModal = ({ onClose = () => {}, onAdd = () => {} }) => {
 
     const handlePhotoChange = (e) => {
         if (e.target.files && e.target.files[0]) {
+            const file = e.target.files[0];
+            const localUrl = URL.createObjectURL(file);
             setMenu({
                 ...menu,
-                menuImage: e.target.files[0],
+                menuImage: localUrl,
+                serverImage: file,
             });
         }
     };
@@ -41,10 +44,7 @@ const AddModal = ({ onClose = () => {}, onAdd = () => {} }) => {
             <div className="body">
                 <div className="photo">
                     {menu.menuImage ? (
-                        <img
-                            src={URL.createObjectURL(menu.menuImage)}
-                            alt="uploaded"
-                        />
+                        <img src={menu.menuImage} alt="uploaded" />
                     ) : (
                         <>
                             <span>사진을 추가해주세요</span>
