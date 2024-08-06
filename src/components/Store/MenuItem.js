@@ -45,7 +45,6 @@ const MenuItemDescription = styled.p`
 `;
 
 const MenuItem = ({ item, onClick }) => {
-    console.log(item);
     const formatPrice = (price) => {
         return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };

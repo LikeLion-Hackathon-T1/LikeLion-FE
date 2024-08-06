@@ -13,6 +13,9 @@ const OwnerHeader = ({ name, stores }) => {
         navigate(`/owner/${storeId}`);
     };
 
+    console.log("hi");
+    console.log(name);
+
     return (
         <>
             {isClicked && (
@@ -35,7 +38,7 @@ const OwnerHeader = ({ name, stores }) => {
                     defaultValue=""
                 >
                     <option value="" disabled>
-                        가게를 선택해주세요.
+                        {name ? name : "가게를 선택해주세요."}
                     </option>
                     {storeData.map((store) => (
                         <option key={store.storeId} value={store.storeId}>
