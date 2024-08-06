@@ -10,6 +10,7 @@ import Search from "components/Common/Search";
 import useTokenStore from "hooks/useTokenStore";
 import noVisit from "assets/images/app-icon.png";
 import Splash from "components/Common/Splash";
+import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
     const { getName } = useTokenStore();
@@ -20,16 +21,22 @@ const HomePage = () => {
     const [hotMarkets, setHotMarkets] = useState([]);
     const { getAccessToken } = useTokenStore();
     const [isLoading, setIsLoading] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (getAccessToken()) {
-            syluvAxios.get("/home").then((res) => {
-                if (res.data) {
-                    setLatestMarkets(res.data.payload.visitListHomeList);
-                    setHotMarkets(res.data.payload.hotListHomeList);
-                    setIsLoading(false);
-                }
-            });
+            syluvAxios
+                .get("/home")
+                .then((res) => {
+                    if (res.data) {
+                        setLatestMarkets(res.data.payload.visitListHomeList);
+                        setHotMarkets(res.data.payload.hotListHomeList);
+                        setIsLoading(false);
+                    }
+                })
+                .catch((err) => {
+                    navigate("/error", { replace: true });
+                });
         }
     }, []);
 

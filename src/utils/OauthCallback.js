@@ -4,6 +4,7 @@ import useTokenStore from "hooks/useTokenStore";
 import { useNavigate } from "react-router-dom";
 import Welcome from "components/Login/Welcome";
 import Splash from "components/Common/Splash";
+import ErrorPage from "pages/ErrorPage";
 
 const OauthCallback = () => {
     const [isLoading, setIsLoading] = useState(true);
@@ -85,7 +86,7 @@ const OauthCallback = () => {
 
     if (isFIrstLogin) return <Welcome />;
     if (isLoading) return <Splash />;
-    if (isError) return <div>Error: {error.message}</div>;
+    if (isError) return <ErrorPage />;
 
     return <Splash />;
 };
