@@ -184,6 +184,10 @@ const StorePage = () => {
         });
     };
 
+    const handleSelectedMenu = (menu) => {
+        setSelectedMenu(menu);
+    };
+
     let isFirstMyReview = true; // 첫 번째 본인의 리뷰인지 확인
     let myReviewCount = reviews.filter((review) => review.isMine).length;
     let myReviewIndex = 0;
@@ -199,6 +203,7 @@ const StorePage = () => {
                     menu={selectedMenu}
                     cartLength={cartLength}
                     handleCartLength={handleCartLength}
+                    handleSelectedMenu={handleSelectedMenu}
                 />
             ) : (
                 <>
